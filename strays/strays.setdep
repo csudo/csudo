@@ -1,0 +1,13 @@
+# internal dependencies in strays.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+StrayNumLen: StrayGetEl, StrayLen, StrNumP
+StrayNumMem: StrNumP
+StrayNumSum: StrayLen, StrayGetEl
+StrayNumToFt: StrayLen, StrExpr1, StrExpr2
+StrayRemDup: StrayLen, StrayGetEl
+StrayRndEl: StrayLen, StrayGetEl
+StraySetNum: FracLen
+
+
+

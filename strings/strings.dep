@@ -1,0 +1,4 @@
+# internal dependencies in strings.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+StrExpr2: StrExpr1

@@ -1,0 +1,6 @@
+# internal dependencies in string_conversion.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+StrExpr2: StrExpr1
+
+

@@ -1,0 +1,13 @@
+# internal dependencies in csudo.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+ExtrOrc: StripL
+StrayNumLen: StrayGetEl,StrayLen,StrNumP
+StrayNumMem: StrNumP
+StrayNumSum: StrayLen,StrayGetEl
+StrayNumToFt: StrayLen,StrExpr1,StrExpr2
+StrayRemDup: StrayLen,StrayGetEl
+StrayRndEl: StrayLen,StrayGetEl
+StraySetNum: FracLen
+StrExpr2: StrExpr1
+TbRmDp: TbMem

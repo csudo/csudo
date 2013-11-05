@@ -1,0 +1,4 @@
+# internal dependencies in tables.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+TbRmDp: TbMem
