@@ -8,7 +8,7 @@
 #### ENTER YOUR CSOUND6 EXECUTABLE HERE ####
 ############################################
 csound6 = 'csound'
-#csound6 = '/home/jh/src/cs6/bin/csound'
+# csound6 = '/home/jh/src/cs6/bin/csound'
 ############################################
 ############################################
 
@@ -409,26 +409,13 @@ i 1 0 0
     outfil.write(csdtext)
     outfil.close()
     print "*Testing file %s ..." % udo
-    
-    #if system('%s %s 2> /dev/null' % (csound6, csd)) == 0:
-    #    print "... ok"
-    #    return 0
-    #else:
-    #    print "\n********\n... ERROR!!!\n********\n"
-    #    print "*This is Csound's output message:"
-    #    print "Return value = %d" % system('%s %s 2> /dev/null' % (csound6, csd))
-    #    system('%s %s' % (csd, csound6))
-    #    return 1
-    
-    # now ugly hack to temporarily fix the bug in cs6 which always returns 0
-    system('%s %s 2>&1 | grep -w "0 errors in performance" > /tmp/res.txt' % (csound6, csd))
-    testfil = open('/tmp/res.txt', 'r')
-    if testfil.read() == '0 errors in performance\n': 
+    if system('%s %s 2> /dev/null' % (csound6, csd)) == 0:
         print "... ok"
         return 0
     else:
         print "\n********\n... ERROR!!!\n********\n"
         print "*This is Csound's output message:"
+        print "Return value = %d" % system('%s %s 2> /dev/null' % (csound6, csd))
         system('%s %s' % (csound6, csd))
         return 1
 
