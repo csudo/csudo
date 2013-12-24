@@ -36,6 +36,7 @@ PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 PtkSmpA    : aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+SrtArrk    : kOutArr[] SrtArrk kInArr[], iLen
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
 StrExpr1   : iNum StrExpr1 Str
@@ -552,6 +553,14 @@ kDistribution - distribution of the grains in time. 0 means periodic, 1 means sc
 see the Csound Manual for partikkel for more information about the input parameters
 ****************************************************************************/
 /****************************************************************************
+kOutArr[] SrtArrk kInArr[], iLen
+Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
+
+kInArr[] - array to sort
+iLen - its length
+kOutArr[] - sorted array
+****************************************************************************/
+/****************************************************************************
 Sout StrAgrm Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
@@ -938,6 +947,20 @@ istart - start in seconds in the function table to write (default=0)
 iend - last point to write in the function table in seconds (default=-1: until the end)
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
+
+  opcode SrtArrk, k[], k[]i
+kInArr[], iLen xin    
+kOutArr[]  init       iLen
+kMax       maxarray   kInArr
+kIndx      =          0
+ until kIndx == iLen do
+kMin, kMinIndx minarray kInArr
+kOutArr[kIndx] =      kInArr[kMinIndx]
+kInArr[kMinIndx] =    kMax+1
+kIndx += 1
+ od
+           xout       kOutArr
+  endop
 
   opcode BufFiCt1, i, Soo
 Sfilenam, iftnum, inorm xin
