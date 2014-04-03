@@ -1,4 +1,3 @@
-===================================
 CSUDO (Csound User Defined Opcodes)
 ===================================
 
@@ -34,9 +33,9 @@ Three use cases are now described in detail:
 
 
 
-============================================================
+
 USE CASE 1: DOWNLOAD ANY UDO DEFINITION (NO VERSION CONTROL)
-============================================================
+------------------------------------------------------------
 
 Go to https://github.com/csudo/csudo.git. You find the current
 collection of all UDO definitions in csudo.udo. You can also browse to any
@@ -44,9 +43,8 @@ folder for subcollections. The .csd files in the folder will contain working
 examples for the UDOs.
 
 
-=========================================
 USE CASE 2: CLONING THE PUBLIC REPOSITORY
-=========================================
+-----------------------------------------
 
 You need git (http://git-scm.com).
 
@@ -61,9 +59,8 @@ For further updates, change to the csudo-code folder and execute:
 
 
 
-=========================================================
 USE CASE 3: USING THE SYSTEM FOR A PRIVATE UDO COLLECTION
-=========================================================
+---------------------------------------------------------
 
 You need git (http://git-scm.com) and python 2.7 (http://python.org).
 
@@ -84,8 +81,7 @@ D. Add your changes to the git repository.
 These steps are now described in detail.
 
 
-A. ADD A NEW .CSD FILE
-======================
+**A. ADD A NEW .CSD FILE**
 
 A .csd file MUST have the same name as the udo which is defined in it. For
 instance if the udo is called 'MyLove', the .csd file must be called
@@ -108,8 +104,7 @@ After the documentation enclosed in the /* ... */ comment, provide a working
 example for the UDO in the .csd file.
 
 
-B. ADD A .SETDEP FILE
-=====================
+**B. ADD A .SETDEP FILE**
 
 This step is only necessary when the UDO you define in a .csd file depends on
 another UDO. In this case, you must describe this dependency in a .setdep file
@@ -123,8 +118,7 @@ they are referring to. If there is an already existing .setdep file in this
 directory, add the declaration to it.
 
 
-C. RUN THE SCRIPT
-=================
+**C. RUN THE SCRIPT**
 
 After having added a .csd file and possibly a .setdep file, run the command
     python make_udo_files.py
@@ -143,8 +137,7 @@ Csound and including the .udo files one after another. The final result is
 written at the end of the script's output.
 
 
-D. ADD TO GIT
-=============
+**D. ADD TO GIT**
 
 If you are fine with the changes, run
     git add --all (or only add some changes)
@@ -153,9 +146,8 @@ to add your changes to git's version control system.
 
 
 
-===========================================================
 USE CASE 4: ADDING UDO DEFINITIONS TO THE PUBLIC REPOSITORY
-===========================================================
+-----------------------------------------------------------
 
 Essentially the steps are the same as in use case 3, except you need write
 access to the git repository. Start with git pull, add your changes, commit
@@ -165,9 +157,8 @@ to push your changes to the online repository.
 
 
 
-=========================================
 USE CASE 5: CHECKING OUT A PREVIOUS STATE
-=========================================
+-----------------------------------------
 
 The easiest way to check out a previous state of a UDO definition, or of the
 whole repository (perhaps any UDO has been deleted on favour of another one but
