@@ -26,6 +26,7 @@ kppr - parameters per row (default = 10, maximum = 32)
   opcode PrtArr1k, 0, k[]POVVO
 kArr[], ktrig, kstart, kend, kprec, kppr xin
 kprint     init       0
+kndx       init       0
 if ktrig > 0 then
 kppr       =          (kppr == 0 ? 10 : kppr)
 kend       =          (kend == -1 || kend == .5 ? lenarray(kArr) : kend)
