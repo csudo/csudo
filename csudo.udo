@@ -2,6 +2,12 @@
 *****************************************************************************
 UDO DEFINITIONS IN csudo:
 *****************************************************************************
+ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
+ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
+ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
+ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
+ArrSrti    : iOutArr[] ArrSrti iInArr[]
+ArrSrtk    : kOutArr[] ArrSrtk kInArr[]
 BufCt1     : ift BufCt1 ilen [, inum]
 BufCt2     : iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 BufFiCt1   : ift BufFiCt1 Sfilenam [, iftnum [, inorm]]
@@ -31,12 +37,12 @@ FracLen    : iFracs FracLen iNum
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 LpPhsr     : atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
 Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
+PrtArr1S   : PrtArr1S SArr [,istart [,iend]]
 PrtArr1i   : PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
 PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 PtkSmpA    : aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
-SrtArrk    : kOutArr[] SrtArrk kInArr[], iLen
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
 StrExpr1   : iNum StrExpr1 Str
@@ -72,6 +78,55 @@ TbToSF     : TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+iOutArr[] ArrPermRndNi iInArr[], iN
+Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+
+iInArr[] - input array
+iN - desired length of the output array (must not be longer than iInArr)
+iOutArr[] - output array with iN randomly permuted elements of iInArr
+****************************************************************************/
+/****************************************************************************
+kOutArr[] ArrPermRndNk kInArr[], kN
+Returns an array of kN length which contains randomly permuted elements of kInArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+
+kInArr[] - input array
+kN - desired length of the output array (must not be longer than kInArr)
+kOutArr[] - output array with kN randomly permuted elements of kInArr
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrRmvIndxk iInArr[], iIndx
+Removes the element with the index iIndx from iInArr and returns the result as new array.
+
+iInArr[] - input array
+iIndx - index to be removed from iInArr
+iOutArr[] - output array as copy of iInArr without iIndx
+****************************************************************************/
+/****************************************************************************
+kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
+Removes the element with the index Kindx from kInArr and returns the result as new array.
+
+kInArr[] - input array
+kIndx - index to be removed from kInArr
+iLenInArr - length of input array
+kOutArr[] - output array as copy of kInArr without kIndx
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrSrti iInArr[]
+Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
+
+iInArr[] - array to sort
+iOutArr[] - sorted array
+****************************************************************************/
+/****************************************************************************
+kOutArr[] ArrSrtk kInArr[]
+Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
+
+kInArr[] - array to sort
+kOutArr[] - sorted array
+****************************************************************************/
 /****************************************************************************
 ift BufCt1 ilen [, inum]
 creates a function table of ilen seconds for recording
@@ -462,6 +517,17 @@ kSpaces - number of spaces to insert before printing (default = 0)
 
 ****************************************************************************/
 /****************************************************************************
+PrtArr1S SArr [,istart [,iend]]
+Prints a one-dimensional string array at i-time.
+
+Prints the content of a one-dimensional string array at i-time. 
+Requires Csound 6.
+
+SArr - array to be printed
+istart - first index to be printed (default = 0)
+iend - first index not to be printed. -1 (default) mean the end of the array
+****************************************************************************/
+/****************************************************************************
 PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
 Prints a one-dimensional array at i-time.
 
@@ -551,14 +617,6 @@ kGrainRate - grains per second (default = 200)
 kGrainSize - grain size in milliseconds (default = 100)
 kDistribution - distribution of the grains in time. 0 means periodic, 1 means scattered (which is the dafault), with any value in between possible
 see the Csound Manual for partikkel for more information about the input parameters
-****************************************************************************/
-/****************************************************************************
-kOutArr[] SrtArrk kInArr[], iLen
-Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
-
-kInArr[] - array to sort
-iLen - its length
-kOutArr[] - sorted array
 ****************************************************************************/
 /****************************************************************************
 Sout StrAgrm Sin [,iLen]
@@ -948,17 +1006,125 @@ iend - last point to write in the function table in seconds (default=-1: until t
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
 
-  opcode SrtArrk, k[], k[]i
-kInArr[], iLen xin    
-kOutArr[]  init       iLen
+  opcode ArrPermRndNi, i[], i[]i
+iInArr[], iN xin
+iLen       =          lenarray(iInArr)
+;copy input array 
+;(for future should be simply possible via iInArrCyp[] = iInArr)
+iInArrCpy[] init      iLen
+iIndx      =          0
+ until iIndx == iLen do
+iInArrCpy[iIndx] = iInArr[iIndx]
+iIndx      +=         1
+ enduntil
+;create out array and reset index
+iOutArr[]  init       iN
+iIndx      =          0
+;for iN elements:
+ until iIndx == iN do
+ ;get one random element and put it in iOutArr
+iRndIndx   random     0, iLen-.0001
+iRndIndx   =          int(iRndIndx)
+iOutArr[iIndx] =      iInArrCpy[iRndIndx]
+ ;shift the elements after this one to the left
+  until iRndIndx == iLen-1 do
+iInArrCpy[iRndIndx] = iInArrCpy[iRndIndx+1]
+iRndIndx   +=         1
+  enduntil
+ ;reset iLen and increase counter
+iLen       -=         1
+iIndx      +=         1
+ enduntil
+           xout       iOutArr
+  endop
+
+  opcode ArrPermRndNk, k[], k[]k
+kInArr[], kN xin
+kInArrCpy[] =         kInArr
+kOutArr[]  init       i(kN)
+kIndx      =          0
+kLen       =          lenarray(kInArrCpy)
+;for kN elements:
+until kIndx == kN do
+ ;get one random element and put it in kOutArr
+kRndIndx   random     0, kLen-.0001
+kRndIndx   =          int(kRndIndx)
+kOutArr[kIndx] =      kInArrCpy[kRndIndx]
+ ;shift the elements after this one to the left
+ until kRndIndx == kLen-1 do
+kInArrCpy[kRndIndx] = kInArrCpy[kRndIndx+1]
+kRndIndx   +=         1
+ enduntil
+ ;reset kLen and increase counter
+kLen       -=         1
+kIndx      +=         1
+enduntil
+           xout       kOutArr
+  endop
+
+  opcode ArrRmvIndxi, i[], i[]i
+iInArr[], iIndx xin
+;create iOutArr with one el less than iInArr
+iOutArr[]  init       lenarray(iInArr)-1
+;copy elements from indx=0 to iIndx into iOutArr
+iReadIndx  =          0
+ until iReadIndx == iIndx do
+iOutArr[iReadIndx] =  iInArr[iReadIndx]
+iReadIndx  +=         1
+ enduntil
+;copy elements from iIndx+1 until the end of iInArr
+iReadIndx  +=         1
+ until iReadIndx == lenarray(iInArr) do
+iOutArr[iReadIndx-1] = iInArr[iReadIndx]
+iReadIndx  +=         1
+ enduntil
+           xout       iOutArr
+  endop
+
+  opcode ArrRmvIndxk, k[], k[]ki
+kInArr[], kIndx, iLenInArr xin
+;create kOutArr with one el less than kInArr
+kOutArr[]  init       iLenInArr-1
+;copy elements from indx=0 to kIndx into kOutArr
+kReadIndx  =          0
+ until kReadIndx == kIndx do
+kOutArr[kReadIndx] =  kInArr[kReadIndx]
+kReadIndx += 1
+ enduntil
+;copy elements from kIndx+1 until the end of kInArr
+kReadIndx += 1
+ until kReadIndx == lenarray(kInArr) do
+kOutArr[kReadIndx-1] = kInArr[kReadIndx]
+kReadIndx += 1
+ enduntil
+           xout       kOutArr
+  endop
+
+  opcode ArrSrti, i[], i[]
+iInArr[] xin    
+iOutArr[]  init       lenarray(iInArr)
+iMax       maxarray   iInArr
+iIndx      =          0
+ until iIndx == lenarray(iInArr) do
+iMin, iMinIndx minarray iInArr
+iOutArr[iIndx] =      iInArr[iMinIndx]
+iInArr[iMinIndx] =    iMax+1
+iIndx      +=         1
+ enduntil
+           xout       iOutArr
+  endop
+
+  opcode ArrSrtk, k[], k[]
+kInArr[] xin    
+kOutArr[]  =          kInArr
 kMax       maxarray   kInArr
 kIndx      =          0
- until kIndx == iLen do
+ until kIndx == lenarray(kInArr) do
 kMin, kMinIndx minarray kInArr
 kOutArr[kIndx] =      kInArr[kMinIndx]
 kInArr[kMinIndx] =    kMax+1
-kIndx += 1
- od
+kIndx      +=         1
+ enduntil
            xout       kOutArr
   endop
 
@@ -1489,6 +1655,18 @@ klen       strlenk    Sdump
 Slast      strsubk    Sdump, 0, klen-2
            printf     "%s]\n", kprint+1, Slast
 endif
+  endop
+
+  opcode PrtArr1S, 0, S[]oj
+SArr[], istart, iend xin
+iend       =          (iend == -1 ? lenarray(SArr) : iend)
+indx       =          istart
+           printf_i   "%s", 1, "["
+ until indx >= iend-1 do
+           printf_i    "%s, ", 1, SArr[indx]
+indx       +=         1
+ enduntil
+           printf_i   "%s]\n", 1, SArr[indx]
   endop
 
   opcode Print_a, 0, aPO

@@ -3,6 +3,7 @@
 UDO DEFINITIONS IN print:
 *****************************************************************************
 Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
+PrtArr1S   : PrtArr1S SArr [,istart [,iend]]
 PrtArr1i   : PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
 PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 TbDmp      : TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
@@ -23,6 +24,17 @@ aSig - input signal to be printed
 kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
 kSpaces - number of spaces to insert before printing (default = 0)
 
+****************************************************************************/
+/****************************************************************************
+PrtArr1S SArr [,istart [,iend]]
+Prints a one-dimensional string array at i-time.
+
+Prints the content of a one-dimensional string array at i-time. 
+Requires Csound 6.
+
+SArr - array to be printed
+istart - first index to be printed (default = 0)
+iend - first index not to be printed. -1 (default) mean the end of the array
 ****************************************************************************/
 /****************************************************************************
 PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
@@ -159,6 +171,18 @@ klen       strlenk    Sdump
 Slast      strsubk    Sdump, 0, klen-2
            printf     "%s]\n", kprint+1, Slast
 endif
+  endop
+
+  opcode PrtArr1S, 0, S[]oj
+SArr[], istart, iend xin
+iend       =          (iend == -1 ? lenarray(SArr) : iend)
+indx       =          istart
+           printf_i   "%s", 1, "["
+ until indx >= iend-1 do
+           printf_i    "%s, ", 1, SArr[indx]
+indx       +=         1
+ enduntil
+           printf_i   "%s]\n", 1, SArr[indx]
   endop
 
   opcode Print_a, 0, aPO
