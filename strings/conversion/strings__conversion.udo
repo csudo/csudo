@@ -19,7 +19,7 @@ Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, S
 Str - input string with a math expression.
 iStrt - first index to read in Str (default = 0)
 iEnd - last index to read in Str (default = -1 which means end of the string)
-iNum - result of the binary operation as number
+iNum - result of the math expression as number
 ****************************************************************************/
 /****************************************************************************
 iNum StrExpr1 Str, iStrt, iEnd

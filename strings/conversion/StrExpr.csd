@@ -7,7 +7,7 @@ Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, S
 Str - input string with a math expression.
 iStrt - first index to read in Str (default = 0)
 iEnd - last index to read in Str (default = -1 which means end of the string)
-iNum - result of the binary operation as number
+iNum - result of the math expression as number
 ****************************************************************************/
 
 
@@ -341,6 +341,7 @@ i 1 + .01 "1-1.23456*-10"
 i 1 + .01 "1 - 1.23456 * -10"
 i 1 + .01 "1 - 1.23456 * ((3+4)-17)"
 i 1 + .01 "(-2 - 3) - 1.23456 * ((3 + 4) - 17)"
+i 1 + .01 "2^(1/12) * 440"
 </CsScore>
 </CsoundSynthesizer>
 returns:
@@ -389,20 +390,4 @@ returns:
 '1 - 1.23456 * -10' -> 13.345600
 '1 - 1.23456 * ((3+4)-17)' -> 13.345600
 '(-2 - 3) - 1.23456 * ((3 + 4) - 17)' -> 7.345600
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+
