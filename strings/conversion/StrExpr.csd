@@ -1,16 +1,4 @@
 /****************************************************************************
-*****************************************************************************
-UDO DEFINITIONS IN strings/conversion:
-*****************************************************************************
-StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
-StrExpr1   : iNum StrExpr1 Str, iStrt, iEnd
-StrExpr2   : iNum StrExpr2 iNum1, iNum2, iOp
-StrNumP    : itest StrNumP String
-StrToAscS  : Sout StrToAscS Sin
-*****************************************************************************
-****************************************************************************/
-
-/****************************************************************************
 iNum StrExpr Str [, iStrt [, iEnd]]
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1.
 
@@ -21,48 +9,19 @@ iStrt - first index to read in Str (default = 0)
 iEnd - last index to read in Str (default = -1 which means end of the string)
 iNum - result of the binary operation as number
 ****************************************************************************/
-/****************************************************************************
-iNum StrExpr1 Str, iStrt, iEnd
-Converts a string expression to a number. Note that the string MUST be WITHOUT any spaces or tabs.
-Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
-Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
 
-Str - Input string with a common math expression
-iStrt - First index (position) to be considered (default = 0)
-iEnd - Last index to be considered (default = -1 = end of string)
-iNum - Result of the math expression as number
-****************************************************************************/
-/****************************************************************************
-iNum StrExpr2 iNum1, iNum2, iOp
+<CsoundSynthesizer>
+<CsOptions>
+-nm0
+</CsOptions>
+<CsInstruments>
+ksmps = 32
 
-Evaluates two numbers which are combined by the operator iOp.
-
-iNum1, iNum2 - numbers
-iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
-iNum - Result as number
-****************************************************************************/
-/****************************************************************************
-itest StrNumP String
-Tests whether a string is a numerical string
-
-Tests whether a string is a numerical string ("1" or "1.23435" but not "1a"). Returns 1 for "yes" and 0 for "no". If "yes", the string can be converted to a number by the opcode strtod.
-
-String - any string
-itest - 1 if String is a numerical string, 0 if not
-****************************************************************************/
-/****************************************************************************
-Sout StrToAscS Sin
-Returns the ASCII numbers of the input string as string.
-
-Returns the ASCII numbers of the input string as string. The integers in the output string are seperated by one space.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
-
-Sin - Input string with any sequence of characters or numbers.
-Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.
-****************************************************************************/
-
+  
   opcode StrIsOp, i, So
+  ;returns 1 for for +, 2 for -, 3 for *, 4 for /, 5 for %, 6 for ^
+  ;0 for anything else
 String, indx xin
 Str strsub String, indx, indx+1
 if strcmp(Str, "+") == 0 then
@@ -82,8 +41,9 @@ iRes = 0
 endif
 xout iRes  
   endop
-
+  
   opcode StrLNoth, i, Sii
+  ;looks whether left of iPos >= imin is nothing but spaces or tabs (1=true)
 Str, imin, iPos xin
 iTrue = 1
 until iPos < imin+1 do
@@ -95,24 +55,26 @@ endif
 enduntil
 end: xout iTrue  
   endop
-
+  
   opcode StrL_NvO, i, Sii
+  ;looks whether the next real sign to the left >= imin is an operator (1=true)
 Str, imin, iPos xin
 iTrue = 0
 until iPos < imin+1 do
 iPos -= 1
-  ;if next sign is not empty, test and break
- if strchar(Str, iPos) != 32 && strchar(Str, iPos) != 9 then
-  if StrIsOp(Str, iPos) > 0 then
-   iTrue = 1 ;implicit: else iTrue=0
-  endif
-  igoto end
+ ;if next sign is not empty, test and break
+if strchar(Str, iPos) != 32 && strchar(Str, iPos) != 9 then
+ if StrIsOp(Str, iPos) > 0 then
+  iTrue = 1 ;implicit: else iTrue=0
  endif
+ igoto end
+endif
 enduntil
 end: xout iTrue
   endop
-
+  
   opcode StrL_Prth, i, Soj
+  ;next corresponding opening parenthesis < iPos and >= iMin
 Str, imin, iPos xin
 iPos = iPos == -1 ? strlen(Str) - 1 : iPos
 iPrtPos = -1
@@ -137,8 +99,11 @@ until iPos < imin+1 do
 enduntil
 end: xout iPrtPos
   endop
-
+  
   opcode StrNxtOpL, ii, Soj
+  ;returns position and type of next operator left to ipos in Str
+  ;stops testing left from iminpos
+  ;anything inside parentheses will be disregarded
 Str, iminpos, ipos xin
 ipos = ipos == -1 ? strlen(Str) - 1 : ipos
 iop = 0
@@ -155,6 +120,8 @@ xout ipos, iop
   endop
 
   opcode StrExpr2, i, iii
+  ;evaluates two numbers which are combined by the operator iOp
+  ;iOP values: 1:+, 2:-, 3:*, 4:/, 5:%, 6:^
 iNum1, iNum2, iOp xin
 if iOp == 1 then
 iNum = iNum1 + iNum2
@@ -171,8 +138,9 @@ iNum = iNum1 ^ iNum2
 endif
 xout iNum
   endop
-
+  
   opcode StrRmvST, S, Soj
+  ;removes all spaces or tabs from strt to end (both included)
 Str, istrt, iend xin
 iend = iend == -1 ? strlen(Str) - 1 : iend
 Scpy = ""
@@ -184,8 +152,10 @@ until istrt == iend+1 do
 enduntil
    xout Scpy
   endop
-
+  
   opcode StrExpr1, i, Soj
+  ;converts a string expression to a number
+  ;note that the string must be without spaces
 
  ;input (string, first and last index to read)
 Str, istrt, iend xin
@@ -293,6 +263,7 @@ iNum strtod strsub(Str, istrt, iend+1)
 end: xout iNum  
   endop
 
+  
   opcode StrExpr, i, Soj
   ;converts a string expression to a number
  
@@ -314,46 +285,124 @@ iNum StrExpr1 StrRmvd
    xout iNum
 skip:
   endop
-
-  opcode StrNumP, i, S
-Str        xin
-ip         =          1; start at yes and falsify
-ilen       strlen     Str
- if ilen == 0 then
-ip         =          0
-           igoto      end
- endif
-ifirst     strchar    Str, 0
- if ifirst == 45 then; a "-" is just allowed as first character
-Str        strsub     Str, 1, -1
-ilen       =          ilen-1
- endif
-indx       =          0
-inpnts     =          0; how many points have there been
-loop:
-iascii     strchar    Str, indx; 48-57
- if iascii < 48 || iascii > 57 then; if not 0-9
-  if iascii == 46 && inpnts == 0 then; if not the first point
-inpnts     =          1
-           else
-ip         =          0
-  endif
- endif
-           loop_lt    indx, 1, ilen, loop
-end:       xout       ip
-  endop
-
-  opcode StrToAscS, S, S
-Sin        xin
-ilen       strlen     Sin
-ipos       =          0
-Sres       =          ""
-loop:
-ichr       strchar    Sin, ipos
-Snew       sprintf    "%d ", ichr
-Sres       strcat     Sres, Snew
-           loop_lt    ipos, 1, ilen, loop
-           xout       Sres
-  endop
+  
 
 
+instr 1
+String    strget    p4
+iNum      StrExpr   String
+          printf_i  "'%s' -> %f\n", 1, String, iNum
+endin 
+
+</CsInstruments>
+<CsScore>
+i 1 0 .01 " -1  " 
+i 1 + .01 "1+1" 
+i 1 + .01 "(1+1)+1" 
+i 1 + .01 "1+(1+1)" 
+i 1 + .01 "(1-1)-1"
+i 1 + .01 "1-(1-1)"
+i 1 + .01 "-(1-1)-1"
+i 1 + .01 "-1-(1-1)"
+i 1 + .01 "(2-1)-1"
+i 1 + .01 "2-(1-1)"
+i 1 + .01 "-(2-1)-1"
+i 1 + .01 "(1-2)-1"
+i 1 + .01 "1-(2-1)"
+i 1 + .01 "-(1-2)-1"
+i 1 + .01 "(-2-1)-1"
+i 1 + .01 "-2-(1-1)"
+i 1 + .01 "-(-2-1)-1"
+i 1 + .01 "(-1-1)-2"
+i 1 + .01 "-1-(1-2)"
+i 1 + .01 "-(-1-1)-2"
+i 1 + .01 "123*0.456"
+i 1 + .01 "123*-0.456" ;ok
+i 1 + .01 "123*(-0.456)" ;no need for parentheses here, but also ok
+i 1 + .01 "-123*-0.456" 
+i 1 + .01 "-(123*-0.456)" 
+i 1 + .01 "(-123)*(-0.456)" 
+i 1 + .01 "(-123*-0.456)" ;stupid but works
+i 1 + .01 "(1/2)/3" 
+i 1 + .01 "1/(2/3)" 
+i 1 + .01 "-(1/2)/3" 
+i 1 + .01 "(1/-2)/3" 
+i 1 + .01 "(-1/-2)/3" 
+i 1 + .01 "-(1/2)/-3" 
+i 1 + .01 "(1/2)/-3" 
+i 1 + .01 "-(-1/-2)/-3" 
+i 1 + .01 "2^(1/12)" ;equal tempered semitone 
+i 1 + .01 "2*(3+4)-17"
+i 1 + .01 "2*((3+4)-17)"
+i 1 + .01 "	2 * ((3+4) - 17)	" ;spaces and tabs will be removed internally
+i 1 + .01 "(-2-3) + (-1.23456)"
+i 1 + .01 "1 - 1.23456 * 10" 
+i 1 + .01 "1-1.23456*-10"
+i 1 + .01 "1 - 1.23456 * -10"
+i 1 + .01 "1 - 1.23456 * ((3+4)-17)"
+i 1 + .01 "(-2 - 3) - 1.23456 * ((3 + 4) - 17)"
+</CsScore>
+</CsoundSynthesizer>
+returns:
+' -1  ' -> -1.000000
+'1+1' -> 2.000000
+'(1+1)+1' -> 3.000000
+'1+(1+1)' -> 3.000000
+'(1-1)-1' -> -1.000000
+'1-(1-1)' -> 1.000000
+'-(1-1)-1' -> -1.000000
+'-1-(1-1)' -> -1.000000
+'(2-1)-1' -> 0.000000
+'2-(1-1)' -> 2.000000
+'-(2-1)-1' -> -2.000000
+'(1-2)-1' -> -2.000000
+'1-(2-1)' -> 0.000000
+'-(1-2)-1' -> 0.000000
+'(-2-1)-1' -> -4.000000
+'-2-(1-1)' -> -2.000000
+'-(-2-1)-1' -> 2.000000
+'(-1-1)-2' -> -4.000000
+'-1-(1-2)' -> 0.000000
+'-(-1-1)-2' -> 0.000000
+'123*0.456' -> 56.088000
+'123*-0.456' -> -56.088000
+'123*(-0.456)' -> -56.088000
+'-123*-0.456' -> 56.088000
+'-(123*-0.456)' -> 56.088000
+'(-123)*(-0.456)' -> 56.088000
+'(-123*-0.456)' -> 56.088000
+'(1/2)/3' -> 0.166667
+'1/(2/3)' -> 1.500000
+'-(1/2)/3' -> -0.166667
+'(1/-2)/3' -> -0.166667
+'(-1/-2)/3' -> 0.166667
+'-(1/2)/-3' -> 0.166667
+'(1/2)/-3' -> -0.166667
+'-(-1/-2)/-3' -> 0.166667
+'2^(1/12)' -> 1.059463
+'2*(3+4)-17' -> -3.000000
+'2*((3+4)-17)' -> -20.000000
+'	2 * ((3+4) - 17)	' -> -20.000000
+'(-2-3) + (-1.23456)' -> -6.234560
+'1 - 1.23456 * 10' -> -11.345600
+'1-1.23456*-10' -> 13.345600
+'1 - 1.23456 * -10' -> 13.345600
+'1 - 1.23456 * ((3+4)-17)' -> 13.345600
+'(-2 - 3) - 1.23456 * ((3 + 4) - 17)' -> 7.345600
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

@@ -1,4 +1,7 @@
 # internal dependencies in strings.udo
 # UDO: dependency [, dependency2 [, ...]]
 
-StrExpr2: StrExpr1
+StrNxtOpL: StrIsOp
+StrL_NvO: StrIsOp
+StrExpr1: StrL_Prth,StrNxtOpL,StrLNoth,StrExpr2,StrIsOp,StrL_NvO
+StrExpr: StrIsOp,StrLNoth,StrL_NvO,StrL_Prth,StrNxtOpL,StrExpr2,StrRmvST,StrExpr1

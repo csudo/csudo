@@ -4,6 +4,7 @@ UDO DEFINITIONS IN strings/modify:
 *****************************************************************************
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
+StrLineBreak: StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
 StripL     : Sout StripL Sin
 *****************************************************************************
 ****************************************************************************/
@@ -27,6 +28,17 @@ Changes the order of the characters in Sin randomly, like in an anagram, and ret
 Sin - input string 
 iLen - length of Sin. If -1 (default), the length is calculated internally. 
 Sout - output string
+****************************************************************************/
+/****************************************************************************
+Sout StrRmvST Sin, iStrt, iEnd
+Removes all spaces or tabs from iStrt to iEnd (both included)
+
+Removes all spaces or tabs in input string Sin from iStrt to iEnd and returns the result as Sout.
+
+Sin - Input string which may contain starting spaces or tabs.
+iStrt - First index (position) to consider in Sin (default = 0)
+iEnd - Last indes to consider in Sin (default = -1 = end of string)
+Sout - Output string with removed initial spaces/tabs.
 ****************************************************************************/
 /****************************************************************************
 Sout StripL Sin
@@ -104,6 +116,37 @@ iLen       =          iLen-1
  if iLen != 0 igoto again
 endif
            xout       Sin
+  endop
+
+  opcode StrLineBreak, S, Si
+;inserts line breaks after iNum characters in the input string
+String, iNum xin
+Sres    =        ""
+loop:
+ilen    strlen   String
+ if ilen > iNum then
+S1      strsub   String, 0, iNum
+Sres    strcat   Sres, S1
+Sres    strcat   Sres, "\n"
+String  strsub   String, iNum
+        igoto    loop
+        else
+Sres    strcat   Sres, String
+ endif
+        xout     Sres
+  endop
+
+  opcode StrRmvST, S, Soj
+Str, istrt, iend xin
+iend = iend == -1 ? strlen(Str) - 1 : iend
+Scpy = ""
+until istrt == iend+1 do
+ if strchar(Str, istrt) != 32 && strchar(Str, istrt) != 9 then
+  Scpy strcat Scpy, strsub(Str, istrt, istrt+1)
+ endif
+ istrt += 1
+enduntil
+   xout Scpy
   endop
 
 

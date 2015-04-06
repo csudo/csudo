@@ -1,8 +1,9 @@
 <CsoundSynthesizer>
 <CsOptions>
--ndm0 -+max_str_len=10000
+-ndm0 
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
 /****************************************************************************
 Sout StrToAscS Sin

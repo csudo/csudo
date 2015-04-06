@@ -1,6 +1,8 @@
 # internal dependencies in string_conversion.udo
 # UDO: dependency [, dependency2 [, ...]]
 
-StrExpr2: StrExpr1
+StrExpr1: StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
+StrExpr: StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST, StrExpr1
+
 
 

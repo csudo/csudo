@@ -14,6 +14,7 @@ itest - 1 if String is a numerical string, 0 if not
 -nm0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
   opcode StrNumP, i, S
 Str        xin
