@@ -6,8 +6,9 @@ ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
 ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
 ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
-ArrSrti    : iOutArr[] ArrSrti iInArr[]
-ArrSrtk    : kOutArr[] ArrSrtk kInArr[]
+ArrSrti_simp: iOutArr[] ArrSrti_simp iInArr[]
+ArrSrtk    : kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
+ArrSrtk_simp: kOutArr[] ArrSrtk_simp kInArr[]
 BufCt1     : ift BufCt1 ilen [, inum]
 BufCt2     : iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 BufFiCt1   : ift BufFiCt1 Sfilenam [, iftnum [, inorm]]
@@ -45,11 +46,20 @@ PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsi
 PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
-StrExpr1   : iNum StrExpr1 Str
-StrExpr2   : iNum StrExpr2 Str
-StrMems    : iSumEls StrMems Str, Sel
+StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
+StrExpr1   : iNum StrExpr1 Str, iStrt, iEnd
+StrExpr2   : iNum StrExpr2 iNum1, iNum2, iOp
+StrIsEmpty : iTrue StrIsEmpty Str, iStrt, iEnd
+StrIsOp    : iOp StrIsOp Str, iPos
+StrLNoth   : iTrue StrLNoth Str, iMin, iPos
+StrL_NvO   : iTrue StrL_NvO Str, iMin, iPos
+StrL_Prth  : iPrPos StrL_Prth Str, iMin, iPos
+StrLineBreak: StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
+StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
+StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
 StrToAscS  : Sout StrToAscS Sin
+StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 StrayElMem : ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
 StrayGetEl : Sel StrayGetEl Stray, ielindx [, isep1 [, isep2]]
 StrayGetNum: inum StrayGetNum Stray, ielindx [, isep1 [, isep2]]
@@ -114,15 +124,40 @@ iLenInArr - length of input array
 kOutArr[] - output array as copy of kInArr without kIndx
 ****************************************************************************/
 /****************************************************************************
-iOutArr[] ArrSrti iInArr[]
+iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
+This is a simple version of ArrSrti.
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
 ****************************************************************************/
 /****************************************************************************
-kOutArr[] ArrSrtk kInArr[]
+kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
+Sorts the content of kInArr[] and returns the sorted array as kOutArr[] of 
+length iOutN.
+Depending on kOutType, the output array can either contain the values, or the
+indices of the values (thus pointing to kInArr). A section of kInArr can be
+specified by kStart and kEnd. Instead of sorting every element, looking only
+for the even or odd elements can be done via the kHop parameter.
+
+kInArr[] - array to sort
+iOutN - length of the output array kOutArr
+kOutType - 0 (default) = output as sorted values, 1 = output as indices
+kStart - start from this element (inclusive) (default = 0)
+kEnd - end at this element (exclusive) (default = 0 means length of array)
+kHop - distance from element to element you are regarding (default = 1)
+kOutArr[] - sorted array
+****************************************************************************/
+/****return all elements sorted****/
+/****all elements, but sort is indicated as indices****/
+/****only the first 6 sorted values are returned****/
+/****6 largest values, start=2****/
+/****6 largest values, start=2, end=10****/
+/****6 largest values, start=2, end=0 (all), hop=2****/
+/****************************************************************************
+kOutArr[] ArrSrtk_simp kInArr[]
 Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
+This is a simple version of ArrSrtk.
 
 kInArr[] - array to sort
 kOutArr[] - sorted array
@@ -639,22 +674,89 @@ iLen - length of Sin. If -1 (default), the length is calculated internally.
 Sout - output string
 ****************************************************************************/
 /****************************************************************************
-iNum StrExpr1 Str
-Calculates a simple binary expression in a string and returns the result as a number
+iNum StrExpr Str [, iStrt [, iEnd]]
+Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1.
 
-Calculates a simple binary expression in a string and returns the result as a number. No spaces and no parentheses are allowed. Supported math operations are +, -, *, /, ^, and %. A simple number string is also accepted and converted to a number.
+Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1. Spaces (or tabs) are allowed. Supported math operations are +, -, *, /, % and ^. The precedence of bindings is as usual (^ is stronger than *%/ than +-).
 
-Str - Input string with a simple binary math expression. Supported math operations are +, -, *, /, ^, and %. No spaces and no parentheses are allowed. A simple number string is also accepted and converted to a number.
+Str - input string with a math expression.
+iStrt - first index to read in Str (default = 0)
+iEnd - last index to read in Str (default = -1 which means end of the string)
 iNum - result of the binary operation as number
 ****************************************************************************/
 /****************************************************************************
-iNum StrExpr2 Str
-Calculates a binary numerical expression in a string and returns the result as a number. One of the elements can be itself a binary expression, in which case it must be set in parentheses. Requires the UDO StrExpr1
+iNum StrExpr1 Str, iStrt, iEnd
+Converts a string expression to a number. Note that the string MUST be WITHOUT any spaces or tabs.
+Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
-Calculates a binary numerical expression in a string and returns the result as a number. One of the elements can be itself a binary expression, in which case it must be set in parentheses. No spaces are allowed. Supported math operations are +, -, *, /, ^, and %. A simple number string or a simple expression (like in StrExpr1) is also accepted and converted to a number.
+Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
 
-Str - Input string with a binary math expression. One of the elements can be itself a binary expression, in which case it must be set in parentheses. No spaces are allowed. Supported math operations are +, -, *, /, ^, and %. A simple number string or a simple expression (like in StrExpr1) is also accepted and converted to a number.
-iNum - result of the binary operation as number
+Str - Input string with a common math expression
+iStrt - First index (position) to be considered (default = 0)
+iEnd - Last index to be considered (default = -1 = end of string)
+iNum - Result of the math expression as number
+****************************************************************************/
+/****************************************************************************
+iNum StrExpr2 iNum1, iNum2, iOp
+
+Evaluates two numbers which are combined by the operator iOp.
+
+iNum1, iNum2 - numbers
+iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
+iNum - Result as number
+****************************************************************************/
+/****************************************************************************
+iTrue StrIsEmpty Str, iStrt, iEnd
+Returns 1 if the positions >= istrt and <= iend are nothing but spaces or tabs.
+
+Str - input string
+iStrt - first index (position) to be considered in Str (default = 0)
+iEnd - last index to be considered in Str (defualt = -1 = end of string)
+iTrue - 1 if true (Str >= istrt and <= iend has only spaces or tabs), 0 else
+****************************************************************************/
+/****************************************************************************
+iOp StrIsOp Str, iPos
+Looks whether the iPos character in Str is a mathematical operator. Returns 
+1 for for +, 2 for -, 3 for *, 4 for /, 5 for %, 6 for ^ and 0 for anything 
+else.
+
+Str - input string
+iPos - position (index) to read in Str (default = 0)
+iOp - 1-6 for operators '+ - * / % ^', 0 for anything else
+****************************************************************************/
+/****************************************************************************
+iTrue StrLNoth Str, iMin, iPos
+
+Looks whether left of iPos >= iMin is nothing but spaces or tabs. Returns 1 
+if true, 0 if false.
+
+Str - input string
+iPos - position (index) in Str. the UDO will look "left to" this position
+iMin - minimum position (index) which is regarded for left search
+iTrue - 1 = true, 0 = false
+****************************************************************************/
+/****************************************************************************
+iTrue StrL_NvO Str, iMin, iPos
+
+Looks whether the next real sign (= except spaces or tabs) left of iPos >= iMin 
+is an operator. Returns 1 if true, 0 if false.
+Requires the UDO StrIsOp.
+
+Str - input string
+iPos - position (index) in Str. the UDO will look "left to" this position
+iMin - minimum position (index) which is regarded for left search
+iTrue - 1 = true, 0 = false
+****************************************************************************/
+/****************************************************************************
+iPrPos StrL_Prth Str, iMin, iPos
+
+Looks for the next corresponding opening parenthesis < iPos and >= iMin.
+
+Str - input string
+iPos - position (index) in Str. the UDO will look "left to" this position.
+       the default is -1 which means the end of the input string.
+iMin - minimum position (index) which is regarded for left search (default 0)
+iPrPos - position (index) of next opening parenthesis (-1 if none)
 ****************************************************************************/
 /****************************************************************************
 iSumEls StrMems Str, Sel
@@ -676,6 +778,31 @@ String - any string
 itest - 1 if String is a numerical string, 0 if not
 ****************************************************************************/
 /****************************************************************************
+iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
+
+Returns position and type of next operator < iPos and >= iMin. Anything inside 
+Parentheses will be disregarded.
+
+Requires the UDO StrIsOp.
+
+Str - input string
+iPos - position (index) in Str. the UDO will look "left to" this position
+iMin - minimum position (index) which is regarded for left search
+iOpPos - position of operator
+iOp - type of operator: 1-6 for operators '+ - * / % ^', 0 for anything else
+****************************************************************************/
+/****************************************************************************
+Sout StrRmvST Sin, iStrt, iEnd
+Removes all spaces or tabs from iStrt to iEnd (both included)
+
+Removes all spaces or tabs in input string Sin from iStrt to iEnd and returns the result as Sout.
+
+Sin - Input string which may contain starting spaces or tabs.
+iStrt - First index (position) to consider in Sin (default = 0)
+iEnd - Last indes to consider in Sin (default = -1 = end of string)
+Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
 Sout StrToAscS Sin
 Returns the ASCII numbers of the input string as string.
 
@@ -684,6 +811,17 @@ You may have to set the flag -+max_str_len=10000 to avoid buffer overflow.
 
 Sin - Input string with any sequence of characters or numbers.
 Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.
+****************************************************************************/
+/****************************************************************************
+iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
+Returns the next position >= iStrtIn and <= iEndIn without possible starting 
+and/or ending spaces or tabs.
+
+Str - input string
+iStrtIn - first index to read in Str (default = 0)
+iEndIn - last index to read in Str (default = -1 which means end of the string)
+iStrtOut - first index to read when starting spaces or tabs are omitted
+iEndOut - last index to read when ending spaces or tabs are omitted
 ****************************************************************************/
 /****************************************************************************
 ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
@@ -780,7 +918,7 @@ Converts a string-array which just consists of numbers or simple math expression
 
 Puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written iftlen. (An empty string as input writes a function table of size=1 to avoid an error but returns 0 as length of elements written.) Simple binary math expressions using +, -, *, /, ^ and % are allowed, with just one parenthesis in total (see the examples below). 
 Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
-Requires csound 5.15 or higher, and the UDOs StrayLen, StrExpr1 and StrExpr2
+Requires csound 5.15 or higher, and the UDOs StrayLen and StrExpr (which itself requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1).
 
 Stray - a string as array
 iftno - like in an ftgen statement: if 0 (which is also the default) an automatic number is generated by Csound; if any positive number, this is then the number of the function table
@@ -1011,13 +1149,8 @@ iInArr[], iN xin
 iLen       =          lenarray(iInArr)
 ;copy input array 
 ;(for future should be simply possible via iInArrCyp[] = iInArr)
-iInArrCpy[] init      iLen
-iIndx      =          0
- until iIndx == iLen do
-iInArrCpy[iIndx] = iInArr[iIndx]
-iIndx      +=         1
- enduntil
-;create out array and reset index
+iInArrCpy[] =         iInArr
+;create out array and set index
 iOutArr[]  init       iN
 iIndx      =          0
 ;for iN elements:
@@ -1100,7 +1233,7 @@ kReadIndx += 1
            xout       kOutArr
   endop
 
-  opcode ArrSrti, i[], i[]
+  opcode ArrSrti_simp, i[], i[]
 iInArr[] xin    
 iOutArr[]  init       lenarray(iInArr)
 iMax       maxarray   iInArr
@@ -1114,7 +1247,95 @@ iIndx      +=         1
            xout       iOutArr
   endop
 
-  opcode ArrSrtk, k[], k[]
+  opcode ArrSrtk, k[], k[]iOOOP
+  
+kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
+
+;calculate some common values 
+kLen lenarray kArr
+kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
+
+;create the array for the result
+kRes[] init iOutN
+
+;fill this array with the smallest number minus 1 of kArr
+kIndx = 0
+kMin minarray kArr
+until kIndx == iOutN do
+  kRes[kIndx] = kMin-1
+  kIndx += 1
+enduntil
+
+;if necessary, create index array
+if kOutType != 0 then
+  kIndices[] init iOutN
+endif
+
+;initialize pointer
+kArrPnt = kStart
+
+;loop over the elements of the array
+until kArrPnt >= kEnd do
+ 
+  ;loop over kRes
+  kResPnt = 0
+  until kResPnt == iOutN do
+  
+    ;if an el in kRes is smaller than the element we are comparing with
+    if kRes[kResPnt] < kArr[kArrPnt] then
+    
+      ;shift the elements right to kResPnt one position to the right
+      kShiftPnt = iOutN-1 
+      until kShiftPnt == kResPnt do
+        kRes[kShiftPnt] = kRes[kShiftPnt-1]
+        kShiftPnt -= 1 
+      enduntil
+      
+      ;then put the element we are comparing with at this position
+      kRes[kResPnt] = kArr[kArrPnt]
+
+      ;if indices array 
+      if kOutType != 0 then
+      
+        ;shift the elements in kIndices one position to the right
+        kShiftPnt = iOutN-1 
+        until kShiftPnt == kResPnt do
+          kIndices[kShiftPnt] = kIndices[kShiftPnt-1]
+          kShiftPnt -= 1
+        enduntil
+
+        ;then put in the index
+        kIndices[kResPnt] = kArrPnt
+      endif
+      
+      ;and leave the loop
+      kgoto Break
+      
+    endif
+    
+    ;increase res pointer
+    kResPnt += 1
+    
+  enduntil
+  
+  Break:
+  ;increase array pointer
+  kArrPnt += kHop
+ 
+enduntil
+
+;copy array to final result
+if kOutType == 0 then
+kOut[] = kRes
+else
+kOut[] = kIndices
+endif
+
+xout kOut
+
+ endop
+
+  opcode ArrSrtk_simp, k[], k[]
 kInArr[] xin    
 kOutArr[]  =          kInArr
 kMax       maxarray   kInArr
@@ -2176,126 +2397,261 @@ isumtot    =          isumtot + inum
 end:       xout       isumtot
   endop
 
-  opcode StrExpr1, i, S
-Str       xin
-isum      strindex  Str, "+"; sum
-idif      strindex  Str, "-"; difference
-ipro      strindex  Str, "*"; product
-irat      strindex  Str, "/"; ratio
-ipow      strindex  Str, "^"; power
-imod      strindex  Str, "%"; modulo
- if ipow > 0 then
-ifirst    strindex  Str, "^"
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-i1        strtod    S1
-i2        strtod    S2
-ires      =         i1 ^ i2
- elseif imod > 0 then
-ifirst    strindex  Str, "%"
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-i1        strtod    S1
-i2        strtod    S2
-ires      =         i1 % i2
- elseif ipro > 0 then
-ifirst    strindex  Str, "*"
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-i1        strtod    S1
-i2        strtod    S2
-ires      =         i1 * i2
- elseif irat > 0 then
-ifirst    strindex  Str, "/"
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-i1        strtod    S1
-i2        strtod    S2
-ires      =         i1 / i2
- elseif isum > 0 then 
-ifirst    strindex  Str, "+"
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-i1        strtod    S1
-i2        strtod    S2
-ires      =         i1 + i2
- elseif idif > -1 then
-ifirst    strrindex Str, "-";(last occurrence: -3-4 is possible, but not 3--4)
-S1        strsub    Str, 0, ifirst
-S2        strsub    Str, ifirst+1
-iS1len    strlen    S1
- if iS1len == 0 then ;just a negative number
-inum      strtod    S2
-ires      =         -inum
- else	 
-ifirst    strtod    S1
-isec      strtod    S2
-ires      =         ifirst - isec
-  endif
- else
-ires      strtod    Str
- endif
-          xout      ires
-  endop 
-
-  opcode StrExpr2, i, S
-Sin       xin
-ilen      strlen    Sin
-;if a parenthesis can be found
-iparenth  strindex  Sin, "("
-if iparenth > -1 then
-  ;if in first half and no '-' preceeds
-  if iparenth == 0 then
-    ;then first element ends in ")"
-iprend    strindex   Sin, ")"
-S1        strsub     Sin, 1, iprend
-    ;convert this element into a number
-i1        StrExpr1   S1
-    ;append the rest and convert again
-S2        strsub     Sin, iprend+2 
-Sep       strsub     Sin, iprend+1, iprend+2
-Scoll     sprintf    "%f%s%s", i1, Sep, S2
-ires      StrExpr1   Scoll
-  ;if in first half and '-' preceeds
-  elseif iparenth == 1 then
-    ;then first element ends in ")"
-iprend    strindex   Sin, ")"
-S1        strsub     Sin, 2, iprend
-    ;convert this element into a number
-i1        StrExpr1   S1
-i1        =          -i1
-    ;append the rest and convert again
-S2        strsub     Sin, iprend+2 
-Sep       strsub     Sin, iprend+1, iprend+2
-Scoll     sprintf    "%f%s%s", i1, Sep, S2
-ires      StrExpr1   Scoll
-  ;if the parenthesis is in the second half
-  else
-    ;isolate first element and the conjunction
-S1        strsub     Sin, 0, iparenth-1
-Sep       strsub     Sin, iparenth-1, iparenth
-    ;convert the second element
-S2        strsub     Sin, iparenth+1, ilen-1
-i2        StrExpr1   S2
-      ;if subtraction and i2 negative, convert to addition
-isepminus strcmp     Sep, "-"
-      if i2 < 0 && isepminus == 0 then
-i2        =          -i2
-Sep       =          "+"
-      endif
-    ;convert the whole
-Scoll     sprintf    "%s%s%f", S1, Sep, i2
-ires      StrExpr1   Scoll
-  endif
-;if no parenthesis, simply convert
-else	
-ires      StrExpr1   Sin
+  opcode StrIsOp, i, So
+String, indx xin
+Str strsub String, indx, indx+1
+if strcmp(Str, "+") == 0 then
+iRes = 1
+elseif strcmp(Str, "-") == 0 then
+iRes = 2
+elseif strcmp(Str, "*") == 0 then
+iRes = 3
+elseif strcmp(Str, "/") == 0 then
+iRes = 4
+elseif strcmp(Str, "%") == 0 then
+iRes = 5
+elseif strcmp(Str, "^") == 0 then
+iRes = 6
+else
+iRes = 0
 endif
-          xout       ires
+xout iRes  
+  endop
+
+  opcode StrL_Prth, i, Soj
+Str, imin, iPos xin
+iPos = iPos == -1 ? strlen(Str) - 1 : iPos
+iPrtPos = -1
+iLevel = 0
+until iPos < imin+1 do
+  iPos -= 1
+  iChar strchar Str, iPos
+   ;if next sign is another closing parenthesis, increase level
+  if iChar == 41 then
+    iLevel += 1
+   ;if opening parenthesis 
+  elseif iChar == 40 then
+     ;and level=0: return position
+    if iLevel == 0 then
+      iPrtPos = iPos
+      igoto end
+     ;otherwise decrease level
+    else 
+      iLevel -= 1
+    endif
+  endif
+enduntil
+end: xout iPrtPos
+  endop
+
+  opcode StrNxtOpL, ii, Soj
+Str, iminpos, ipos xin
+ipos = ipos == -1 ? strlen(Str) - 1 : ipos
+iop = 0
+until ipos <= iminpos || iop > 0 do
+ipos -= 1
+ if strchar(Str, ipos) == 41 then
+  iPrthPos strrindex strsub(Str, 0, ipos), "("
+  ipos = iPrthPos
+ else
+iop StrIsOp Str, ipos
+ endif
+enduntil
+xout ipos, iop
+  endop
+
+  opcode StrLNoth, i, Sii
+Str, imin, iPos xin
+iTrue = 1
+until iPos < imin+1 do
+iPos -= 1
+if strchar(Str, iPos) != 32 && strchar(Str, iPos) != 9 then
+iTrue = 0
+igoto end
+endif
+enduntil
+end: xout iTrue  
+  endop
+
+  opcode StrExpr2, i, iii
+iNum1, iNum2, iOp xin
+if iOp == 1 then
+iNum = iNum1 + iNum2
+elseif iOp == 2 then
+iNum = iNum1 - iNum2
+elseif iOp == 3 then
+iNum = iNum1 * iNum2
+elseif iOp == 4 then
+iNum = iNum1 / iNum2
+elseif iOp == 5 then
+iNum = iNum1 % iNum2
+elseif iOp == 6 then
+iNum = iNum1 ^ iNum2
+endif
+xout iNum
+  endop
+
+  opcode StrL_NvO, i, Sii
+Str, imin, iPos xin
+iTrue = 0
+until iPos < imin+1 do
+iPos -= 1
+  ;if next sign is not empty, test and break
+ if strchar(Str, iPos) != 32 && strchar(Str, iPos) != 9 then
+  if StrIsOp(Str, iPos) > 0 then
+   iTrue = 1 ;implicit: else iTrue=0
+  endif
+  igoto end
+ endif
+enduntil
+end: xout iTrue
+  endop
+
+  opcode StrRmvST, S, Soj
+Str, istrt, iend xin
+iend = iend == -1 ? strlen(Str) - 1 : iend
+Scpy = ""
+until istrt == iend+1 do
+ if strchar(Str, istrt) != 32 && strchar(Str, istrt) != 9 then
+  Scpy strcat Scpy, strsub(Str, istrt, istrt+1)
+ endif
+ istrt += 1
+enduntil
+   xout Scpy
+  endop
+
+  opcode StrExpr1, i, Soj
+
+ ;input (string, first and last index to read)
+Str, istrt, iend xin
+iend = (iend == -1) ? strlen(Str) - 1 : iend
+
+ ;read backwards
+indx = iend
+until indx == istrt do
+
+  ;1. if this char is closing parenthesis:
+ if strchar(Str, indx) == 41 then
+   ;look for the corresponding opening parenthesis
+  iPrthPos StrL_Prth Str, istrt, indx
+   ;look for the operator before
+  iOpPos, iOp StrNxtOpL Str, istrt, iPrthPos
+  
+   ;if there is one:
+  if iOp > 0 then
+    ;if this is a simple minus sign:
+   if iOp == 2 && StrLNoth(Str, istrt, iOpPos) == 1 then
+     ;evaluate 
+    iNum = -StrExpr1(Str, iPrthPos+1, indx-1)
+    ;if this is plus or minus, split here
+   elseif iOp <= 2 then
+    iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iPrthPos+1, indx-1), iOp
+    
+    ;else splitting might be here or not, if there is another operator before
+   else 
+     ;look for the operator before
+    iPrecOpPos, iPrecOp StrNxtOpL Str, istrt, iOpPos    
+     ;if there is none or nothing left to it (= single minus sign), split here
+    if iPrecOp == 0 || StrLNoth(Str, istrt, iPrecOpPos) == 1 then
+     iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iPrthPos+1, indx-1), iOp     
+     ;if preceding operator >= than operator here, split here
+    elseif iPrecOp >= iOp then
+     iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iPrthPos+1, indx-1), iOp     
+     ;else split there
+    else
+     iNum StrExpr2 StrExpr1(Str, istrt, iPrecOpPos-1), StrExpr1(Str, iPrecOpPos+1, indx), iPrecOp
+    endif
+   endif
+   
+   ;if no operator before, evaluate this section 
+  else
+   iNum StrExpr1 Str, iPrthPos+1, indx-1
+  endif
+   ;leave
+  igoto end
+  
+  ;2. if this char is +:
+ elseif StrIsOp(Str, indx) == 1 then
+   ;split here, evaluate sections and break
+  iNum StrExpr2 StrExpr1(Str, istrt, indx-1), StrExpr1(Str, indx+1, iend), 1
+  igoto end
+
+  ;3. if this char is -:
+ elseif StrIsOp(Str, indx) == 2 then
+   ;if this is a minus sign, ignore
+  if StrL_NvO(Str, istrt, indx) == 0 then
+    ;otherwise split here, evaluate sections and break
+   iNum StrExpr2 StrExpr1(Str, istrt, indx-1), StrExpr1(Str, indx+1, iend), 2
+   igoto end
+  endif
+
+  ;4. if this char is *, / or %:
+ elseif StrIsOp(Str, indx) == 3 || StrIsOp(Str, indx) == 4 || StrIsOp(Str, indx) == 5 then
+
+   ;look for next operator at left
+  iOpPos, iOp StrNxtOpL Str, istrt, indx
+   ;if +: split there
+   if iOp == 1  then
+    iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iOpPos+1, iend), iOp
+   ;if - and not minus sign: split there as well
+   elseif iOp == 2 && StrLNoth(Str, istrt, iOpPos) == 0 then
+    iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iOpPos+1, iend), iOp
+    ;else split here
+   else
+    iNum StrExpr2 StrExpr1(Str, istrt, indx-1), StrExpr1(Str, indx+1, iend), StrIsOp(Str, indx)
+   endif
+   ;break loop
+  igoto end
+  
+  ;5. if this char is ^:
+ elseif StrIsOp(Str, indx) == 6 then  
+   ;look for next operator at left
+  iOpPos, iOp StrNxtOpL Str, istrt, indx   
+   ;if ^ or minus sign or none: split here
+  if iOp == 0 || iOp == 6 || (iOp == 2 && iOpPos == 0) then
+    iNum StrExpr2 StrExpr1(Str, istrt, indx-1), StrExpr1(Str, indx+1, iend), 6
+   ;else there
+  else
+    iNum StrExpr2 StrExpr1(Str, istrt, iOpPos-1), StrExpr1(Str, iOpPos+1, iend), 6   
+  endif
+   ;break loop
+  igoto end
+ endif
+
+  ;decrease index
+indx -= 1
+ 
+enduntil
+
+iNum strtod strsub(Str, istrt, iend+1)
+
+end: xout iNum  
+  endop
+
+  opcode StrExpr, i, Soj
+  ;converts a string expression to a number
+ 
+ ;input
+Str, istrt, iend xin
+iend = (iend == -1) ? strlen(Str) - 1 : iend
+
+ ;remove spaces
+StrRmvd StrRmvST Str, istrt, iend
+
+ ;make sure this is a real string
+if strlen(StrRmvd) == 0 then
+prints "ERROR in UDO StrExpr: Input String is empty!\n"
+igoto skip
+endif
+
+ ;then let the sub functions do their work
+iNum StrExpr1 StrRmvd
+   xout iNum
+skip:
   endop
 
   opcode StrayNumToFt, ii, Sojj
-  ;requires the UDOs StrayLen, StrExpr1 and StrExpr2
+  ;requires the UDOs StrayLen and StrExpr (which itself requires others)
 Stray, iftno, isepA, isepB xin
 ;;DEFINE THE SEPERATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
@@ -2342,7 +2698,7 @@ iwarleer  =         1 ;reset info about previous separator
  endif
  ;WRITE THE ELEMENT TO THE TABLE
  if inewel == 1 then
-inum      StrExpr2  Sel ;convert expression to number
+inum      StrExpr   Sel ;convert expression to number
           tabw_i    inum, iel, ift ;write to ift
  endif
 inewel    =         0
@@ -2607,6 +2963,19 @@ Sout      strsub    Sres, 1; remove starting seperator
           xout      Sout
   endop 
 
+  opcode StrIsEmpty, i, Soj
+Str, istrt, iend xin
+iend = iend == -1 ? strlen(Str) - 1 : iend
+iTrue = 1
+until iTrue == 0 || istrt > iend do
+ if strchar(Str, istrt) != 32 && strchar(Str, istrt) != 9 then
+  iTrue = 0
+ endif
+istrt += 1
+enduntil
+xout iTrue
+  endop
+
   opcode StrMems, i, SS
 Str, Sel   xin
 iSumEls    =          0
@@ -2624,6 +2993,20 @@ iIndx      =          iLen
    endif
   od
            xout       iSumEls
+  endop
+
+  opcode StrTrmPos, ii, Soj
+Str, istrt, iend xin
+iend = iend == -1 ? strlen(Str) - 1 : iend
+;left trim
+until strchar(Str, istrt) != 32 && strchar(Str, istrt) != 9 || istrt == iend do
+istrt += 1
+enduntil
+;right trim
+until strchar(Str, iend) != 32 && strchar(Str, iend) != 9 || iend == istrt do
+iend -= 1
+enduntil
+xout istrt, iend
   endop
 
   opcode StrToAscS, S, S
@@ -2687,6 +3070,24 @@ Sin        strcatk    Ssub1, Ssub2
 kRange     =          kRange-1
            loop_lt    kCnt, 1, kLen, loop
            xout       Sout
+  endop
+
+  opcode StrLineBreak, S, Si
+;inserts line breaks after iNum characters in the input string
+String, iNum xin
+Sres    =        ""
+loop:
+ilen    strlen   String
+ if ilen > iNum then
+S1      strsub   String, 0, iNum
+Sres    strcat   Sres, S1
+Sres    strcat   Sres, "\n"
+String  strsub   String, iNum
+        igoto    loop
+        else
+Sres    strcat   Sres, String
+ endif
+        xout     Sres
   endop
 
   opcode FilDir, S, S
