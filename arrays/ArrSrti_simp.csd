@@ -1,6 +1,7 @@
 /****************************************************************************
-iOutArr[] ArrSrti iInArr[]
+iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
+This is a simple version of ArrSrti.
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
@@ -13,7 +14,7 @@ iOutArr[] - sorted array
 <CsInstruments>
 ksmps = 32
 
-  opcode ArrSrti, i[], i[]
+  opcode ArrSrti_simp, i[], i[]
 iInArr[] xin    
 iOutArr[]  init       lenarray(iInArr)
 iMax       maxarray   iInArr
@@ -30,7 +31,7 @@ iIndx      +=         1
 
 instr 1
 iArr[]     fillarray  1, -4, 19, 3, 2
-iSorted[]  ArrSrti    iArr
+iSorted[]  ArrSrti_simp iArr
 iPrint     =          0
 until iPrint == lenarray(iSorted) do
            printf_i   "iSorted[%d] = %d\n", iPrint+1, iPrint, iSorted[iPrint]
@@ -45,6 +46,12 @@ endin
 i 1 0 1
 </CsScore>
 </CsoundSynthesizer>
+returns:
+iSorted[0] = -4
+iSorted[1] = 1
+iSorted[2] = 2
+iSorted[3] = 3
+iSorted[4] = 19
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>

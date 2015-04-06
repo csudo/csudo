@@ -21,13 +21,8 @@ iInArr[], iN xin
 iLen       =          lenarray(iInArr)
 ;copy input array 
 ;(for future should be simply possible via iInArrCyp[] = iInArr)
-iInArrCpy[] init      iLen
-iIndx      =          0
- until iIndx == iLen do
-iInArrCpy[iIndx] = iInArr[iIndx]
-iIndx      +=         1
- enduntil
-;create out array and reset index
+iInArrCpy[] =         iInArr
+;create out array and set index
 iOutArr[]  init       iN
 iIndx      =          0
 ;for iN elements:
@@ -51,7 +46,7 @@ iIndx      +=         1
 
 instr 1
 ;create array
-iArr[]     array      1, 2, 3, 4, 5
+iArr[]     fillarray  1, 2, 3, 4, 5
 
 ;get permuted arrays for n=1..5 and print
 iPrmRnd1[] ArrPermRndNi iArr, 1

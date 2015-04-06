@@ -6,8 +6,9 @@ ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
 ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
 ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
-ArrSrti    : iOutArr[] ArrSrti iInArr[]
-ArrSrtk    : kOutArr[] ArrSrtk kInArr[]
+ArrSrti_simp: iOutArr[] ArrSrti_simp iInArr[]
+ArrSrtk    : kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
+ArrSrtk_simp: kOutArr[] ArrSrtk_simp kInArr[]
 *****************************************************************************
 ****************************************************************************/
 
@@ -47,15 +48,40 @@ iLenInArr - length of input array
 kOutArr[] - output array as copy of kInArr without kIndx
 ****************************************************************************/
 /****************************************************************************
-iOutArr[] ArrSrti iInArr[]
+iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
+This is a simple version of ArrSrti.
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
 ****************************************************************************/
 /****************************************************************************
-kOutArr[] ArrSrtk kInArr[]
+kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
+Sorts the content of kInArr[] and returns the sorted array as kOutArr[] of 
+length iOutN.
+Depending on kOutType, the output array can either contain the values, or the
+indices of the values (thus pointing to kInArr). A section of kInArr can be
+specified by kStart and kEnd. Instead of sorting every element, looking only
+for the even or odd elements can be done via the kHop parameter.
+
+kInArr[] - array to sort
+iOutN - length of the output array kOutArr
+kOutType - 0 (default) = output as sorted values, 1 = output as indices
+kStart - start from this element (inclusive) (default = 0)
+kEnd - end at this element (exclusive) (default = 0 means length of array)
+kHop - distance from element to element you are regarding (default = 1)
+kOutArr[] - sorted array
+****************************************************************************/
+/****return all elements sorted****/
+/****all elements, but sort is indicated as indices****/
+/****only the first 6 sorted values are returned****/
+/****6 largest values, start=2****/
+/****6 largest values, start=2, end=10****/
+/****6 largest values, start=2, end=0 (all), hop=2****/
+/****************************************************************************
+kOutArr[] ArrSrtk_simp kInArr[]
 Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
+This is a simple version of ArrSrtk.
 
 kInArr[] - array to sort
 kOutArr[] - sorted array
@@ -66,13 +92,8 @@ iInArr[], iN xin
 iLen       =          lenarray(iInArr)
 ;copy input array 
 ;(for future should be simply possible via iInArrCyp[] = iInArr)
-iInArrCpy[] init      iLen
-iIndx      =          0
- until iIndx == iLen do
-iInArrCpy[iIndx] = iInArr[iIndx]
-iIndx      +=         1
- enduntil
-;create out array and reset index
+iInArrCpy[] =         iInArr
+;create out array and set index
 iOutArr[]  init       iN
 iIndx      =          0
 ;for iN elements:
@@ -155,7 +176,7 @@ kReadIndx += 1
            xout       kOutArr
   endop
 
-  opcode ArrSrti, i[], i[]
+  opcode ArrSrti_simp, i[], i[]
 iInArr[] xin    
 iOutArr[]  init       lenarray(iInArr)
 iMax       maxarray   iInArr
@@ -169,7 +190,95 @@ iIndx      +=         1
            xout       iOutArr
   endop
 
-  opcode ArrSrtk, k[], k[]
+  opcode ArrSrtk, k[], k[]iOOOP
+  
+kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
+
+;calculate some common values 
+kLen lenarray kArr
+kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
+
+;create the array for the result
+kRes[] init iOutN
+
+;fill this array with the smallest number minus 1 of kArr
+kIndx = 0
+kMin minarray kArr
+until kIndx == iOutN do
+  kRes[kIndx] = kMin-1
+  kIndx += 1
+enduntil
+
+;if necessary, create index array
+if kOutType != 0 then
+  kIndices[] init iOutN
+endif
+
+;initialize pointer
+kArrPnt = kStart
+
+;loop over the elements of the array
+until kArrPnt >= kEnd do
+ 
+  ;loop over kRes
+  kResPnt = 0
+  until kResPnt == iOutN do
+  
+    ;if an el in kRes is smaller than the element we are comparing with
+    if kRes[kResPnt] < kArr[kArrPnt] then
+    
+      ;shift the elements right to kResPnt one position to the right
+      kShiftPnt = iOutN-1 
+      until kShiftPnt == kResPnt do
+        kRes[kShiftPnt] = kRes[kShiftPnt-1]
+        kShiftPnt -= 1 
+      enduntil
+      
+      ;then put the element we are comparing with at this position
+      kRes[kResPnt] = kArr[kArrPnt]
+
+      ;if indices array 
+      if kOutType != 0 then
+      
+        ;shift the elements in kIndices one position to the right
+        kShiftPnt = iOutN-1 
+        until kShiftPnt == kResPnt do
+          kIndices[kShiftPnt] = kIndices[kShiftPnt-1]
+          kShiftPnt -= 1
+        enduntil
+
+        ;then put in the index
+        kIndices[kResPnt] = kArrPnt
+      endif
+      
+      ;and leave the loop
+      kgoto Break
+      
+    endif
+    
+    ;increase res pointer
+    kResPnt += 1
+    
+  enduntil
+  
+  Break:
+  ;increase array pointer
+  kArrPnt += kHop
+ 
+enduntil
+
+;copy array to final result
+if kOutType == 0 then
+kOut[] = kRes
+else
+kOut[] = kIndices
+endif
+
+xout kOut
+
+ endop
+
+  opcode ArrSrtk_simp, k[], k[]
 kInArr[] xin    
 kOutArr[]  =          kInArr
 kMax       maxarray   kInArr
