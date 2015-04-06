@@ -4,6 +4,18 @@
 # and for declaring the dependencies in .setdep files
 # at the end, all .udo files are tested for errors when run by csound
 
+# 2015/04/06 problem if the dependencies are complicated 
+# (like in StrExpr, which is also used in StrayNumToFt)
+# if udo one depends on two which itself depends on three
+# it would be desirable to write in the .setdep file:
+# one: two
+# and not care about the second dependency. but for bringing this to work,
+# the way dependencies are resolved in formatCollect2 is to be rewritten.
+# for now, try to name the dependencies all (as i did in strays.setdep) and
+# in a good order.
+
+
+
 ############################################
 #### ENTER YOUR CSOUND6 EXECUTABLE HERE ####
 ############################################
@@ -154,6 +166,9 @@ def formatCollect2(drct, lists, allUdoList, deplis):
         # get a list with the names of all dependencies and append
         addnamenneu.append(deplis[i][1:])
         addnamen.append(addnamenneu)
+    # sort addnamen as this is needed for next step
+    # NOTE: this is not enought for complicate dependencies!
+    addnamen.sort()
     # insert the new udo names to be added in udonamen
     udoNamenExtended = []
     for i in range(len(udonamen)):
@@ -418,7 +433,7 @@ i 1 0 0
         print "Return value = %d" % system('%s %s 2> /dev/null' % (csound6, csd))
         system('%s %s' % (csound6, csd))
         return 1
-
+    
 
 def testAll(d, sum=0):
     """tests all .udo files which has been generated whether they can be executed by csound without errors"""
