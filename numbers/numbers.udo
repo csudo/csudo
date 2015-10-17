@@ -4,6 +4,7 @@ UDO DEFINITIONS IN numbers:
 *****************************************************************************
 Counter    : kcount Counter kup, kdown [, kstep [, istart]]
 FracLen    : iFracs FracLen iNum
+Scale      : iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
 *****************************************************************************
 ****************************************************************************/
 
@@ -27,6 +28,19 @@ Returns the real length of digits in the the fractional part of a number. "Real"
 
 iNum - incoming number
 iFracs - number of digits in the fractional part. 0 means that iNum is an integer
+****************************************************************************/
+/****************************************************************************
+iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+
+iVal - incoming number
+iInMin - minimum possible incoming number
+iInMax - maximum possible incoming numer
+iOutMin - minimum possible outgoing number
+iOutMax - maximum possible outgoing number
+iValOut - iVal scaled
 ****************************************************************************/
 
   opcode Counter, k, kkPo
@@ -53,6 +67,12 @@ else
 ifracs    FracLen   inum, ifracs+1
 endif
 end:      xout      ifracs
+  endop
+
+  opcode Scale, i, iiiii
+iVal, iInMin, iInMax, iOutMin, iOutMax xin
+iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
+xout iValOut
   endop
 
 

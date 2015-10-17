@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN arrays:
 *****************************************************************************
+ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
 ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
 ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
@@ -12,6 +13,16 @@ ArrSrtk_simp: kOutArr[] ArrSrtk_simp kInArr[]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+kOutArr[] ArrPermRndIndx kInArr[], kN
+Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+This UDO is similar to ArrPermRndN but returns indices instead of values.
+
+kInArr[] - input array
+kN - desired length of the output array (must not be longer than kInArr)
+kOutArr[] - output array with kN randomly permuted indices of kInArr
+****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPermRndNi iInArr[], iN
 Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
@@ -86,6 +97,32 @@ This is a simple version of ArrSrtk.
 kInArr[] - array to sort
 kOutArr[] - sorted array
 ****************************************************************************/
+
+  opcode ArrPermRndIndx, k[], k[]k
+kInArr[], kN xin
+iLen       lenarray   kInArr
+kInd[]     genarray_i  0, iLen-1
+kIndCpy[]  =          kInd
+kOutArr[]  init       i(kN)
+kIndx      =          0
+kLen       =          iLen
+;for kN elements:
+until kIndx == kN do
+ ;get one random element and put it in kOutArr
+kRndIndx   =          int(random:k(0, kLen-.0001))
+kOutArr[kIndx] =      kIndCpy[kRndIndx]
+ ;shift the elements after this one to the left
+ until kRndIndx == kLen-1 do
+kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
+kRndIndx   +=         1
+ od
+ ;reset kLen and increase counter
+kLen       -=         1
+kIndx      +=         1
+od
+
+           xout       kOutArr
+  endop
 
   opcode ArrPermRndNi, i[], i[]i
 iInArr[], iN xin

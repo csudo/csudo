@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN csudo:
 *****************************************************************************
+ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
 ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
 ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
@@ -44,6 +45,7 @@ PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 PtkSmpA    : aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+Scale      : iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
@@ -80,6 +82,7 @@ TbDmpS     : TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
 TbDmpSk    : TbDmpSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 TbDmpk     : TbDmpk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 TbMem      : ipos TbMem ival, ift [, indxstrt [, indxend]]
+TbPeak     : iPeak TbPeak ift [, indxstrt [, indxend]]
 TbPrmRnd   : TbPrmRnd ift
 TbPrmRndk  : TbPrmRndk ift, ktrig
 TbRmDp     : iend TbRmDp iftsrc, iftdst [, ioffset [, inumels]]
@@ -88,6 +91,16 @@ TbToSF     : TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+kOutArr[] ArrPermRndIndx kInArr[], kN
+Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+This UDO is similar to ArrPermRndN but returns indices instead of values.
+
+kInArr[] - input array
+kN - desired length of the output array (must not be longer than kInArr)
+kOutArr[] - output array with kN randomly permuted indices of kInArr
+****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPermRndNi iInArr[], iN
 Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
@@ -654,6 +667,19 @@ kDistribution - distribution of the grains in time. 0 means periodic, 1 means sc
 see the Csound Manual for partikkel for more information about the input parameters
 ****************************************************************************/
 /****************************************************************************
+iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+
+iVal - incoming number
+iInMin - minimum possible incoming number
+iInMax - maximum possible incoming numer
+iOutMin - minimum possible outgoing number
+iOutMax - maximum possible outgoing number
+iValOut - iVal scaled
+****************************************************************************/
+/****************************************************************************
 Sout StrAgrm Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
@@ -1092,6 +1118,17 @@ indxend - position after the last index which is tested (default = -1 = length o
 ipos - if ival has been found in ift, the position of the first occurence is returned, or -1, if ival has not been found
 ****************************************************************************/
 /****************************************************************************
+iPeak TbPeak ift [, indxstrt [, indxend]]
+Returns the peak (highest absolute number) value of a function table.
+
+Returns the peak value of a function table, or a part of it, in a range between indxstart (included, defaults to zero) and indxend (excluded, defaults to table length). The return value is always positive.
+
+ift - function table
+indxstart - starting index in ift to look for ival (default=0)
+indxend - position after the last index which is tested (default = -1 = length of the table). if a number is given for indxend which exceeds the length of the function table, it will stop at table end
+iPeak - peak value as absolute number
+****************************************************************************/
+/****************************************************************************
 TbPrmRnd ift
 Permutes the values of a function table randomly, at i-time
 
@@ -1143,6 +1180,32 @@ istart - start in seconds in the function table to write (default=0)
 iend - last point to write in the function table in seconds (default=-1: until the end)
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
+
+  opcode ArrPermRndIndx, k[], k[]k
+kInArr[], kN xin
+iLen       lenarray   kInArr
+kInd[]     genarray_i  0, iLen-1
+kIndCpy[]  =          kInd
+kOutArr[]  init       i(kN)
+kIndx      =          0
+kLen       =          iLen
+;for kN elements:
+until kIndx == kN do
+ ;get one random element and put it in kOutArr
+kRndIndx   =          int(random:k(0, kLen-.0001))
+kOutArr[kIndx] =      kIndCpy[kRndIndx]
+ ;shift the elements after this one to the left
+ until kRndIndx == kLen-1 do
+kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
+kRndIndx   +=         1
+ od
+ ;reset kLen and increase counter
+kLen       -=         1
+kIndx      +=         1
+od
+
+           xout       kOutArr
+  endop
 
   opcode ArrPermRndNi, i[], i[]i
 iInArr[], iN xin
@@ -1811,6 +1874,12 @@ else
 ifracs    FracLen   inum, ifracs+1
 endif
 end:      xout      ifracs
+  endop
+
+  opcode Scale, i, iiiii
+iVal, iInMin, iInMax, iOutMin, iOutMax xin
+iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
+xout iValOut
   endop
 
   opcode LpPhsr, a, kkkki
@@ -3241,6 +3310,18 @@ iwritindx =         iwritindx + 1
  endif
           loop_lt   ireadindx, 1, ireadend, loop
           xout      iwritindx
+  endop
+
+  opcode TbPeak, i, ioj
+ift, indxstrt, indxend xin
+indxend   =         (indxend == -1 ? ftlen(ift) : indxend)
+iPeak     =         0
+while indxstrt < indxend do
+  iVal = abs(table:i(indxstrt, ift))
+  iPeak = iVal > iPeak ? iVal : iPeak
+  indxstrt += 1
+od
+     xout      iPeak
   endop
 
   opcode TbToLin, k, i
