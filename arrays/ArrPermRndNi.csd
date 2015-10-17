@@ -68,6 +68,49 @@ r 5
 i 1 0 .1
 </CsScore>
 </CsoundSynthesizer>
+
+prints:
+
+SECTION 1:
+end of section 1	 sect peak amps:      0.0
+SECTION 2:
+iPrmRnd1 = [3]
+iPrmRnd2 = [2, 4]
+iPrmRnd3 = [1, 3, 4]
+iPrmRnd4 = [1, 4, 3, 2]
+iPrmRnd5 = [1, 4, 3, 5, 2]
+end of section 2	 sect peak amps:      0.0
+inactive allocs returned to freespace
+SECTION 3:
+iPrmRnd1 = [1]
+iPrmRnd2 = [4, 1]
+iPrmRnd3 = [4, 5, 1]
+iPrmRnd4 = [1, 3, 4, 5]
+iPrmRnd5 = [5, 2, 1, 4, 3]
+end of section 3	 sect peak amps:      0.0
+inactive allocs returned to freespace
+SECTION 4:
+iPrmRnd1 = [5]
+iPrmRnd2 = [4, 2]
+iPrmRnd3 = [5, 3, 2]
+iPrmRnd4 = [3, 1, 2, 5]
+iPrmRnd5 = [4, 2, 1, 3, 5]
+end of section 4	 sect peak amps:      0.0
+inactive allocs returned to freespace
+SECTION 5:
+iPrmRnd1 = [3]
+iPrmRnd2 = [1, 4]
+iPrmRnd3 = [2, 1, 3]
+iPrmRnd4 = [5, 1, 4, 3]
+iPrmRnd5 = [2, 5, 1, 3, 4]
+end of section 5	 sect peak amps:      0.0
+inactive allocs returned to freespace
+SECTION 6:
+iPrmRnd1 = [4]
+iPrmRnd2 = [4, 5]
+iPrmRnd3 = [2, 1, 4]
+iPrmRnd4 = [5, 3, 4, 2]
+iPrmRnd5 = [2, 4, 3, 5, 1]
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
