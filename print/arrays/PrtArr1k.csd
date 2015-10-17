@@ -19,6 +19,7 @@ kppr - parameters per row (default = 10, maximum = 32)
 -n -m0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
            seed       0
 
