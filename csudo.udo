@@ -60,6 +60,7 @@ StrLineBreak: StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
 StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrToArr   : S_Arr[], iLen StrToArr S_in, S_sep
 StrToAscS  : Sout StrToAscS Sin
 StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 StrayElMem : ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
@@ -827,6 +828,15 @@ Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
 iEnd - Last indes to consider in Sin (default = -1 = end of string)
 Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
+S_Arr[], iLen StrToArr S_in, S_sep
+Transforms the sections of the input string S_in to elements of a string array. The sections in S_in are seperated by the seperator S_in. 
+
+S_in - Input string.
+S_sep - Seperator string.
+S_Arr - Output string array.
+iLen - Its length.
 ****************************************************************************/
 /****************************************************************************
 Sout StrToAscS Sin
@@ -3077,6 +3087,46 @@ iend -= 1
 enduntil
 xout istrt, iend
   endop
+
+opcode StrToArr, S[]i, SS
+
+ S_in, S_sep xin 
+
+ ;count the number of substrings
+ iLenSep strlen S_sep
+ iPos = 0
+ iPosShift = 0
+ iCnt = 0
+
+ while iPos != -1 do
+ 
+  iCnt += 1
+  S_sub strsub S_in, iPosShift
+  iPos strindex S_sub, S_sep
+  iPosShift += iPos+iLenSep
+  
+ od
+ 
+ ;create a string array and put the substrings in it
+ S_Arr[] init iCnt
+ iPos = 0
+ iPosShift = 0
+ iArrIndx = -1
+ while iPos != -1 do
+ 
+  iArrIndx += 1
+  S_sub strsub S_in, iPosShift
+  iPos strindex S_sub, S_sep
+  iEnd = (iPos == -1 ? -1 : iPosShift+iPos)
+  S_ToArr strsub S_in, iPosShift, iEnd
+  iPosShift += iPos+iLenSep
+  S_Arr[iArrIndx] = S_ToArr  
+ 
+ od
+ 
+ xout S_Arr, iCnt
+
+endop
 
   opcode StrToAscS, S, S
 Sin        xin
