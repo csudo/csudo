@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-ndm0 
+-ndm0 
 </CsOptions>
 <CsInstruments>
 ksmps = 32
@@ -103,9 +103,9 @@ endin
 
 </CsInstruments>
 <CsScore>
-i "One" 0 .1
-i "Two" .1 .1
-i "Three" .2 .1
+i "One" 0 0
+i "Two" .1 0
+i "Three" .2 0
 </CsScore>
 </CsoundSynthesizer>
 Returns:
@@ -139,20 +139,4 @@ Three:
   S_arr[10] = 'my'
   S_arr[11] = 'file'
   S_arr[12] = 'four.wav'
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+
