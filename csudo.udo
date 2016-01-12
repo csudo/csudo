@@ -890,19 +890,21 @@ Sel - the element at position ielindx, as a string. if the element has not been 
 ****************************************************************************/
 /****************************************************************************
 inum StrayGetNum Stray, ielindx [, isep1 [, isep2]]
+knum StrayGetNum Stray, kelindx [, isep1 [, isep2]]
 Gets one number from a string-array
 
 Returns the element with the position ielindex (starting from 0) in Stray. This element must be a number (the other elements can be strings or charcters). By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
-If ielindx is out of range, or if the element is not a number, an error occurs
+If ielindx is out of range, "nan" is returned.
+If the element is not a number, "nan" is returned at k-rate, but an error occurs at i-rate.
 
 Input:
 Stray - a string as array
-ielindx - the index of the element (starting with 0)
+ielindx (kelindx) - the index of the element (starting with 0)
 isep1 - the first seperator (default=32: space)
 isep2 - the second seperator (default=9: tab)
 If the defaults are not used and just isep1 is given, it's the only seperator. If you want two seperators (as in the dafault), you must give isep1 and isep2
 Output:
-inum - the number which is at the ielindx position of Stray
+inum (knum) - the number which is at the ielindx position of Stray
 ****************************************************************************/
 /****************************************************************************
 ilen StrayLen Stray [, isep1 [, isep2]]
@@ -2261,8 +2263,59 @@ endif
           loop_lt   indx, 1, ilen, loop 
 end: 		
 Snum      strsub    Stray, istartsel, iendsel
+if strcmp(Snum,"") == 0 then
+ Snum     =         "nan"
+endif
 inum      strtod    Snum
           xout      inum
+  endop 
+  opcode StrayGetNum, k, Skjj
+;returns kelindex in Stray. this element must be a number
+Str, kelindx, isepA, isepB xin
+;;DEFINE THE SEPERATORS
+isep1     =         (isepA == -1 ? 32 : isepA)
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1      sprintf   "%c", isep1
+Sep2      sprintf   "%c", isep2
+;;INITIALIZE SOME PARAMETERS
+Stray     strcpyk   Str ;make sure to update in performance
+klen      strlenk   Stray
+kstartsel =         -1; startindex for searched element
+kendsel   =         -1; endindex for searched element
+kel       =         0; actual number of element while searching
+kwarleer  =         1
+kndx      =         0
+ if klen == 0 kgoto end ;don't go into the loop if Stray is empty
+loop:
+Snext     strsubk   Stray, kndx, kndx+1; next sign
+ksep1p    strcmpk   Snext, Sep1; returns 0 if Snext is sep1
+ksep2p    strcmpk   Snext, Sep2; 0 if Snext is sep2
+;;NEXT SIGN IS NOT SEP1 NOR SEP2
+if ksep1p != 0 && ksep2p != 0 then
+ if kwarleer == 1 then; first character after a seperator 
+  if kel == kelindx then; if searched element index
+kstartsel =         kndx; set it
+kwarleer  =         0
+  else 			;if not searched element index
+kel       =         kel+1; increase it
+kwarleer  =         0; log that it's not a seperator 
+  endif 
+ endif 
+;;NEXT SIGN IS SEP1 OR SEP2
+else 
+ if kstartsel > -1 then; if this is first selector after searched element
+kendsel   =         kndx; set iendsel
+          kgoto     end ;break
+ else	
+kwarleer  =         1
+ endif 
+endif
+          loop_lt   kndx, 1, klen, loop 
+end: 		
+Snum      strsubk   Stray, kstartsel, kendsel
+Snum      init      "nan"
+knum      strtodk   Snum
+          xout      knum
   endop 
 
   opcode StrayLen, i, Sjj
