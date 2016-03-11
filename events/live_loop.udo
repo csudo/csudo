@@ -395,6 +395,7 @@ itotal = floor(itotal)
   endop
 
 opcode live_loop, 0, SSSoj
+;Made by Hlöðver Sigurðsson 2016
 SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   SPatName2 strcat SPatName, "_s"
   iTurnOff strcmp "", SPattern
