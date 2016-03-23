@@ -2,6 +2,9 @@
 
 /**********
 
+REQUIREMENT: Csound 6.07 
+(at least newer than from 11th March 2016)
+
 DOCUMENTATION:
 
 SPatternName: A unique name for pattern, after pattern is assigned to instrument, 
@@ -25,7 +28,7 @@ live_loop SPatternName, Schedule, SParameters,[iMeter, iBPM]
 **********/
 
 
-giTrackStates[][] init 10000000, 4
+giTrackStates[][] init 10000000, 5
 
  opcode StrNumP, i, S
 ;tests whether String is numerical string (simple, no scientific notation) which can be converted via strtod ito a float (1 = yes, 0 = no)
@@ -247,25 +250,21 @@ SPatName1 strcat SPatName1, " \n"
 SPatName3 strcat "\nSPatName = \"",SPatName
 SPatName3 strcat SPatName3, "\"\n"
 SPatternizerParam sprintf "giTimeSignature%s = %i\ngiBPM%s = %i\ngSpattern%s = \"%s\"\n", SPatName, iTimeSignature,SPatName, iBPM,SPatName, SPattern
-;SPatternizerParam strcat SPatternizerParam, SPattern
-;SPatternizerParam strcat SPatternizerParam, "\" \n"
-;SPatternizerParamN strcat "gSpattern", SPatName
 SPatternizer sprintf "kTrigger, kOffTrigger, kIndex patternizer giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
-;SAll strcat SInstrCat, SInits
-;SAll strcat SAll, SInitsLen
 SAlways strcat SAlways, SPatternizer
 SAlways strcat SAlways, Schedule
 SAlways strcat SAlways,"\nif kOffTrigger == 1 then \n turnoff \n endif \n endin \n"
 SAlways strcat SInstrCat, SAlways
 SAlways strcat SPatName1, SAlways
-;SAll strcat SPatName1, SAll
-State strcat "\"\nkActive active SPatName\nif kActive < 1 then\nschedkwhen 1, 0, 1, SPatName, 0, 100000\nendif\nendin\n", State
+State = "\"\nkActive active SPatName\nif kActive < 1 then\nschedkwhen 1, 0, 1, SPatName, 0, 100000\nendif\nendin\n;"
 State strcat SInitsLen, State
 State strcat SInits, State
 State strcat SPatternizerParam, State
 State strcat SPatName3, State
 State strcat SPatName2, State
 xout SAlways, State
+;prints SAlways
+;prints State
 endop
 
 
@@ -353,9 +352,36 @@ iTimeSignature, iBPM, Spattern xin
 xout kTrigger, kOffTrigger, kIndex
 endop
 
-
-
+  opcode paramcount, i, S
+         Sin xin
+  Sep1		  sprintf 	  "%c", 32 ; Space
+  SarrOpen   sprintf    "%c", 91 ; '[' Symbol
+  SarrClose  sprintf    "%c", 93 ; ']' Symbol
+  ilen       strlen     Sin 
+  ipcount   = 0
+  insidearr = 0
+  ipos      = 0
+loop:
+  Schar  strsub Sin, ipos, ipos+1 
+  icomp1 strcmp Schar, Sep1    ;is a space?
+  icomp2 strcmp Schar, SarrOpen ;is in an array?
+  icomp3 strcmp Schar, SarrClose ;array ends?
+  if (icomp1 == 0 ) && (insidearr == 0) then
+    ipcount += 1
+  endif
+  if icomp2 == 0 then 
+    insidearr = 1
+    ipcount += 1
+  endif
+  if icomp3 == 0 then
+    insidearr = 0
+  endif
+loop_lt    ipos, 1, ilen, loop
+       xout ipcount
+  endop
+  
   opcode stringsum, i, S
+ 
 Sin        xin 
 ilen       strlen     Sin 
 ipos = 0
@@ -363,13 +389,13 @@ itotal init 0
 loop:
 ichr       strchar    Sin, ipos
 itotal     += ichr
-           loop_lt    ipos, 1, ilen, loop
+   loop_lt    ipos, 1, ilen, loop
 itotal = floor(itotal)
-           xout       itotal
+   xout itotal
   endop
 
 opcode live_loop, 0, SSSoj
-;Made by Hlöðver Sigurðsson
+;Made by Hlöðver Sigurðsson 2016
 SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   SPatName2 strcat SPatName, "_s"
   iTurnOff strcmp "", SPattern
@@ -385,6 +411,7 @@ SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   iTrackID stringsum SPatName
   iPatSum  stringsum SPattern
   iParSum  stringsum SParameters
+  iParCount paramcount SParameters
 if giTrackStates[iTrackID][0] != iPatSum  || \
    giTrackStates[iTrackID][1] != iParSum  || \
    giTrackStates[iTrackID][2] != iTimeSignature || \
@@ -394,12 +421,14 @@ if giTrackStates[iTrackID][0] != iPatSum  || \
   SAlways, State StrToPar SPatName, SParameters, SPattern, iTimeSignature, iBPM
   iFailTest1 compilestr State
   if iFailTest1 != 0 then
-    prints "ERROR: FAILED TO EVALUATE PATTERN\n"
+    SConsoleLogFailEval sprintf "ERROR: FAILED TO EVALUATE PATTERN %s\n", SPatName 
+    prints SConsoleLogFailEval
   endif
-  if iActive < 1 then
+  if (iActive < 1) || (giTrackStates[iTrackID][4] != iParCount) then
     iFailTest2 compilestr SAlways
     if iFailTest2 != 0 then
-      prints "ERROR: FAILED TO START THE PATTERN\n"
+      SConsoleLogStartFail sprintf "ERROR: FAILED TO START THE PATTERN %s\n", SPatName
+      prints SConsoleLogStartFail
     endif
   endif
 endif
@@ -407,6 +436,7 @@ endif
   giTrackStates[iTrackID][1] = iParSum
   giTrackStates[iTrackID][2] = iTimeSignature
   giTrackStates[iTrackID][3] = iBPM
+  giTrackStates[iTrackID][4] = iParCount
   schedkwhen 1, 1, 1, SPatName2, 0, 1
 donothing:
 endop

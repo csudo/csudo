@@ -1,0 +1,4 @@
+# internal dependencies in live_loop.udo
+# UDO: dependency [, dependency2 [, ...]]
+
+live_loop: StrayLen, StrNumP
