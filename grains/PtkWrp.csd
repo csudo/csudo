@@ -31,7 +31,7 @@ ksmps = 32
 nchnls = 1
 
  ;read in fox.wav from the csound manual (http://www.csounds.com/manual/html/examples/fox.wav)
-giSound    ftgen      0, 0, 0, -1, "../_samples/fox.wav", 0, 0, 1
+giSound    ftgen      0, 0, 0, -1, "../_sourcefiles/fox.wav", 0, 0, 1
 
 
 
@@ -132,7 +132,7 @@ i "Compress" 29 1
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBSpinBox">
+ <bsbObject type="BSBSpinBox" version="2">
   <objectName>pointer</objectName>
   <x>134</x>
   <y>90</y>
