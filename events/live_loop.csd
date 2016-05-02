@@ -1,3 +1,13 @@
+<CsoundSynthesizer>
+<CsOptions>
+</CsOptions>
+<CsInstruments>
+
+sr = 44100
+ksmps = 64
+nchnls = 2
+0dbfs = 1.0
+
 /**********
 
 REQUIREMENT: Csound 6.07 
@@ -87,34 +97,32 @@ iwarsep	=		0; and tell you are ot sep1 nor sep2
 end: 		xout		icount
   endop 
 
-  opcode StrayLen, k, Sjj
-Stray, isepA, isepB xin
- ;define seperators
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
- ;initialize
-klen      strlenk   Stray
-kcount    =         0; number of elements
-kwarsep   =         1
-kndx      =         0
- if klen == 0 kgoto end ;don't go into the loop if String is empty
+
+
+  opcode StrayLen2, k, S
+Stray xin
+Sep1		sprintf	"%c", 32
+Sep2		sprintf	"%c", 9
+klen		strlenk		Stray
+kcount	=	0
+kwarsep	 = 1
+kndx = 0
+ if klen == 0 kgoto end
 loop:
-Snext     strsubk   Stray, kndx, kndx+1; next sign
-ksep1p    strcmpk   Snext, Sep1; returns 0 if Snext is sep1
-ksep2p    strcmpk   Snext, Sep2; 0 if Snext is sep2
- if ksep1p == 0 || ksep2p == 0 then; if sep1 or sep2
-kwarsep   =         1; tell the log so
- else 				; if not 
-  if kwarsep == 1 then	; and has been sep1 or sep2 before
-kcount    =         kcount + 1; increase counter
-kwarsep   =         0; and tell you are not sep1 nor sep2 
+Snext		strsubk		Stray, kndx, kndx+1
+ksep1p		strcmpk		Snext, Sep1
+ksep2p		strcmpk		Snext, Sep2
+ if ksep1p == 0 || ksep2p == 0 then
+kwarsep	=		1
+ else 
+  if kwarsep == 1 then
+kcount		=		kcount + 1
+kwarsep	 = 0 
   endif 
  endif	
-          loop_lt   kndx, 1, klen, loop 
-end:      xout      kcount
-  endop 
+		loop_lt	kndx, 1, klen, loop 
+end: 		xout		kcount
+  endop
 
 
 opcode StrToPar, SS, SSSii
@@ -326,7 +334,7 @@ opcode patternizer, kkk,iiS
 ; Made by Hlödver Sigurdsson 2016
 iTimeSignature, iBPM, Spattern xin
   kOffTrigger init -1
-  kPatLen StrayLen Spattern
+  kPatLen StrayLen2 Spattern
   kPatMax StrayGetNum Spattern, kPatLen - 1
   ;kPatMax = i(kPatMax)
   krate_counter timek
@@ -381,6 +389,7 @@ loop_lt    ipos, 1, ilen, loop
   endop
   
   opcode stringsum, i, S
+ 
 Sin        xin 
 ilen       strlen     Sin 
 ipos = 0
@@ -439,3 +448,52 @@ endif
   schedkwhen 1, 1, 1, SPatName2, 0, 1
 donothing:
 endop
+
+;; Test for live_loop
+;; 5 rounds of kick pattern
+
+giSaw       ftgen     0, 0, 2^10, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9
+
+instr 1
+;;Typehint
+;;live_loop SPatternName, Schedule, SParameters,[iMeter, iBPM]
+
+live_loop "Kick", "0 1 2 3 3.5", "kick [0.1 0.1 0.3] -20 [60 60 60 58] [0.9 0.9 0.9 0.8 0.7]", 4, 190
+endin
+
+instr kick
+ idur   = p3
+ iamp   = ampdb(p4)
+ ifreq  = p5                           
+ ifreqr = p6 * ifreq  
+ afreq expon ifreq, idur, ifreqr
+ aenv   line iamp, idur, 0
+ aout poscil aenv, afreq, giSaw, 0.25
+ outs aout, aout
+endin
+
+</CsInstruments>
+<CsScore>
+{5 x
+i 1 $x
+}
+
+</CsScore>
+</CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
