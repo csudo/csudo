@@ -4,6 +4,7 @@ Plays a four channel sample from four GEN01 function tables, including sample ra
 
 Plays a four channel sample from four GEN01 function tables, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn1 - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt4 for creating the tables for all channels - see the example below)
@@ -19,7 +20,8 @@ a1 - audio output channel 1
 a2 - audio output channel 2
 a3 - audio output channel 3
 a4 - audio output channel 4
-kfin - 1 if iwrap=0 and playback has finished, otherwise 0 ****************************************************************************/
+kfin - 1 if iwrap=0 and playback has finished, otherwise 0 
+****************************************************************************/
 
 
 <CsoundSynthesizer>
@@ -119,20 +121,4 @@ i . 16 .  1     1   1.2  0
 e
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

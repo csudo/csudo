@@ -4,6 +4,7 @@ kLen StrayLen Stray [, isep1 [, isep2]]
 Returns the length of an array-string
 
 Returns the number of elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -144,20 +145,3 @@ k-cycle = 3
   Stray = Hello World World 
   StrayLen = 3
 
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

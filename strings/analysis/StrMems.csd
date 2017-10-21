@@ -3,6 +3,7 @@ iSumEls StrMems Str, Sel
 Returns the number of occurencies of a string in another string.
 
 Returns the number of occurencies of a string in another string.
+written by joachim heintz
 
 Str - Input string
 Sel - Another string which is asked to be a member of Str
@@ -52,20 +53,4 @@ i 1 + . "eldfjslhfbsjdsldhjbsljdhbvswjuevflksjhdbvcsahbf" "jh"
 i 1 + . "ich habe hunger" " "
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

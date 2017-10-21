@@ -3,6 +3,7 @@ iPeak TbPeak ift [, indxstrt [, indxend]]
 Returns the peak (highest absolute number) value of a function table.
 
 Returns the peak value of a function table, or a part of it, in a range between indxstart (included, defaults to zero) and indxend (excluded, defaults to table length). The return value is always positive.
+written by joachim heintz
 
 ift - function table
 indxstart - starting index in ift to look for ival (default=0)
@@ -44,20 +45,4 @@ endin
 i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

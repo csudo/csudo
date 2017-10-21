@@ -3,6 +3,7 @@ iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+written by joachim heintz
 
 iVal - incoming number
 iInMin - minimum possible incoming number

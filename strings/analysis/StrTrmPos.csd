@@ -2,6 +2,7 @@
 iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 Returns the next position >= iStrtIn and <= iEndIn without possible starting 
 and/or ending spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrtIn - first index to read in Str (default = 0)
@@ -65,20 +66,4 @@ Reading string with End = 11:
   Start = 1, End = 10, String = 'This is my'
 Reading string with Start=5, End = 11:
   Start = 6, End = 10, String = 'is my'
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

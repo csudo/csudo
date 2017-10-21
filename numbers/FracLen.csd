@@ -3,6 +3,7 @@ iFracs FracLen iNum
 Returns the real length of the fractional part of a number
 
 Returns the real length of digits in the the fractional part of a number. "Real" means that the number 1.000 actually has no fractional part but is in this sense an integer.
+written by joachim heintz
 
 iNum - incoming number
 iFracs - number of digits in the fractional part. 0 means that iNum is an integer
@@ -49,20 +50,4 @@ Length of fractional part in 123.450000 = 2 digits
 Length of fractional part in 1234.000000 = 0 digits
 Length of fractional part in 1234.001000 = 3 digits
 Length of fractional part in -12.000000 = 0 digits
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

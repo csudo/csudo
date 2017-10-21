@@ -2,6 +2,7 @@
 iNum StrExpr2 iNum1, iNum2, iOp
 
 Evaluates two numbers which are combined by the operator iOp.
+written by joachim heintz
 
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
@@ -61,20 +62,4 @@ returns:
 2 / 3 = 0.666667
 2 % 3 = 2.000000
 2 ^ 3 = 8.000000
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

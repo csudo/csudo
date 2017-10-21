@@ -4,6 +4,7 @@ Prints a function table at i-time.
 
 Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpk for the k-rate equivalent.
+written by joachim heintz
 
 ifn - function table number
 istart - first index to be printed (default = 0)

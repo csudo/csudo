@@ -3,6 +3,7 @@ kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 Records in a stereo buffer (= two function tables)
 
 Records in a stereo buffer (two function tables), with optional start point, end point, and wrap (= loop record). 
+written by joachim heintz
 
 iftL, iftR - function tables for recording
 ainL, ainR - audio signals to record
@@ -181,20 +182,4 @@ endin
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

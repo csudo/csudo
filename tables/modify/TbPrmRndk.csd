@@ -3,6 +3,7 @@ TbPrmRndk ift, ktrig
 Permutes the values of a function table randomly, at k-time
 
 Permutes the values of ift randomly and overwrites this table with the result. This operation is performed once a k-cycle, as long as a trigger is positive. See TbPrmRnd for the i-rate version
+written by joachim heintz
 
 ift - function table to be permuted
 ktrig - if > 0, the permutation is performed once a k-cycle
@@ -106,39 +107,3 @@ prints something like:
 [3, 4, 7, 6, 9, 2, 10, 5, 8, 1, 11, 12]
 [5, 8, 12, 1, 9, 2, 4, 7, 11, 6, 3, 10]
 
-
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>231</r>
-  <g>46</g>
-  <b>255</b>
- </bgcolor>
- <bsbObject version="2" type="BSBVSlider">
-  <objectName>slider1</objectName>
-  <x>5</x>
-  <y>5</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{60a698d9-677e-405d-ad67-997221231d09}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

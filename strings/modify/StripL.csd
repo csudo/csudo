@@ -3,6 +3,7 @@ Sout StripL Sin
 Strips all initial spaces or tabs from a string.
 
 Strips all spaces or tabs at the beginning of the input string Sin and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 Sout - Output string with removed initial spaces/tabs.
@@ -53,20 +54,4 @@ i 1 + . " 	 "
 i 1 + . ""
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

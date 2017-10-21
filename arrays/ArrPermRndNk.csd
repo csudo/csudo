@@ -2,6 +2,7 @@
 kOutArr[] ArrPermRndNk kInArr[], kN
 Returns an array of kN length which contains randomly permuted elements of kInArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
 
 kInArr[] - input array
 kN - desired length of the output array (must not be longer than kInArr)
@@ -110,20 +111,4 @@ kPrmRnd2 = [2, 1]
 kPrmRnd3 = [5, 3, 1]
 kPrmRnd4 = [3, 2, 5, 4]
 kPrmRnd5 = [3, 5, 4, 1, 2]
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

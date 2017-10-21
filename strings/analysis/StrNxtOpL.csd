@@ -5,6 +5,7 @@ Returns position and type of next operator < iPos and >= iMin. Anything inside
 Parentheses will be disregarded.
 
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -83,20 +84,4 @@ Indx = 0123456789
 Left of indx=4 operator? True = 1
 Left of indx=3 operator? True = 1
 Left of indx=4 with min=3 operator? True = 0
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

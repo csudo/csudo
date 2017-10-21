@@ -4,6 +4,7 @@ Gets one element from a string-array
 
 Returns (at i-rate) the element for ielindex in String, or an empty string, if the element has not been found. By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 Requires Csound 5.15 or higher
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -127,20 +128,4 @@ returns:
 'dobd'
 '12398'
 ''
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

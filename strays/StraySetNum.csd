@@ -4,6 +4,7 @@ Inserts a number in an array-string at a certain position
 
 Puts the number inum at the position ielindx (default=-1: at the end) of Stray, and returns the result as Sres. Elements in Stray are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). if just isepA is given, it is also read as isepB. the element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher, and the UDO FracLen.
+written by joachim heintz
 
 Stray - a string as array
 inum - the number to be inserted
@@ -147,20 +148,4 @@ returns:
 '1,2,-3,-4,5'
 '1,2,-3,-4 5'
 '1, 2, -3, -4|5'
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

@@ -4,6 +4,7 @@ Plays audio from a mono buffer (function table), with different options
 
 Plays audio from a mono buffer (function table), with control over speed (forward - backward), volume, start point, end point, and different options of wrapping/looping. All parameters can be modified during performance.
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
+written by joachim heintz
 
 ift - function table to play. This can be a non-power-of-two function table (given by a negative size, see example), but no deferred size GEN01 table.
 kplay - 1 for playing, 0 (or any other number) stops playing
@@ -17,7 +18,8 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aout - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 
 
 <CsoundSynthesizer>
@@ -137,20 +139,4 @@ i . 36 5  1     1     2   3   ;wrap between start and end of table
 e
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

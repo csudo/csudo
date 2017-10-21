@@ -8,6 +8,7 @@ ksmps = 32
 /****************************************************************************
 S_Arr[], iLen StrToArr S_in, S_sep
 Transforms the sections of the input string S_in to elements of a string array. The sections in S_in are seperated by the seperator S_in. 
+written by joachim heintz
 
 S_in - Input string.
 S_sep - Seperator string.

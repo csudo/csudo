@@ -68,6 +68,7 @@ inum (knum) - the number which is at the ielindx position of Stray
 ****************************************************************************/
 /****************************************************************************
 ilen StrayLen Stray [, isep1 [, isep2]]
+kLen StrayLen Stray [, isep1 [, isep2]]
 Returns the length of an array-string
 
 Returns the number of elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
@@ -409,14 +410,13 @@ knum      strtodk   Snum
   endop 
 
   opcode StrayLen, i, Sjj
-;returns the number of elements in Stray. elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1
 Stray, isepA, isepB xin
-;;DEFINE THE SEPERATORS
+ ;seperators
 isep1     =         (isepA == -1 ? 32 : isepA)
 isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
 Sep1      sprintf   "%c", isep1
 Sep2      sprintf   "%c", isep2
-;;INITIALIZE SOME PARAMETERS
+ ;initialize
 ilen      strlen    Stray
 icount    =         0; number of elements
 iwarsep   =         1
@@ -436,6 +436,34 @@ iwarsep   =         0; and tell you are ot sep1 nor sep2
  endif	
           loop_lt   indx, 1, ilen, loop 
 end:      xout      icount
+  endop 
+  opcode StrayLen, k, Sjj
+Stray, isepA, isepB xin
+ ;define seperators
+isep1     =         (isepA == -1 ? 32 : isepA)
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1      sprintf   "%c", isep1
+Sep2      sprintf   "%c", isep2
+ ;initialize
+klen      strlenk   Stray
+kcount    =         0; number of elements
+kwarsep   =         1
+kndx      =         0
+ if klen == 0 kgoto end ;don't go into the loop if String is empty
+loop:
+Snext     strsubk   Stray, kndx, kndx+1; next sign
+ksep1p    strcmpk   Snext, Sep1; returns 0 if Snext is sep1
+ksep2p    strcmpk   Snext, Sep2; 0 if Snext is sep2
+ if ksep1p == 0 || ksep2p == 0 then; if sep1 or sep2
+kwarsep   =         1; tell the log so
+ else 				; if not 
+  if kwarsep == 1 then	; and has been sep1 or sep2 before
+kcount    =         kcount + 1; increase counter
+kwarsep   =         0; and tell you are not sep1 nor sep2 
+  endif 
+ endif	
+          loop_lt   kndx, 1, klen, loop 
+end:      xout      kcount
   endop 
 
   opcode StrNumP, i, S

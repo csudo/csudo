@@ -1,6 +1,7 @@
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
 Returns 1 if the positions >= istrt and <= iend are nothing but spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrt - first index (position) to be considered in Str (default = 0)
@@ -67,20 +68,4 @@ Str = '  my lovely 	 string ', iStrt = 11, iEnd = 14 -> iTrue = 0
 Str = '  my lovely 	 string ', iStrt = 19, iEnd = 20 -> iTrue = 0
 Str = '  my lovely 	 string ', iStrt = 20, iEnd = 21 -> iTrue = 0
 Str = '  my lovely 	 string ', iStrt = 20, iEnd = -1 -> iTrue = 1
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

@@ -3,6 +3,7 @@ TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
 Writes the content of a table to a soundfile
 
 Writes the content of a table to a soundfile, with optional start and end point
+written by joachim heintz
 
 ift - function table to write
 Soutname - output file name in double quotes
@@ -80,3 +81,4 @@ i 3 5.1 .1
 i 4 5.2 .1
 </CsScore>
 </CsoundSynthesizer>
+

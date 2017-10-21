@@ -3,6 +3,7 @@ TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
 Prints a table with an introducing string at i-time
 
 Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
+written by joachim heintz
 
 ifn - function table number
 String - string to be printed as introduction
@@ -100,20 +101,4 @@ Printing table 2 with 8 elements per row:
 -1.000, -0.995, -0.981, -0.957, -0.924, -0.882, -0.831, -0.773, 
 -0.707, -0.634, -0.556, -0.471, -0.383, -0.290, -0.195, -0.098]
 
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>772</x>
- <y>166</y>
- <width>489</width>
- <height>475</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="background">
-  <r>170</r>
-  <g>170</g>
-  <b>127</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

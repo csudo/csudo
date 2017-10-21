@@ -4,6 +4,7 @@ Plays a stereo sample from two GEN01 function tables, including sample rate conv
 
 Plays a stereo sample from two GEN01 function tables for the left and right channel, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifnL - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt2 for creating the tables for left and right channel - see the example below)
@@ -111,20 +112,4 @@ i . 16 .  1     1   1.2  0
 e
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

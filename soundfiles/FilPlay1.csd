@@ -3,6 +3,7 @@ aout FilPlay1 Sfil, kspeed [, iskip [, iloop]]
 Plays a mono signal from a mono or stereo soundfile
 
 Gives mono output regardless a soundfile is mono or stereo (if stereo, just the first channel is used).
+written by joachim heintz
 
 Sfil - Sound file name (or path) in double quotes
 iskip - skiptime in seconds (default=0)
@@ -46,20 +47,4 @@ i 1 0 5
 i 2 5 5
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

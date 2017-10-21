@@ -4,6 +4,7 @@ Adds the elements in a numerical array-string
 
 Adds all numbers in Stray (which must not contain non-numerical elements). Simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -213,20 +214,4 @@ isum = -560.880000
 isum = 51.519054
 isum = 209.259463
 isum = 0.000000
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

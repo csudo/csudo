@@ -4,6 +4,7 @@ Returns the length of numerical elements in an array-string
 
 Returns the number of numerical elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayGetEl, StrayLen and StrNumP
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -167,20 +168,4 @@ returns:
 '5'
 '0'
 '5'
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

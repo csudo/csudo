@@ -2,6 +2,7 @@
 iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
 This is a simple version of ArrSrti.
+written by joachim heintz
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
@@ -52,20 +53,4 @@ iSorted[1] = 1
 iSorted[2] = 2
 iSorted[3] = 3
 iSorted[4] = 19
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

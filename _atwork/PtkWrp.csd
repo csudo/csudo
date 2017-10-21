@@ -8,7 +8,6 @@ General notes:
 2. Two function tables are generated from inside the UDO, which is actually bad style. The reason is not to bother the user with tables which are not important for him. But if you want to use this UDO in a real time context, you should definitely put the iWinTab and iDistTab tables outside the UDO.
 3. The default values for grain rate (200 Hz) and grain size (100 ms) can be changed easily inside the UDO.
 Requires Csound 5.18 or higher.
-written by joachim heintz
 
 aPos - position in the sound in seconds
 iFilTab - function table containing the mono sound file (use GEN01 with 1 as last parameter to import any sample)
@@ -32,7 +31,7 @@ ksmps = 32
 nchnls = 1
 
  ;read in fox.wav from the csound manual (http://www.csounds.com/manual/html/examples/fox.wav)
-giSound    ftgen      0, 0, 0, -1, "../_sourcefiles/fox.wav", 0, 0, 1
+giSound    ftgen      0, 0, 0, -1, "../_samples/fox.wav", 0, 0, 1
 
 
 
@@ -119,4 +118,49 @@ i "Stretch" 8 20
 i "Compress" 29 1
 </CsScore>
 </CsoundSynthesizer>
-
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>0</x>
+ <y>0</y>
+ <width>328</width>
+ <height>220</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject version="2" type="BSBSpinBox">
+  <objectName>pointer</objectName>
+  <x>134</x>
+  <y>90</y>
+  <width>80</width>
+  <height>25</height>
+  <uuid>{4ab4d562-f557-4280-b37d-841660c7bcb5}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <alignment>left</alignment>
+  <font>Arial</font>
+  <fontsize>16</fontsize>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <resolution>0.10000000</resolution>
+  <minimum>0</minimum>
+  <maximum>1e+12</maximum>
+  <randomizable group="0">false</randomizable>
+  <value>0.5</value>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

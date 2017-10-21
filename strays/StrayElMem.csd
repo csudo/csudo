@@ -4,6 +4,7 @@ Tests whether a string is contained as an element in an array-string
 
 Looks whether a string equals one of the elements in Stray. If yes, itest returns the position of the element, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires Csound 5.15 or higher.
+written by joachim heintz
 
 Stray - a string as array
 Stest - a string to be looked for in Stray
@@ -117,3 +118,4 @@ returns:
 'a' in 'sdhgf, a, elh,  4,  876' with separators ',' and ',': result = -1
 'a' in 'sdhgf,a,elh,4,876' with separators ',' and ',': result = 1
 'a' in 'sdhgf, a, elh,  4,  876' with separators ',' and ' ': result = 1
+

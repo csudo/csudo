@@ -4,6 +4,7 @@ Reverses the elements of an array-string
 
 Reverses the elements in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1. The elements in the resulting string Sres are seperated by isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 isepA - the first seperator for the elements in Stray (default=32: space)
@@ -105,3 +106,4 @@ returns:
 '876,4,elh,a,sdhgf'
 '876,4,elh,a,sdhgf'
 '876|4|elh|a|sdhgf'
+

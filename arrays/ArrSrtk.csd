@@ -6,6 +6,7 @@ Depending on kOutType, the output array can either contain the values, or the
 indices of the values (thus pointing to kInArr). A section of kInArr can be
 specified by kStart and kEnd. Instead of sorting every element, looking only
 for the even or odd elements can be done via the kHop parameter.
+written by joachim heintz
 
 kInArr[] - array to sort
 iOutN - length of the output array kOutArr
@@ -232,20 +233,4 @@ Return the 6 largest values, start=2, end=10 (exclusive):
 Return the 6 largest values, start=1, end=0(all), hop=2 (= all odd indices):
 [89.000  10.760  2.000  2.000  0.002  -2.300  ]
 
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

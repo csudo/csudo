@@ -3,6 +3,7 @@ TbPrmRnd ift
 Permutes the values of a function table randomly, at i-time
 
 Permutes the values of ift randomly and overwrites this table with the result. See TbPrmRndk for the k-rate version
+written by joachim heintz
 
 ift: function table to be permuted
 ****************************************************************************/
@@ -97,38 +98,4 @@ prints something like:
 [1, 6, 12, 4, 8, 5, 3, 9, 7, 11, 10, 2]
 [10, 6, 3, 2, 7, 8, 12, 1, 9, 4, 11, 5]
 
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>231</r>
-  <g>46</g>
-  <b>255</b>
- </bgcolor>
- <bsbObject version="2" type="BSBVSlider">
-  <objectName>slider1</objectName>
-  <x>5</x>
-  <y>5</y>
-  <width>20</width>
-  <height>100</height>
-  <uuid>{60a698d9-677e-405d-ad67-997221231d09}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>-3</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.00000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>-1.00000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

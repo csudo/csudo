@@ -6,7 +6,7 @@ Plays audio from a stereo buffer (two function tables), with control over speed 
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
 
 iftL, iftR - function tables to play. It is possible to use non-power-of-two function tables (given by a negative size, see example), but no deferred size GEN01 table.
-Performance
+written by joachim heintz
 
 kplay - 1 for playing, 0 (or any other number) stops playing
 kspeed - 1 for playing back in the same speed as the buffer has been recorded, 2 for double speed etc., negative numbers for backwards
@@ -19,7 +19,8 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aL, aR - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 
 
 <CsoundSynthesizer>
@@ -189,20 +190,4 @@ endin
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>  
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

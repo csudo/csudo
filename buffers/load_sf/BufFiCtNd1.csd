@@ -3,6 +3,7 @@ ift, ilen BufFiCtNd1 Sfilenam [, ichn [, iftnum [, inorm]]]
 creates a non deferred function table from a mono soundfile and returns its length
 
 Creates a non deferred function table from a mono soundfile and returns its length. This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichn - channel in Sfilenam to read (default=1)

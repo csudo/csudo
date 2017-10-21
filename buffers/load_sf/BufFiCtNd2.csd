@@ -3,6 +3,7 @@ iftL, iftR, ilen BufFiCtNd2 Sfilenam [, ichnL [, ichnR [, iftnumL [, iftnumR [, 
 creates two non deferred function tables from a stereo soundfile and returns the length
 
 Creates two non deferred function tables from a stereo (or any multichannel) soundfile and returns the length as table size (= sample frames). This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichnL, ichnR - channels in Sfilenam to read (default = 1 for ichnL and 2 for ichnR)

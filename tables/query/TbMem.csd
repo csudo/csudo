@@ -3,6 +3,7 @@ ipos TbMem ival, ift [, indxstrt [, indxend]]
 Looks whether a number is in a function table
 
 Looks whether a number is a member of a function table, in a range between indxstart (included) and indxend (excluded). Returns the position of the element if found, or -1 otherwise.
+written by joachim heintz
 
 ival - element (number) to be looked for
 ift - function table
@@ -56,3 +57,4 @@ endin
 i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
+

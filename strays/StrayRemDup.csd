@@ -4,6 +4,7 @@ Removes duplicates in an array-string
 
 Removes duplicates in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -163,3 +164,4 @@ returns:
 'hu,la,la	la 8 8 9'
 'hu,la,la	la,8,9'
 'hu,la,la 8 8 9'
+

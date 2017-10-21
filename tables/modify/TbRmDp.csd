@@ -4,6 +4,7 @@ Removes duplicates from a function table
 
 Removes duplicates from a function table, copies the elements in a new table, and returns the end position (which can be used to build a table with just these elements).
 Requires the UDO TbMem
+written by joachim heintz
 
 iftsrc - source function table
 iftdst - table (usually with the same length as iftsrc) for copying the non-duplicated elements of iftsrc
@@ -124,3 +125,4 @@ endin
 i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
+

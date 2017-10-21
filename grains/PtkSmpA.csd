@@ -3,6 +3,7 @@ aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, k
 A simplified version of the Partikkel opcode, but with some additional parameters
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+written by joachim heintz
 
 ifiltab - function table with the input sound file (usually with GEN01)
 iskip - skiptime (sec)
@@ -15,7 +16,8 @@ kgrainrate - number of grains per seconds
 kgrainsize - grain duration in ms
 kcent - transposition in cent
 kposrand - random deviation (offset) of the pointer in ms
-kcentrand - random transposition in cents (up and down) ****************************************************************************/
+kcentrand - random transposition in cents (up and down) 
+****************************************************************************/
 
 <CsoundSynthesizer>
 <CsOptions>
@@ -79,20 +81,4 @@ i1  6  5.514 0    -1.5  -400
 e
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

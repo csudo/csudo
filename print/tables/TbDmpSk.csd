@@ -5,6 +5,7 @@ Prints a table with an introducing string at k-time
 Prints the content of a function table with a string as 'introduction' at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpS for the i-time equivalent.
 Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
+written by joachim heintz
 
 ifn - function table number
 String - string to be printed as introduction / comment
@@ -219,22 +220,3 @@ Number 6: [4, 1, 6, 5, 2, 3, 0]
 Number 7: [0, 3, 6, 4, 5, 1, 2]
 
 
-
-
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="background">
-  <r>170</r>
-  <g>170</g>
-  <b>127</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

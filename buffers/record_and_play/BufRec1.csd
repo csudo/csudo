@@ -4,6 +4,7 @@ Records in a mono buffer (function table)
 
 Records in a mono buffer (function table), with optional start point, end point, and wrap (= loop record).
 The example below has different tests for ensuring that BufRec works as expected. See the example for the UDO BufCt for another example with live recording.
+written by joachim heintz
 
 ift - function table for recording
 ain - audio signal to record
@@ -71,20 +72,4 @@ i "Rec" 0 10
 i "Play" 10 10
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

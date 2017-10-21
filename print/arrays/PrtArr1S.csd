@@ -4,6 +4,7 @@ Prints a one-dimensional string array at i-time.
 
 Prints the content of a one-dimensional string array at i-time. 
 Requires Csound 6.
+written by joachim heintz
 
 SArr - array to be printed
 istart - first index to be printed (default = 0)
@@ -52,20 +53,4 @@ returns:
 [there is, no, not any, time, at all, ?, !]
 [not any, time, at all, ?, !]
 [at all, ?]
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

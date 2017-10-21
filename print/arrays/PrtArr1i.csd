@@ -4,6 +4,7 @@ Prints a one-dimensional array at i-time.
 
 Prints the content of a one-dimensional array at i-time. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 Requires Csound 6.
+written by joachim heintz
 
 iArr - array to be printed
 istart - first index to be printed (default = 0)

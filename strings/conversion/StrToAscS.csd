@@ -10,7 +10,7 @@ Sout StrToAscS Sin
 Returns the ASCII numbers of the input string as string.
 
 Returns the ASCII numbers of the input string as string. The integers in the output string are seperated by one space.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 Sin - Input string with any sequence of characters or numbers.
 Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.
@@ -42,20 +42,4 @@ printf_i {{\n'!"#$%%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`a
 i "Test" 0 0
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

@@ -4,6 +4,7 @@ Converts a string expression to a number. Note that the string MUST be WITHOUT a
 Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
 Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
+written by joachim heintz
 
 Str - Input string with a common math expression
 iStrt - First index (position) to be considered (default = 0)
@@ -336,20 +337,4 @@ returns:
 '-(2^0.5)' -> -1.414214
 '-9.87654321' -> -9.876543
 '(-2-3)-1.23456*((3+4)-17)' -> 7.345600
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

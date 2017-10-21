@@ -2,6 +2,7 @@
 iPrPos StrL_Prth Str, iMin, iPos
 
 Looks for the next corresponding opening parenthesis < iPos and >= iMin.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position.
@@ -59,20 +60,4 @@ printf_i "Position for min=3 and pos=5 = %d\n", 1, StrL_Prth(Str, 3, 5)
 i 1 0 0
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

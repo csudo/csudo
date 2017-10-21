@@ -4,6 +4,7 @@ Inserts an element in an array-string at a certain position
 
 Puts the string Sin at the position ielindx (default=-1: at the end) of Stray, and returns the result as a string. Elements in the string are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). If just isepA is given, it is also read as isepB. The new element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array 
 Sin - a string to be inserted 
@@ -132,3 +133,4 @@ returns:
 'The		ASCII code of a comma (,bubu ) is 44'
 'The		bubu	ASCII code of a comma (,) is 44'
 'The		bubu,ASCII code of a comma (,) is 44'
+

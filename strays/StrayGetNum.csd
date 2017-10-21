@@ -6,6 +6,7 @@ Gets one number from a string-array
 Returns the element with the position ielindex (starting from 0) in Stray. This element must be a number (the other elements can be strings or charcters). By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 If ielindx is out of range, "nan" is returned.
 If the element is not a number, "nan" is returned at k-rate, but an error occurs at i-rate.
+written by joachim heintz
 
 Input:
 Stray - a string as array

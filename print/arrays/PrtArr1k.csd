@@ -4,6 +4,7 @@ Prints a one-dimensional array at k-time.
 
 Prints the content of a one-dimensional array at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 Requires Csound 6.
+written by joachim heintz
 
 kArr - array to be printed
 ktrig - if > 0, kArr is printed once in each k-cycle (= default). for any other value, no printing is performed

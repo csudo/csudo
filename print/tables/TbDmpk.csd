@@ -5,6 +5,7 @@ Prints a function table at k-time.
 Prints the content of a function table at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmp for the i-time equivalent.
 Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
+written by joachim heintz
 
 ifn - function table number
 ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
@@ -190,24 +191,3 @@ Printing table 1 each time it has been permutet randomly:
 [2, 3, 6, 5, 0, 4, 1]
 [4, 6, 2, 1, 5, 0, 3]
 
-
-
-
-
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="background">
-  <r>170</r>
-  <g>170</g>
-  <b>127</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>

@@ -5,6 +5,7 @@ Returns a subset of elements in an array-string
 Returns a subset of elements in Stray, from istart (included) to iend (excluded). The defaults are istart=0 (first element) and iend=-1 (end of string). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 The resulting substring will use isepOut as seperator (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 istart - first element to extract (default=0)
@@ -139,3 +140,4 @@ returns:
 'x elh'
 'x,elh'
 ' x elh  4|  876'
+

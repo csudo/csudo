@@ -2,6 +2,7 @@
 iOutArr[] ArrPermRndNi iInArr[], iN
 Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
 
 iInArr[] - input array
 iN - desired length of the output array (must not be longer than iInArr)
@@ -111,20 +112,4 @@ iPrmRnd2 = [4, 5]
 iPrmRnd3 = [2, 1, 4]
 iPrmRnd4 = [5, 3, 4, 2]
 iPrmRnd5 = [2, 4, 3, 5, 1]
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

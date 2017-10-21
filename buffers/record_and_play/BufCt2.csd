@@ -3,6 +3,7 @@ iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 creates two function tables of ilen seconds for recording
 
 creates two "empty" function tables (filled with zeros) of ilen seconds, using GEN02, for recording stereo sound input
+written by joachim heintz
 
 ilen - length in seconds
 inumL, inumR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -176,20 +177,4 @@ endin
 i 1 0 1000
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

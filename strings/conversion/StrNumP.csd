@@ -3,6 +3,7 @@ itest StrNumP String
 Tests whether a string is a numerical string
 
 Tests whether a string is a numerical string ("1" or "1.23435" but not "1a"). Returns 1 for "yes" and 0 for "no". If "yes", the string can be converted to a number by the opcode strtod.
+written by joachim heintz
 
 String - any string
 itest - 1 if String is a numerical string, 0 if not
@@ -83,20 +84,4 @@ returns:
 '-1' -> 1
 '-1.2345' -> 1
 '-.1' -> 1
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

@@ -4,6 +4,7 @@ Tests whether a number is a member of an array-string
 
 Looks whether the number inum is a member of Stray. If yes, itest returns the position of inum in Stray, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDO StrNumP
+written by joachim heintz
 
 Stray - a string as array
 inum - the number which is being looked for
@@ -138,3 +139,4 @@ returns:
 '4.000' in 'sdhgfa elh 4,876' with separators ',' and ' ': result = 2
 '5.000' in 'sdhgfa elh 4,876 5' with separators ',' and ' ': result = 4
 '-4.321' in 'sdhgfa elh -4.321,876' with separators ',' and ' ': result = 2
+

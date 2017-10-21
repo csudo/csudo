@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN arrays:
 *****************************************************************************
+ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
 ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
 ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
 ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
@@ -13,6 +14,33 @@ ArrSrtk_simp: kOutArr[] ArrSrtk_simp kInArr[]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+kFound ArrElCnt kNeedle, iInArr[]
+Returns a count of instances of kNeedle in iInArray
+written by kevin welch
+
+kNeedle - numeric value to search for
+iInArr[] - input array to search through
+kFound - count of instances found
+****************************************************************************/
+/****************************************************************************
+kFound ArrElCnt kNeedle, kInArr[]
+Returns a count of instances of kNeedle in iInArray
+written by kevin welch
+
+kNeedle - numeric value to search for
+kInArr[] - input array to search through
+kFound - count of instances found
+****************************************************************************/
+/****************************************************************************
+iFound ArrElCnt iNeedle, iInArr[]
+Returns a count of instances of kNeedle in iInArray
+written by kevin welch
+
+iNeedle - numeric value to search for
+iInArr[] - input array to search through
+iFound - count of instances found
+****************************************************************************/
 /****************************************************************************
 kOutArr[] ArrPermRndIndx kInArr[], kN
 Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
@@ -97,6 +125,7 @@ This is a simple version of ArrSrtk.
 kInArr[] - array to sort
 kOutArr[] - sorted array
 ****************************************************************************/
+
 
   opcode ArrPermRndIndx, k[], k[]k
 kInArr[], kN xin

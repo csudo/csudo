@@ -4,6 +4,7 @@ Gets a random element from a string-array.
 
 Returns a random element from a string-array.
 Requires Csound 5.15 or higher and the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -143,20 +144,4 @@ returns (for instance):
 'Audio 04.wav'
 'Audio 01.wav'
 'Audio 02.wav'
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

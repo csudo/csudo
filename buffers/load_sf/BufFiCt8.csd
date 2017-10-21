@@ -4,6 +4,7 @@ creates eight gen01 function table from an eight channel soundfile
 
 Creates eight gen01 function table from an eight channel soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifn1 ... ifn8 - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
