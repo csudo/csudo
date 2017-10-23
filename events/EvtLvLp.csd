@@ -256,7 +256,7 @@ SPatName1 strcat SPatName1, " \n"
 SPatName3 strcat "\nSPatName = \"",SPatName
 SPatName3 strcat SPatName3, "\"\n"
 SPatternizerParam sprintf "giTimeSignature%s = %i\ngiBPM%s = %i\ngSpattern%s = \"%s\"\n", SPatName, iTimeSignature,SPatName, iBPM,SPatName, SPattern
-SPatternizer sprintf "kTrigger, kOffTrigger, kIndex patternizer giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
+SPatternizer sprintf "kTrigger, kOffTrigger, kIndex Patternizer giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
 SAlways strcat SAlways, SPatternizer
 SAlways strcat SAlways, Schedule
 SAlways strcat SAlways,"\nif kOffTrigger == 1 then \n turnoff \n endif \n endin \n"
@@ -325,37 +325,37 @@ knum      strtodk   Snum
   endop 
       
 
-
-opcode patternizer, kkk,iiS 
-; Give it a string with numbers and it outputs trigger 1 or no-trigger 0
-; Example ktrigger patternizer 4, 120, "0 1 2 3"
-; Made by Hlödver Sigurdsson 2016
-iTimeSignature, iBPM, Spattern xin
-  kOffTrigger init -1
+opcode Patternizer, kkk,iiS 
+  ; Give it a string with numbers and it outputs trigger 1 or no-trigger 0
+  ; Made by Hlödver Sigurdsson 2016
+  iTimeSignature, iBPM, Spattern xin
+  kOffTrigger init 0
   kPatLen StrayLen Spattern
   kPatMax StrayGetNum Spattern, kPatLen - 1
-  ;kPatMax = i(kPatMax)
   krate_counter timek
   iOneSecond =  kr
   iBeatsPerSecond = iBPM / 60
   iTicksPerBeat = iOneSecond / iBeatsPerSecond
   if iTimeSignature != 0 then
-  kBeatCounts = (ceil(kPatMax) >= iTimeSignature ? ceil((kPatMax+0.00001)/iTimeSignature)*iTimeSignature : iTimeSignature)
+    kBeatCounts = (ceil(kPatMax) >= iTimeSignature ? ceil((kPatMax+0.00001)/iTimeSignature)*iTimeSignature : iTimeSignature)
   endif
   kPatternLength = (iTimeSignature < 1 ? ceil(kPatMax+0.00001) * iTicksPerBeat : kBeatCounts * iTicksPerBeat)
   kIndex init 0
   kNextEvent StrayGetNum Spattern, kIndex % kPatLen
   kLastEvent StrayGetNum Spattern, (kPatLen - 1)
-    if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kLastEvent) then
-       kOffTrigger += 1
-    endif
-    if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kNextEvent) then
-      kTrigger = 1
-      kIndex += 1
-    else
-      kTrigger = 0
-    endif
-xout kTrigger, kOffTrigger, kIndex
+
+  if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kLastEvent) then
+    kOffTrigger = 1
+  else
+    kOffTrigger = 0
+  endif
+  if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kNextEvent) then
+    kTrigger = 1
+    kIndex += 1
+  else
+    kTrigger = 0
+  endif
+  xout kTrigger, kOffTrigger, kIndex
 endop
 
 opcode StrayElCnt, i, Sjjjj
