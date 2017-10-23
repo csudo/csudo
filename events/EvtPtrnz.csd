@@ -1,5 +1,5 @@
 /****************************************************************************
-kTrig, kOffTrig, kIndx Patternizer kTime, kBPM, SPat
+kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
 A simple sequencer based on numeric string that returns triggers for events along with index.
 
 Requires Csound 6.07 or higher
@@ -136,7 +136,7 @@ knum      strtodk   Snum
           xout      knum
   endop 
 
-opcode Patternizer, kkk,iiS 
+opcode EvtPtrnz, kkk,iiS
   ; Give it a string with numbers and it outputs trigger 1 or no-trigger 0
   ; Made by Hlödver Sigurdsson 2016
   iTimeSignature, iBPM, Spattern xin
@@ -194,7 +194,7 @@ endin
 instr 2
   kDurs[]  fillarray 6,6,6,3,3,6,6
   kFreqs[] fillarray 7.09,7.04,7.09,7.08,7.09,7.00,7.11,7.09
-  kTrigger, kOffTrigger, kIndex Patternizer 4, 120, "0 1 2 3"
+  kTrigger, kOffTrigger, kIndex EvtPtrnz 4, 120, "0 1 2 3"
   schedkwhen kTrigger, 0, 0, 1, 0, kDurs[kIndex%lenarray(kDurs)],cpspch(kFreqs[kIndex%lenarray(kFreqs)])
 endin
 
@@ -202,7 +202,7 @@ endin
 instr 3
   kDurs[]  fillarray 6,6,6,3,3,6,6
   kFreqs[] fillarray 7.09,7.04,7.09,7.08,7.09,7.00,7.11,7.09
-  kTrigger, kOffTrigger, kIndex Patternizer 4, 120, "0 1 2 3"
+  kTrigger, kOffTrigger, kIndex EvtPtrnz 4, 120, "0 1 2 3"
   schedkwhen kTrigger, 0, 0, 1, 0, kDurs[kIndex%lenarray(kDurs)],cpspch(kFreqs[kIndex%lenarray(kFreqs)])
   if (kOffTrigger == 1) then
     turnoff2 1, 0, 1

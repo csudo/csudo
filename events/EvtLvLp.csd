@@ -124,7 +124,7 @@ end:      xout      kcount
 
 
 opcode StrToPar, SS, SSSii
- ; String to Pattern, to be used with Patternizer and EvtLvLp opcodes
+ ; String to Pattern, to be used with EvtPtrnz and EvtLvLp opcodes
  ; Made by Hlödver Sigurdsson 2016
 SPatName, SPar, SPattern, iTimeSignature, iBPM xin
 SPatNameState strcat SPatName, "_s"
@@ -256,7 +256,7 @@ SPatName1 strcat SPatName1, " \n"
 SPatName3 strcat "\nSPatName = \"",SPatName
 SPatName3 strcat SPatName3, "\"\n"
 SPatternizerParam sprintf "giTimeSignature%s = %i\ngiBPM%s = %i\ngSpattern%s = \"%s\"\n", SPatName, iTimeSignature,SPatName, iBPM,SPatName, SPattern
-SPatternizer sprintf "kTrigger, kOffTrigger, kIndex Patternizer giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
+SPatternizer sprintf "kTrigger, kOffTrigger, kIndex EvtPtrnz giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
 SAlways strcat SAlways, SPatternizer
 SAlways strcat SAlways, Schedule
 SAlways strcat SAlways,"\nif kOffTrigger == 1 then \n turnoff \n endif \n endin \n"
@@ -325,7 +325,7 @@ knum      strtodk   Snum
   endop 
       
 
-opcode Patternizer, kkk,iiS 
+opcode EvtPtrnz, kkk,iiS
   ; Give it a string with numbers and it outputs trigger 1 or no-trigger 0
   ; Made by Hlödver Sigurdsson 2016
   iTimeSignature, iBPM, Spattern xin
