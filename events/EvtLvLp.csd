@@ -1,3 +1,25 @@
+/**********
+EvtLvLp SPatternName, Schedule, SParameters,[iMeter, iBPM]
+A sequencer that emits events for live evaluation.
+
+SPatternName - A unique name for pattern, after pattern is assigned to instrument, 
+it can't be reassigned to another instrument.
+Schedule - Empty string means the pattern is turned-off. Event calculation starts
+at 0 and ends at but not including the value of iMeter. If equal or larger than the value
+of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
+must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
+is equal to the next integer of last (and the greatest) value.
+SParameters - Is a string that operates on the p-fields for the events, there is
+to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
+as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
+inside square brackets, which for each event will iterate trough (i.e Loop).
+iMeter - Optional and defaults to 4. Meter value of 0 indicates a pattern without
+meter, or a pattern that loops from the last and greatest value of the Schedule string.
+iBPM - Optinal and defaults to 120. Controls the tempo of the pattern, measured
+in beats per minute.
+
+**********/
+
 <CsoundSynthesizer>
 <CsOptions>
 </CsOptions>
@@ -8,32 +30,6 @@ ksmps = 64
 nchnls = 2
 0dbfs = 1.0
 
-/**********
-
-REQUIREMENT: Csound 6.07 
-(at least newer than from 11th March 2016)
-
-DOCUMENTATION:
-
-SPatternName: A unique name for pattern, after pattern is assigned to instrument, 
-it can't be reassigned to another instrument.
-Schedule: Empty string means the pattern is turned-off. Event calculation starts
-at 0 and ends at but not including the value of iMeter. If equal or larger than the value
-of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
-must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
-is equal to the next integer of last (and the greatest) value.
-SParameters: Is a string that operates on the p-fields for the events, there is
-to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
-as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
-inside square brackets, which for each event will iterate trough (i.e Loop).
-iMeter: Optional and defaults to 4. Meter value of 0 indicates a pattern without
-meter, or a pattern that loops from the last and greatest value of the Schedule string.
-iBPM: Optinal and defaults to 120. Controls the tempo of the pattern, measured
-in beats per minute.
-
-live_loop SPatternName, Schedule, SParameters,[iMeter, iBPM]
-
-**********/
 
 
 giTrackStates[][] init 10000000, 5
@@ -128,7 +124,7 @@ end:      xout      kcount
 
 
 opcode StrToPar, SS, SSSii
- ; String to Pattern, to be used with Patternizer and live_loop opcodes
+ ; String to Pattern, to be used with Patternizer and EvtLvLp opcodes
  ; Made by Hlödver Sigurdsson 2016
 SPatName, SPar, SPattern, iTimeSignature, iBPM xin
 SPatNameState strcat SPatName, "_s"
@@ -362,33 +358,48 @@ iTimeSignature, iBPM, Spattern xin
 xout kTrigger, kOffTrigger, kIndex
 endop
 
-  opcode paramcount, i, S
-         Sin xin
-  Sep1		  sprintf 	  "%c", 32 ; Space
-  SarrOpen   sprintf    "%c", 91 ; '[' Symbol
-  SarrClose  sprintf    "%c", 93 ; ']' Symbol
-  ilen       strlen     Sin 
+opcode StrayElCnt, i, Sjjjj
+  Sin, iElOpn, iElCls, iSep1, iSep2 xin
+  iElOpn = (iElOpn == -1 ? 91 : iElOpn) ; Defaults to [
+  iElCls = (iElCls == -1 ? 93 : iElCls) ; Defaults to ]
+  iSep1  = (iSep1  == -1 ? 32 : iSep1)  ; Defaults to Whitespace
+  iSep2  = (iSep2  == -1 ? 44 : iSep2)  ; Defaults to Comma
+
+  SElOpen   sprintf    "%c", iElOpn ; (default)'[' Symbol
+  SElClose  sprintf    "%c", iElCls ; (default) ']' Symbol
+  Sep1      sprintf    "%c", iSep1  ; (default) Whitespace
+  Sep2      sprintf    "%c", iSep2  ; (default) ',' Comma (optional)
+
+  ilen       strlen     Sin
   ipcount   = 0
   insidearr = 0
   ipos      = 0
-loop:
-  Schar  strsub Sin, ipos, ipos+1 
-  icomp1 strcmp Schar, Sep1    ;is a space?
-  icomp2 strcmp Schar, SarrOpen ;is in an array?
-  icomp3 strcmp Schar, SarrClose ;array ends?
-  if (icomp1 == 0 ) && (insidearr == 0) then
-    ipcount += 1
-  endif
-  if icomp2 == 0 then 
-    insidearr = 1
-    ipcount += 1
-  endif
-  if icomp3 == 0 then
-    insidearr = 0
-  endif
-loop_lt    ipos, 1, ilen, loop
-       xout ipcount
-  endop
+  iOnSep    = 1
+  loop:
+    Schar  strsub Sin, ipos, ipos+1
+    icompElOpen  strcmp Schar, SElOpen ;is in an array?
+    icompElClose strcmp Schar, SElClose ;array ends?
+    icompSep1    strcmp Schar, Sep1    ;is a space?
+    icompSep2    strcmp Schar, Sep2    ;is a comma?
+
+    if icompElOpen == 0 then 
+      insidearr = 1
+      iOnSep = 0
+      ipcount += 1
+    endif
+    if icompElClose == 0 then
+      insidearr = 0
+      iOnSep = 0
+    endif
+    if ((icompSep1 == 0 ) || (icompSep2 == 0 )) && (insidearr == 0) then
+      iOnSep = 1
+    elseif iOnSep == 1 then
+      ipcount += 1
+      iOnSep = 0
+    endif
+    loop_lt ipos, 1, ilen, loop
+    xout ipcount
+endop
   
   opcode stringsum, i, S
  
@@ -404,7 +415,7 @@ itotal = floor(itotal)
    xout itotal
   endop
 
-opcode live_loop, 0, SSSoj
+opcode EvtLvLp, 0, SSSoj
 ;Made by Hlöðver Sigurðsson 2016
 SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   SPatName2 strcat SPatName, "_s"
@@ -421,7 +432,7 @@ SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   iTrackID stringsum SPatName
   iPatSum  stringsum SPattern
   iParSum  stringsum SParameters
-  iParCount paramcount SParameters
+  iParCount StrayElCnt SParameters
 if giTrackStates[iTrackID][0] != iPatSum  || \
    giTrackStates[iTrackID][1] != iParSum  || \
    giTrackStates[iTrackID][2] != iTimeSignature || \
@@ -451,16 +462,16 @@ endif
 donothing:
 endop
 
-;; Test for live_loop
+;; Test for EvtLvLp
 ;; 5 rounds of kick pattern
 
 giSaw       ftgen     0, 0, 2^10, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9
 
 instr 1
-;;Typehint
-;;live_loop SPatternName, Schedule, SParameters,[iMeter, iBPM]
 
-live_loop "Kick", "0 1 2 3 3.5", "kick [0.1 0.1 0.3] -20 [60 60 60 58] [0.9 0.9 0.9 0.8 0.7]", 4, 190
+;; EvtLvLp SPatternName, Schedule, SParameters,[iMeter, iBPM]
+
+EvtLvLp "Kick", "0 1 2 3 3.5", "kick [0.1 0.1 0.3] -20 [60 60 60 58] [0.9 0.9 0.9 0.8 0.7]", 4, 190
 endin
 
 instr kick
@@ -482,20 +493,4 @@ i 1 $x
 
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+
