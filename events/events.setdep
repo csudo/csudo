@@ -1,4 +1,5 @@
 # internal dependencies in events
 # UDO: dependency [, dependency2 [, ...]]
 
-live_loop: StrayLen, StrNumP
+EvtLvLp: EvtPtrnz, StrayLen, StrNumP, StrayElCnt
+EvtPtrnz: StrayLen, StrayGetNum
