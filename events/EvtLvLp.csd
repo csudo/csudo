@@ -1,22 +1,25 @@
 /**********
-EvtLvLp SPatternName, Schedule, SParameters,[iMeter, iBPM]
+EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
 A sequencer that emits events for live evaluation.
+Requires the UDOs EvtPtrnz, StrayLen, StrNumP, StrayElCnt, StrSum
+written by Hlödver Sigurdsson
 
 SPatternName - A unique name for pattern, after pattern is assigned to instrument, 
-it can't be reassigned to another instrument.
+  it can't be reassigned to another instrument.
 Schedule - Empty string means the pattern is turned-off. Event calculation starts
-at 0 and ends at but not including the value of iMeter. If equal or larger than the value
-of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
-must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
-is equal to the next integer of last (and the greatest) value.
+  at 0 and ends at but not including the value of iMeter. If equal or larger than the value
+  of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
+  must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
+  is equal to the next integer of last (and the greatest) value.
 SParameters - Is a string that operates on the p-fields for the events, there is
-to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
-as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
-inside square brackets, which for each event will iterate trough (i.e Loop).
+  to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
+  as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
+  inside square brackets, which for each event will iterate trough (i.e Loop).
+iTrackStates[][] - 2dim array
 iMeter - Optional and defaults to 4. Meter value of 0 indicates a pattern without
-meter, or a pattern that loops from the last and greatest value of the Schedule string.
+  meter, or a pattern that loops from the last and greatest value of the Schedule string.
 iBPM - Optinal and defaults to 120. Controls the tempo of the pattern, measured
-in beats per minute.
+  in beats per minute.
 
 **********/
 
@@ -123,7 +126,7 @@ end:      xout      kcount
   endop 
 
 
-opcode StrToPar, SS, SSSii
+opcode EvtS2P, SS, SSSii
  ; String to Pattern, to be used with EvtPtrnz and EvtLvLp opcodes
  ; Made by Hlödver Sigurdsson 2016
 SPatName, SPar, SPattern, iTimeSignature, iBPM xin
@@ -401,23 +404,18 @@ opcode StrayElCnt, i, Sjjjj
     xout ipcount
 endop
   
-  opcode stringsum, i, S
- 
-Sin        xin 
-ilen       strlen     Sin 
-ipos = 0
-itotal init 0
-loop:
-ichr       strchar    Sin, ipos
-itotal     += ichr
-   loop_lt    ipos, 1, ilen, loop
-itotal = floor(itotal)
-   xout itotal
+  opcode StrSum, i, S
+Sin xin 
+iPos, iSum init 0
+while iPos < strlen(Sin) do
+ iSum+= strchar(Sin, iPos)
+ iPos += 1
+od
+   xout iSum
   endop
 
-opcode EvtLvLp, 0, SSSoj
-;Made by Hlöðver Sigurðsson 2016
-SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
+opcode EvtLvLp, 0, SSSi[][]oj
+SPatName, SPattern, SParameters, iTrackStates[][], iTimeSignature, iBPM xin
   SPatName2 strcat SPatName, "_s"
   iTurnOff strcmp "", SPattern
   if iTurnOff == 0 goto donothing
@@ -429,23 +427,23 @@ SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   endif
   iActive active SPatName
   iActive_state active SPatName2
-  iTrackID stringsum SPatName
-  iPatSum  stringsum SPattern
-  iParSum  stringsum SParameters
+  iTrackID StrSum SPatName
+  iPatSum  StrSum SPattern
+  iParSum  StrSum SParameters
   iParCount StrayElCnt SParameters
-if giTrackStates[iTrackID][0] != iPatSum  || \
-   giTrackStates[iTrackID][1] != iParSum  || \
-   giTrackStates[iTrackID][2] != iTimeSignature || \
-   giTrackStates[iTrackID][3] != iBPM then
+if iTrackStates[iTrackID][0] != iPatSum  || \
+   iTrackStates[iTrackID][1] != iParSum  || \
+   iTrackStates[iTrackID][2] != iTimeSignature || \
+   iTrackStates[iTrackID][3] != iBPM then
   SConsoleLog sprintf "Pattern: %s was evaluated!\n", SPatName
   prints SConsoleLog
-  SAlways, State StrToPar SPatName, SParameters, SPattern, iTimeSignature, iBPM
+  SAlways, State EvtS2P SPatName, SParameters, SPattern, iTimeSignature, iBPM
   iFailTest1 compilestr State
   if iFailTest1 != 0 then
     SConsoleLogFailEval sprintf "ERROR: FAILED TO EVALUATE PATTERN %s\n", SPatName 
     prints SConsoleLogFailEval
   endif
-  if (iActive < 1) || (giTrackStates[iTrackID][4] != iParCount) then
+  if (iActive < 1) || (iTrackStates[iTrackID][4] != iParCount) then
     iFailTest2 compilestr SAlways
     if iFailTest2 != 0 then
       SConsoleLogStartFail sprintf "ERROR: FAILED TO START THE PATTERN %s\n", SPatName
@@ -453,11 +451,11 @@ if giTrackStates[iTrackID][0] != iPatSum  || \
     endif
   endif
 endif
-  giTrackStates[iTrackID][0] = iPatSum
-  giTrackStates[iTrackID][1] = iParSum
-  giTrackStates[iTrackID][2] = iTimeSignature
-  giTrackStates[iTrackID][3] = iBPM
-  giTrackStates[iTrackID][4] = iParCount
+  iTrackStates[iTrackID][0] = iPatSum
+  iTrackStates[iTrackID][1] = iParSum
+  iTrackStates[iTrackID][2] = iTimeSignature
+  iTrackStates[iTrackID][3] = iBPM
+  iTrackStates[iTrackID][4] = iParCount
   schedkwhen 1, 1, 1, SPatName2, 0, 1
 donothing:
 endop
@@ -468,10 +466,7 @@ endop
 giSaw       ftgen     0, 0, 2^10, 10, 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9
 
 instr 1
-
-;; EvtLvLp SPatternName, Schedule, SParameters,[iMeter, iBPM]
-
-EvtLvLp "Kick", "0 1 2 3 3.5", "kick [0.1 0.1 0.3] -20 [60 60 60 58] [0.9 0.9 0.9 0.8 0.7]", 4, 190
+EvtLvLp "Kick", "0 1 2 3 3.5", "kick [0.1 0.1 0.3] -20 [60 60 60 58] [0.9 0.9 0.9 0.8 0.7]", giTrackStates, 4, 190
 endin
 
 instr kick

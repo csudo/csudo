@@ -1,5 +1,6 @@
 # internal dependencies in events
 # UDO: dependency [, dependency2 [, ...]]
 
-EvtLvLp: EvtPtrnz, StrayLen, StrNumP, StrayElCnt
-EvtPtrnz: StrayLen, StrayGetNum
+
+EvtLvLp: StrSum, StrNumP, StrayElCnt, StrayLen, StrayGetNum, EvtPtrnz, EvtS2P
+EvtPtrnz: StrayGetNum, StrayLen

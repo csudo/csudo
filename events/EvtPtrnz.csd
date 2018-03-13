@@ -3,6 +3,7 @@ kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
 A simple sequencer based on numeric string that returns triggers for events along with index.
 
 Requires Csound 6.07 or higher
+Requires the UDOs StrayLen and StrayGetNum
 written by Hlöðver Sigurðsson
 
 Input:
@@ -84,8 +85,6 @@ kwarsep   =         0; and tell you are not sep1 nor sep2
           loop_lt   kndx, 1, klen, loop 
 end:      xout      kcount
   endop 
-
-
 
   opcode StrayGetNum, k, Skjj
 ;returns kelindex in Stray. this element must be a number
