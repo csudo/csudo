@@ -3,9 +3,8 @@
 UDO DEFINITIONS IN csudo:
 *****************************************************************************
 ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
+ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
-ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
-ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
 ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
 ArrSrti_simp: iOutArr[] ArrSrti_simp iInArr[]
@@ -28,6 +27,9 @@ BufPlay2   : aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend
 BufRec1    : kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 BufRec2    : kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 Counter    : kcount Counter kup, kdown [, kstep [, istart]]
+EvtLvLp    : EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
+EvtPtrnz   : kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
+EvtS2P     : SAlways, State EvtS2P SPatName, SPar, SPattern, iTimeSignature, iBPM
 ExtrOrc    : Sorc ExtrOrc Sfil
 F2M        : iNotNum F2M iFreq [,iRound]
 FilDir     : Sdir FilDir Spath
@@ -39,6 +41,7 @@ FilSuf     : Suf FilSuf Spath [,ilow]
 FracLen    : iFracs FracLen iNum
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 LpPhsr     : atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
+Meter      : Meter S_chan_sig, S_chan_over, aSig, kTrig
 Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
 PrtArr1S   : PrtArr1S SArr [,istart [,iend]]
 PrtArr1i   : PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
@@ -48,6 +51,7 @@ PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsi
 PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 Scale      : iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
 Sinc       : iFt Sinc iStart, iEnd [,iSize [,iFtNo]]
+StepIncr   : iOut StepIncr iValStart, iValEnd, iNumSteps, iThisStep
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
@@ -58,13 +62,16 @@ StrIsOp    : iOp StrIsOp Str, iPos
 StrLNoth   : iTrue StrLNoth Str, iMin, iPos
 StrL_NvO   : iTrue StrL_NvO Str, iMin, iPos
 StrL_Prth  : iPrPos StrL_Prth Str, iMin, iPos
-StrLineBreak: StrMems    : iSumEls StrMems Str, Sel
+StrLineBreak: Sres StrLineBreak String, iNum
+StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
 StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrSum     : iSum StrSum Sin
 StrToArr   : S_Arr[], iLen StrToArr S_in, S_sep
 StrToAscS  : Sout StrToAscS Sin
 StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
+StrayElCnt : ilen StrayElCnt Stray [, iElOpn] [, iElCls] [, iSep1] [, iSep2]
 StrayElMem : ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
 StrayGetEl : Sel StrayGetEl Stray, ielindx [, isep1 [, isep2]]
 StrayGetNum: inum StrayGetNum Stray, ielindx [, isep1 [, isep2]]
@@ -91,7 +98,6 @@ TbPrmRndk  : TbPrmRndk ift, ktrig
 TbRmDp     : iend TbRmDp iftsrc, iftdst [, ioffset [, inumels]]
 TbToLin    : kLin TbToLin iFt
 TbToSF     : TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
-live_loop  : REQUIREMENT: Csound 6.07 
 *****************************************************************************
 ****************************************************************************/
 
@@ -123,36 +129,31 @@ iInArr[] - input array to search through
 iFound - count of instances found
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrPermRnd iInArr[] [, iN]
+kOutArr[] ArrPermRnd kInArr[] [, kN]
+Returns an array of i(k)N length which contains randomly permuted elements of i(k)InArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
+
+iInArr[] - input array
+i(k)N - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
+i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
+****************************************************************************/
+/****************************************************************************
 kOutArr[] ArrPermRndIndx kInArr[], kN
 Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
 This UDO is similar to ArrPermRndN but returns indices instead of values.
+written by joachim heintz
 
 kInArr[] - input array
 kN - desired length of the output array (must not be longer than kInArr)
 kOutArr[] - output array with kN randomly permuted indices of kInArr
 ****************************************************************************/
 /****************************************************************************
-iOutArr[] ArrPermRndNi iInArr[], iN
-Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
-As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
-
-iInArr[] - input array
-iN - desired length of the output array (must not be longer than iInArr)
-iOutArr[] - output array with iN randomly permuted elements of iInArr
-****************************************************************************/
-/****************************************************************************
-kOutArr[] ArrPermRndNk kInArr[], kN
-Returns an array of kN length which contains randomly permuted elements of kInArr[]. 
-As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
-
-kInArr[] - input array
-kN - desired length of the output array (must not be longer than kInArr)
-kOutArr[] - output array with kN randomly permuted elements of kInArr
-****************************************************************************/
-/****************************************************************************
 iOutArr[] ArrRmvIndxk iInArr[], iIndx
 Removes the element with the index iIndx from iInArr and returns the result as new array.
+written by joachim heintz
 
 iInArr[] - input array
 iIndx - index to be removed from iInArr
@@ -161,6 +162,7 @@ iOutArr[] - output array as copy of iInArr without iIndx
 /****************************************************************************
 kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
 Removes the element with the index Kindx from kInArr and returns the result as new array.
+written by joachim heintz
 
 kInArr[] - input array
 kIndx - index to be removed from kInArr
@@ -171,6 +173,7 @@ kOutArr[] - output array as copy of kInArr without kIndx
 iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
 This is a simple version of ArrSrti.
+written by joachim heintz
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
@@ -183,6 +186,7 @@ Depending on kOutType, the output array can either contain the values, or the
 indices of the values (thus pointing to kInArr). A section of kInArr can be
 specified by kStart and kEnd. Instead of sorting every element, looking only
 for the even or odd elements can be done via the kHop parameter.
+written by joachim heintz
 
 kInArr[] - array to sort
 iOutN - length of the output array kOutArr
@@ -202,6 +206,7 @@ kOutArr[] - sorted array
 kOutArr[] ArrSrtk_simp kInArr[]
 Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
 This is a simple version of ArrSrtk.
+written by joachim heintz
 
 kInArr[] - array to sort
 kOutArr[] - sorted array
@@ -211,6 +216,7 @@ ift BufCt1 ilen [, inum]
 creates a function table of ilen seconds for recording
 
 creates an "empty" function table (filled with zeros) of ilen seconds, using GEN02, for recording sound
+written by joachim heintz
 
 ilen - length in seconds
 inum - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -221,6 +227,7 @@ iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 creates two function tables of ilen seconds for recording
 
 creates two "empty" function tables (filled with zeros) of ilen seconds, using GEN02, for recording stereo sound input
+written by joachim heintz
 
 ilen - length in seconds
 inumL, inumR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -232,6 +239,7 @@ creates a gen01 function table from a mono soundfile
 
 Creates a gen01 function table from a mono soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 iftnum - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -244,6 +252,7 @@ creates two gen01 function table from a stereo soundfile
 
 Creates two gen01 function table from a stereo soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifnL, ifnR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -256,6 +265,7 @@ creates fout gen01 function table from a four channel soundfile
 
 Creates four gen01 function table from a four channel soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifn1 ... ifn4 - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -268,6 +278,7 @@ creates eight gen01 function table from an eight channel soundfile
 
 Creates eight gen01 function table from an eight channel soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifn1 ... ifn8 - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -279,6 +290,7 @@ ift, ilen BufFiCtNd1 Sfilenam [, ichn [, iftnum [, inorm]]]
 creates a non deferred function table from a mono soundfile and returns its length
 
 Creates a non deferred function table from a mono soundfile and returns its length. This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichn - channel in Sfilenam to read (default=1)
@@ -292,6 +304,7 @@ iftL, iftR, ilen BufFiCtNd2 Sfilenam [, ichnL [, ichnR [, iftnumL [, iftnumR [, 
 creates two non deferred function tables from a stereo soundfile and returns the length
 
 Creates two non deferred function tables from a stereo (or any multichannel) soundfile and returns the length as table size (= sample frames). This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichnL, ichnR - channels in Sfilenam to read (default = 1 for ichnL and 2 for ichnR)
@@ -306,6 +319,7 @@ Plays a mono sample from a GEN01 function table, including sample rate conversio
 
 Plays a mono sample from a GEN01 function table, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn - number of the function table which contains the sample (please use GEN01 - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt1 for creating the table - see the example below)
@@ -323,6 +337,7 @@ Plays a stereo sample from two GEN01 function tables, including sample rate conv
 
 Plays a stereo sample from two GEN01 function tables for the left and right channel, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifnL - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt2 for creating the tables for left and right channel - see the example below)
@@ -342,6 +357,7 @@ Plays a four channel sample from four GEN01 function tables, including sample ra
 
 Plays a four channel sample from four GEN01 function tables, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn1 - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt4 for creating the tables for all channels - see the example below)
@@ -357,13 +373,15 @@ a1 - audio output channel 1
 a2 - audio output channel 2
 a3 - audio output channel 3
 a4 - audio output channel 4
-kfin - 1 if iwrap=0 and playback has finished, otherwise 0 ****************************************************************************/
+kfin - 1 if iwrap=0 and playback has finished, otherwise 0 
+****************************************************************************/
 /****************************************************************************
 a1, a2, a3, a4, a5, a6, a7, a8 BufFiPl8 ifn1, ifn2, ifn3, ifn4, ifn5, ifn6, ifn7, ifn8, kplay, kspeed, kvol [, iskip [, iwrap]]
 Plays an eight channel sample from eight GEN01 function tables, including sample rate conversion
 
 Plays an eight channel sample from eight GEN01 function tables, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn1 - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt8 for creating the tables for all channels - see the example below)
@@ -387,13 +405,15 @@ a5 - audio output channel 5
 a6 - audio output channel 6
 a7 - audio output channel 7
 a8 - audio output channel 8
-kfin - 1 if iwrap=0 and playback has finished, otherwise 0  ****************************************************************************/
+kfin - 1 if iwrap=0 and playback has finished, otherwise 0  
+****************************************************************************/
 /****************************************************************************
 aout, kfin BufPlay1 ift, kplay, kspeed, kvol, kstart, kend, kwrap
 Plays audio from a mono buffer (function table), with different options
 
 Plays audio from a mono buffer (function table), with control over speed (forward - backward), volume, start point, end point, and different options of wrapping/looping. All parameters can be modified during performance.
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
+written by joachim heintz
 
 ift - function table to play. This can be a non-power-of-two function table (given by a negative size, see example), but no deferred size GEN01 table.
 kplay - 1 for playing, 0 (or any other number) stops playing
@@ -407,7 +427,8 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aout - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 Plays audio from a stereo buffer (two function tables), with different options
@@ -416,7 +437,7 @@ Plays audio from a stereo buffer (two function tables), with control over speed 
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
 
 iftL, iftR - function tables to play. It is possible to use non-power-of-two function tables (given by a negative size, see example), but no deferred size GEN01 table.
-Performance
+written by joachim heintz
 
 kplay - 1 for playing, 0 (or any other number) stops playing
 kspeed - 1 for playing back in the same speed as the buffer has been recorded, 2 for double speed etc., negative numbers for backwards
@@ -429,13 +450,15 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aL, aR - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 Records in a mono buffer (function table)
 
 Records in a mono buffer (function table), with optional start point, end point, and wrap (= loop record).
 The example below has different tests for ensuring that BufRec works as expected. See the example for the UDO BufCt for another example with live recording.
+written by joachim heintz
 
 ift - function table for recording
 ain - audio signal to record
@@ -450,6 +473,7 @@ kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 Records in a stereo buffer (= two function tables)
 
 Records in a stereo buffer (two function tables), with optional start point, end point, and wrap (= loop record). 
+written by joachim heintz
 
 iftL, iftR - function tables for recording
 ainL, ainR - audio signals to record
@@ -464,6 +488,7 @@ kcount Counter kup, kdown [, kstep [, istart]]
 Step counter
 
 Counts steps upwards or downwards, whenever a trigger signal has been received. This is meant to be used in live interaction, and is simliar to counter objects in realtime programs like Max or Pd. The example shows how the basic function can be extended to repeat sequences in a certain range.
+written by joachim heintz
 
 kstep - step size (default = 1)
 istart - starting value (default = 0)
@@ -471,12 +496,60 @@ kup - counts upwards when 1
 kdown - counts downwards when 1
 kcount - current count as output
 ****************************************************************************/
+/**********
+EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
+A sequencer that emits events for live evaluation.
+Requires the UDOs EvtPtrnz, StrayLen, StrNumP, StrayElCnt, StrSum
+written by Hlödver Sigurdsson
+
+SPatternName - A unique name for pattern, after pattern is assigned to instrument, 
+  it can't be reassigned to another instrument.
+Schedule - Empty string means the pattern is turned-off. Event calculation starts
+  at 0 and ends at but not including the value of iMeter. If equal or larger than the value
+  of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
+  must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
+  is equal to the next integer of last (and the greatest) value.
+SParameters - Is a string that operates on the p-fields for the events, there is
+  to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
+  as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
+  inside square brackets, which for each event will iterate trough (i.e Loop).
+iTrackStates[][] - 2dim array
+iMeter - Optional and defaults to 4. Meter value of 0 indicates a pattern without
+  meter, or a pattern that loops from the last and greatest value of the Schedule string.
+iBPM - Optinal and defaults to 120. Controls the tempo of the pattern, measured
+  in beats per minute.
+
+**********/
+/****************************************************************************
+kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
+A simple sequencer based on numeric string that returns triggers for events along with index.
+
+Requires Csound 6.07 or higher
+Requires the UDOs StrayLen and StrayGetNum
+written by Hlöðver Sigurðsson
+
+Input:
+kTime - a number representing the length of musical bar
+kBPM  - the tempo of 1 integer represented as beats per minute 
+sPat  - a string containing numbers on which an event is emitted, seperated by whitespaces
+Output:
+kTrig - a trigger where 1 represents an event and 0 for no events
+kOffTrig - an event triggered after end of each note, ideally for noteoff events
+kIndx - a 0 based index of the event that is being triggered
+****************************************************************************/
+/**********
+SAlways, State EvtS2P SPatName, SPar, SPattern, iTimeSignature, iBPM
+
+written by Hlödver Sigurdsson
+
+**********/
 /****************************************************************************
 Sorc ExtrOrc Sfil
 Extracts the orc part of a csd file.
 
 Extracts the orc part (= the text in the <CsInstruments> tag) from the csd 
 file Sfil, and returns it as string Sorc. Requires the UDO StripL.
+written by joachim heintz
 
 Sfil - csd file (either full path or name if in the same directory)
 Sorc - orc part of Sfil as string
@@ -486,6 +559,7 @@ iNotNum F2M iFreq [,iRound]
 Converts a frequency to MIDI.Cent note number, with optional rounding to the next key.
 
 Converts a frequency to MIDI.Cent note number, for instance 60.024759 for an input of 262 Hz. If the round option is turned on, the frequency is mapped to the nearest key, so that an integer is returned.
+written by joachim heintz
 
 iFreq - Frequency to be converted
 iRound - 0 = off (default), 1 = on
@@ -496,6 +570,7 @@ Sdir FilDir Spath
 Returns the directory in a given path
 
 Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
+written by joachim heintz
 
 Spath - full path name as string
 Sdir - directory
@@ -505,6 +580,7 @@ SUpDir FilDirUp SCurDir
 Returns the directory above the current directory
 
 Returns the directory above the current directory.
+written by joachim heintz
 
 SCurDir - current directory (with or without an ending slash)
 SUpDir - directory above the current directory (returned without an ending slash)
@@ -515,6 +591,7 @@ Returns the file name in a given path
 
 Returns the file name (= everything after the last slash) in a given path.
 Requires Csound 5.15 or higher.
+written by joachim heintz
 
 Spath - full path name as string
 Snam - name part
@@ -524,6 +601,7 @@ aout FilPlay1 Sfil, kspeed [, iskip [, iloop]]
 Plays a mono signal from a mono or stereo soundfile
 
 Gives mono output regardless a soundfile is mono or stereo (if stereo, just the first channel is used).
+written by joachim heintz
 
 Sfil - Sound file name (or path) in double quotes
 iskip - skiptime in seconds (default=0)
@@ -534,6 +612,7 @@ aL, aR FilPlay2 Sfil, kspeed [, iskip [, iloop]]
 Plays a stereo signal from a mono or stereo soundfile
 
 Gives stereo output regardless a soundfile is mono or stereo (if mono, this signal is sent to both channels).
+written by joachim heintz
 
 Sfil - Sound file name (or path) in double quotes
 iskip - skiptime in seconds (default=0)
@@ -545,6 +624,7 @@ Suf FilSuf Spath [,ilow]
 Returns the suffix of a filename or path, optional in lower case 
 
 Returns the suffix (extension) of a filename or a full path, optional in lower case.
+written by joachim heintz
 
 Spath - full pathname (or filename) as string
 ilow - return ensuring lower case (1) or return as in Spath (0 = default)
@@ -554,6 +634,7 @@ iFracs FracLen iNum
 Returns the real length of the fractional part of a number
 
 Returns the real length of digits in the the fractional part of a number. "Real" means that the number 1.000 actually has no fractional part but is in this sense an integer.
+written by joachim heintz
 
 iNum - incoming number
 iFracs - number of digits in the fractional part. 0 means that iNum is an integer
@@ -563,6 +644,7 @@ kval, kfin Linek kthis, knext, ktim, ktrig
 performs a linear interpolation from one value to another value in a certain time whenever a trigger is received
 
 Performs a linear interpolation from kthis to knext in ktim whenever ktrig is 1. Otherwise kthis is bypassed (before the first trigger impulse) or kval is held. The behaviour should be the same as in PD's/Max' "line" object.
+written by joachim heintz
 
 kthis - starting value
 knext - target value
@@ -576,6 +658,7 @@ atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
 creates a time pointer for loops
 
 creates a time pointer signal for typical loop applications, for instance in the mincer opcode, with optional backward playing
+written by joachim heintz
 
 irefdur - the overall duration. must be in the same scale as kloopstart and kloopend (e.g. seconds)
 kloopstart - starting point of the loop (in the scale of irefdur)
@@ -584,11 +667,25 @@ kspeed - 1 = normal speed, 0.5 = half speed, etc.
 kdir - 1 = forward, -1 = backward
 ****************************************************************************/
 /****************************************************************************
+Meter S_chan_sig, S_chan_over, aSig, kTrig
+Shows an audio signal in a CsoundQt controller widget
+
+Shows an audio signal in a CsoundQt controller widget. For efficiency, chnset is used instead outvalue.
+Because of this, the software channel names must be declared outside this UDO via chn_k to work properly.
+written by joachim heintz
+
+S_chan_sig - channel name for the controller widget showing the signal
+S_chan_over - channel name for the controller widget showing the out of range signal
+aSig - audio signal to show
+kTrig - trigger signal for refreshing the display
+****************************************************************************/
+/****************************************************************************
 Print_a aSig [,kPeriod [,kSpaces]]
 Prints an audio signal (vector) every kPeriod seconds.
 
 Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 aSig - input signal to be printed
 kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
@@ -601,6 +698,7 @@ Prints a one-dimensional string array at i-time.
 
 Prints the content of a one-dimensional string array at i-time. 
 Requires Csound 6.
+written by joachim heintz
 
 SArr - array to be printed
 istart - first index to be printed (default = 0)
@@ -612,6 +710,7 @@ Prints a one-dimensional array at i-time.
 
 Prints the content of a one-dimensional array at i-time. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 Requires Csound 6.
+written by joachim heintz
 
 iArr - array to be printed
 istart - first index to be printed (default = 0)
@@ -625,6 +724,7 @@ Prints a one-dimensional array at k-time.
 
 Prints the content of a one-dimensional array at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 Requires Csound 6.
+written by joachim heintz
 
 kArr - array to be printed
 ktrig - if > 0, kArr is printed once in each k-cycle (= default). for any other value, no printing is performed
@@ -638,6 +738,7 @@ aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, k
 A simplified version of the Partikkel opcode, but with some additional parameters
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+written by joachim heintz
 
 ifiltab - function table with the input sound file (usually with GEN01)
 iskip - skiptime (sec)
@@ -650,7 +751,8 @@ kgrainrate - number of grains per seconds
 kgrainsize - grain duration in ms
 kcent - transposition in cent
 kposrand - random deviation (offset) of the pointer in ms
-kcentrand - random transposition in cents (up and down) ****************************************************************************/
+kcentrand - random transposition in cents (up and down) 
+****************************************************************************/
 /*length of input file*/
 /*amplitude*/
 /*transposition*/
@@ -661,6 +763,7 @@ apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kp
 The same as PtkSmpA, but with a time pointer input
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+written by joachim heintz
 
 ifiltab: function table with the input sound file (usually with GEN01)
 icosintab: function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
@@ -672,7 +775,8 @@ kgrainrate: number of grains per seconds
 kgrainsize: grain duration in ms
 kcent: transposition in cent
 kposrand: random deviation (offset) of the pointer in ms
-kcentrand: random transposition in cents (up and down) ****************************************************************************/
+kcentrand: random transposition in cents (up and down) 
+****************************************************************************/
 /*amplitude*/
 /*transposition*/
 /* other parameters */
@@ -686,6 +790,7 @@ General notes:
 2. Two function tables are generated from inside the UDO, which is actually bad style. The reason is not to bother the user with tables which are not important for him. But if you want to use this UDO in a real time context, you should definitely put the iWinTab and iDistTab tables outside the UDO.
 3. The default values for grain rate (200 Hz) and grain size (100 ms) can be changed easily inside the UDO.
 Requires Csound 5.18 or higher.
+written by joachim heintz
 
 aPos - position in the sound in seconds
 iFilTab - function table containing the mono sound file (use GEN01 with 1 as last parameter to import any sample)
@@ -702,6 +807,7 @@ iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+written by joachim heintz
 
 iVal - incoming number
 iInMin - minimum possible incoming number
@@ -715,6 +821,7 @@ iFt Sinc iStart, iEnd [,iSize [,iFtNo]]
 Creates a table with a sinc function.
 
 Creates a table containing the values of a sinc function f(x)/x from x between start and end, with a table size of 4096 as default. Returns the table number which is by default generated by Csound, but can also be assigned by an input.
+written by joachim heintz
 
 iStart - lowest x value for sinc function
 iEnd - highest x value for sinc function
@@ -723,10 +830,26 @@ iFtNo - number of the generated table (default 0: generated by Csound)
 iFt - the number of the table 
 ****************************************************************************/
 /****************************************************************************
+iOut StepIncr iValStart, iValEnd, iNumSteps, iThisStep
+kOut StepIncr kValStart, kValEnd, kNumSteps, kThisStep
+
+Step increment
+
+The range between ValStart and ValEnd is divided in a number of steps. The opcode 
+returns the proper value for one of these steps.
+written by joachim heintz
+
+iValStart (kValStart) - value at start (ThisStep=0)
+iValEnd (kValEnd) - value at end (ThisStep=NumSteps)
+iNumSteps (kNumSteps) - number of steps between ValStart and ValEnd
+iThisStep (kThisStep) - index of this step (starting at zero)
+****************************************************************************/
+/****************************************************************************
 Sout StrAgrm Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
 Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
+written by joachim heintz
 
 Sin - input string 
 iLen - length of Sin. If -1 (default), the length is calculated internally. 
@@ -747,6 +870,7 @@ iNum StrExpr Str [, iStrt [, iEnd]]
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1.
 
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1. Spaces (or tabs) are allowed. Supported math operations are +, -, *, /, % and ^. The precedence of bindings is as usual (^ is stronger than *%/ than +-).
+written by joachim heintz
 
 Str - input string with a math expression.
 iStrt - first index to read in Str (default = 0)
@@ -759,6 +883,7 @@ Converts a string expression to a number. Note that the string MUST be WITHOUT a
 Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
 Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
+written by joachim heintz
 
 Str - Input string with a common math expression
 iStrt - First index (position) to be considered (default = 0)
@@ -769,6 +894,7 @@ iNum - Result of the math expression as number
 iNum StrExpr2 iNum1, iNum2, iOp
 
 Evaluates two numbers which are combined by the operator iOp.
+written by joachim heintz
 
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
@@ -777,6 +903,7 @@ iNum - Result as number
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
 Returns 1 if the positions >= istrt and <= iend are nothing but spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrt - first index (position) to be considered in Str (default = 0)
@@ -788,6 +915,7 @@ iOp StrIsOp Str, iPos
 Looks whether the iPos character in Str is a mathematical operator. Returns 
 1 for for +, 2 for -, 3 for *, 4 for /, 5 for %, 6 for ^ and 0 for anything 
 else.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) to read in Str (default = 0)
@@ -798,6 +926,7 @@ iTrue StrLNoth Str, iMin, iPos
 
 Looks whether left of iPos >= iMin is nothing but spaces or tabs. Returns 1 
 if true, 0 if false.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -810,6 +939,7 @@ iTrue StrL_NvO Str, iMin, iPos
 Looks whether the next real sign (= except spaces or tabs) left of iPos >= iMin 
 is an operator. Returns 1 if true, 0 if false.
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -820,6 +950,7 @@ iTrue - 1 = true, 0 = false
 iPrPos StrL_Prth Str, iMin, iPos
 
 Looks for the next corresponding opening parenthesis < iPos and >= iMin.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position.
@@ -828,10 +959,20 @@ iMin - minimum position (index) which is regarded for left search (default 0)
 iPrPos - position (index) of next opening parenthesis (-1 if none)
 ****************************************************************************/
 /****************************************************************************
+Sres StrLineBreak String, iNum
+
+Inserts line breaks after iNum characters in the input string.
+written by joachim heintz
+
+Sin - Input string which may contain starting spaces or tabs.
+Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
 iSumEls StrMems Str, Sel
 Returns the number of occurencies of a string in another string.
 
 Returns the number of occurencies of a string in another string.
+written by joachim heintz
 
 Str - Input string
 Sel - Another string which is asked to be a member of Str
@@ -842,6 +983,7 @@ itest StrNumP String
 Tests whether a string is a numerical string
 
 Tests whether a string is a numerical string ("1" or "1.23435" but not "1a"). Returns 1 for "yes" and 0 for "no". If "yes", the string can be converted to a number by the opcode strtod.
+written by joachim heintz
 
 String - any string
 itest - 1 if String is a numerical string, 0 if not
@@ -853,6 +995,7 @@ Returns position and type of next operator < iPos and >= iMin. Anything inside
 Parentheses will be disregarded.
 
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -865,6 +1008,7 @@ Sout StrRmvST Sin, iStrt, iEnd
 Removes all spaces or tabs from iStrt to iEnd (both included)
 
 Removes all spaces or tabs in input string Sin from iStrt to iEnd and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
@@ -872,8 +1016,17 @@ iEnd - Last indes to consider in Sin (default = -1 = end of string)
 Sout - Output string with removed initial spaces/tabs.
 ****************************************************************************/
 /****************************************************************************
+iSum StrSum Sin
+Returns the sum of all ASCII values in Sin
+written by Hlödver Sigurdsson and joachim heintz
+
+Sin - input string
+iSum - sum of all ASCII numbers for the elements in Sin
+****************************************************************************/
+/****************************************************************************
 S_Arr[], iLen StrToArr S_in, S_sep
 Transforms the sections of the input string S_in to elements of a string array. The sections in S_in are seperated by the seperator S_in. 
+written by joachim heintz
 
 S_in - Input string.
 S_sep - Seperator string.
@@ -885,7 +1038,7 @@ Sout StrToAscS Sin
 Returns the ASCII numbers of the input string as string.
 
 Returns the ASCII numbers of the input string as string. The integers in the output string are seperated by one space.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 Sin - Input string with any sequence of characters or numbers.
 Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.
@@ -894,6 +1047,7 @@ Sout - Output string containing the ASCII numbers of all characters, seperated b
 iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 Returns the next position >= iStrtIn and <= iEndIn without possible starting 
 and/or ending spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrtIn - first index to read in Str (default = 0)
@@ -902,11 +1056,25 @@ iStrtOut - first index to read when starting spaces or tabs are omitted
 iEndOut - last index to read when ending spaces or tabs are omitted
 ****************************************************************************/
 /****************************************************************************
+ilen StrayElCnt Stray [, iElOpn] [, iElCls] [, iSep1] [, iSep2]
+Returns the number of elements from a string where a list/array can be counted as 1 element.
+
+Returns the number of elements in Stray. Elements are defined by lists/arrays: iElOpn defaults to 91 (ASCII for '['), iElCls (ASCII for ']'), or by seperators when used outside of lists/arrays: isep1 defaults to 32 (= space) and isep2 defaults to 44 (= comma).
+written by Hlöðver Sigurðsson
+
+Stray - a string as array
+iElOpn - open element deliminator (default=91: [)
+iElCls - close element deliminator (default=93: ])
+isep1  - the first seperator (default=32: space)
+isep2  - the second seperator (default=44: comma) 
+****************************************************************************/
+/****************************************************************************
 ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
 Tests whether a string is contained as an element in an array-string
 
 Looks whether a string equals one of the elements in Stray. If yes, itest returns the position of the element, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires Csound 5.15 or higher.
+written by joachim heintz
 
 Stray - a string as array
 Stest - a string to be looked for in Stray
@@ -920,6 +1088,7 @@ Gets one element from a string-array
 
 Returns (at i-rate) the element for ielindex in String, or an empty string, if the element has not been found. By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 Requires Csound 5.15 or higher
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -938,6 +1107,7 @@ Gets one number from a string-array
 Returns the element with the position ielindex (starting from 0) in Stray. This element must be a number (the other elements can be strings or charcters). By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 If ielindx is out of range, "nan" is returned.
 If the element is not a number, "nan" is returned at k-rate, but an error occurs at i-rate.
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -954,6 +1124,7 @@ kLen StrayLen Stray [, isep1 [, isep2]]
 Returns the length of an array-string
 
 Returns the number of elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -965,6 +1136,7 @@ Returns the length of numerical elements in an array-string
 
 Returns the number of numerical elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayGetEl, StrayLen and StrNumP
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -976,6 +1148,7 @@ Tests whether a number is a member of an array-string
 
 Looks whether the number inum is a member of Stray. If yes, itest returns the position of inum in Stray, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDO StrNumP
+written by joachim heintz
 
 Stray - a string as array
 inum - the number which is being looked for
@@ -988,6 +1161,7 @@ Adds the elements in a numerical array-string
 
 Adds all numbers in Stray (which must not contain non-numerical elements). Simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -1000,6 +1174,7 @@ Converts a string-array which just consists of numbers or simple math expression
 Puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written iftlen. (An empty string as input writes a function table of size=1 to avoid an error but returns 0 as length of elements written.) Simple binary math expressions using +, -, *, /, ^ and % are allowed, with just one parenthesis in total (see the examples below). 
 Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires csound 5.15 or higher, and the UDOs StrayLen and StrExpr (which itself requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1).
+written by joachim heintz
 
 Stray - a string as array
 iftno - like in an ftgen statement: if 0 (which is also the default) an automatic number is generated by Csound; if any positive number, this is then the number of the function table
@@ -1014,6 +1189,7 @@ Removes duplicates in an array-string
 
 Removes duplicates in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -1026,6 +1202,7 @@ Reverses the elements of an array-string
 
 Reverses the elements in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1. The elements in the resulting string Sres are seperated by isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 isepA - the first seperator for the elements in Stray (default=32: space)
@@ -1039,6 +1216,7 @@ Gets a random element from a string-array.
 
 Returns a random element from a string-array.
 Requires Csound 5.15 or higher and the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -1054,6 +1232,7 @@ Inserts an element in an array-string at a certain position
 
 Puts the string Sin at the position ielindx (default=-1: at the end) of Stray, and returns the result as a string. Elements in the string are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). If just isepA is given, it is also read as isepB. The new element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array 
 Sin - a string to be inserted 
@@ -1068,6 +1247,7 @@ Inserts a number in an array-string at a certain position
 
 Puts the number inum at the position ielindx (default=-1: at the end) of Stray, and returns the result as Sres. Elements in Stray are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). if just isepA is given, it is also read as isepB. the element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher, and the UDO FracLen.
+written by joachim heintz
 
 Stray - a string as array
 inum - the number to be inserted
@@ -1084,6 +1264,7 @@ Returns a subset of elements in an array-string
 Returns a subset of elements in Stray, from istart (included) to iend (excluded). The defaults are istart=0 (first element) and iend=-1 (end of string). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 The resulting substring will use isepOut as seperator (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 istart - first element to extract (default=0)
@@ -1098,6 +1279,7 @@ Sout StripL Sin
 Strips all initial spaces or tabs from a string.
 
 Strips all spaces or tabs at the beginning of the input string Sin and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 Sout - Output string with removed initial spaces/tabs.
@@ -1108,6 +1290,7 @@ Prints a function table at i-time.
 
 Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpk for the k-rate equivalent.
+written by joachim heintz
 
 ifn - function table number
 istart - first index to be printed (default = 0)
@@ -1121,6 +1304,7 @@ TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
 Prints a table with an introducing string at i-time
 
 Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
+written by joachim heintz
 
 ifn - function table number
 String - string to be printed as introduction
@@ -1136,6 +1320,7 @@ Prints a table with an introducing string at k-time
 Prints the content of a function table with a string as 'introduction' at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpS for the i-time equivalent.
 Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
+written by joachim heintz
 
 ifn - function table number
 String - string to be printed as introduction / comment
@@ -1152,6 +1337,7 @@ Prints a function table at k-time.
 Prints the content of a function table at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmp for the i-time equivalent.
 Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
+written by joachim heintz
 
 ifn - function table number
 ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
@@ -1165,6 +1351,7 @@ ipos TbMem ival, ift [, indxstrt [, indxend]]
 Looks whether a number is in a function table
 
 Looks whether a number is a member of a function table, in a range between indxstart (included) and indxend (excluded). Returns the position of the element if found, or -1 otherwise.
+written by joachim heintz
 
 ival - element (number) to be looked for
 ift - function table
@@ -1177,6 +1364,7 @@ iPeak TbPeak ift [, indxstrt [, indxend]]
 Returns the peak (highest absolute number) value of a function table.
 
 Returns the peak value of a function table, or a part of it, in a range between indxstart (included, defaults to zero) and indxend (excluded, defaults to table length). The return value is always positive.
+written by joachim heintz
 
 ift - function table
 indxstart - starting index in ift to look for ival (default=0)
@@ -1188,6 +1376,7 @@ TbPrmRnd ift
 Permutes the values of a function table randomly, at i-time
 
 Permutes the values of ift randomly and overwrites this table with the result. See TbPrmRndk for the k-rate version
+written by joachim heintz
 
 ift: function table to be permuted
 ****************************************************************************/
@@ -1196,6 +1385,7 @@ TbPrmRndk ift, ktrig
 Permutes the values of a function table randomly, at k-time
 
 Permutes the values of ift randomly and overwrites this table with the result. This operation is performed once a k-cycle, as long as a trigger is positive. See TbPrmRnd for the i-rate version
+written by joachim heintz
 
 ift - function table to be permuted
 ktrig - if > 0, the permutation is performed once a k-cycle
@@ -1206,6 +1396,7 @@ Removes duplicates from a function table
 
 Removes duplicates from a function table, copies the elements in a new table, and returns the end position (which can be used to build a table with just these elements).
 Requires the UDO TbMem
+written by joachim heintz
 
 iftsrc - source function table
 iftdst - table (usually with the same length as iftsrc) for copying the non-duplicated elements of iftsrc
@@ -1218,6 +1409,7 @@ kLin TbToLin iFt
 Reads a table in the same way as a linseg opcode
 
 Reads a table which contains segments of value - duration - value in the same way as a linseg opcocde would do.
+written by joachim heintz
 
 iFt - a function table, usually generated with GEN02 and not normaized
 kLin - k-rate output
@@ -1227,6 +1419,7 @@ TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
 Writes the content of a table to a soundfile
 
 Writes the content of a table to a soundfile, with optional start and end point
+written by joachim heintz
 
 ift - function table to write
 Soutname - output file name in double quotes
@@ -1235,33 +1428,57 @@ istart - start in seconds in the function table to write (default=0)
 iend - last point to write in the function table in seconds (default=-1: until the end)
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
-/**********
 
-REQUIREMENT: Csound 6.07 
-(at least newer than from 11th March 2016)
 
-DOCUMENTATION:
-
-SPatternName: A unique name for pattern, after pattern is assigned to instrument, 
-it can't be reassigned to another instrument.
-Schedule: Empty string means the pattern is turned-off. Event calculation starts
-at 0 and ends at but not including the value of iMeter. If equal or larger than the value
-of iMeter, then a new bar is calculated. Since this is based on indexed array, the value
-must be written linearly (example "0 1 2 3"). In case iMeter = 0, then the pattern length
-is equal to the next integer of last (and the greatest) value.
-SParameters: Is a string that operates on the p-fields for the events, there is
-to say, all the p-fields except p2. For this UDO to work, the instrument must be defined
-as name but not a number. For each parameter (not including p1 and p2) the numbers can be stored
-inside square brackets, which for each event will iterate trough (i.e Loop).
-iMeter: Optional and defaults to 4. Meter value of 0 indicates a pattern without
-meter, or a pattern that loops from the last and greatest value of the Schedule string.
-iBPM: Optinal and defaults to 120. Controls the tempo of the pattern, measured
-in beats per minute.
-
-live_loop SPatternName, Schedule, SParameters,[iMeter, iBPM]
-
-**********/
-
+  opcode ArrPermRnd, i[], i[]j
+iInArr[], iN xin
+iLen       =          lenarray(iInArr)
+;get output length
+iN = (iN == -1) ? iLen : iN
+;create out array and set index
+iOutArr[]  init       iN
+iIndx      =          0
+;for iN elements:
+ until iIndx == iN do
+ ;get one random element and put it in iOutArr
+iRndIndx   random     0, iLen-.0001
+iRndIndx   =          int(iRndIndx)
+iOutArr[iIndx] =      iInArr[iRndIndx]
+ ;shift the elements after this one to the left
+  until iRndIndx == iLen-1 do
+iInArr[iRndIndx] = iInArr[iRndIndx+1]
+iRndIndx   +=         1
+  enduntil
+ ;reset iLen and increase counter
+iLen       -=         1
+iIndx      +=         1
+ enduntil
+           xout       iOutArr
+  endop
+  opcode ArrPermRnd, k[], k[]j
+kInArr[], iN xin
+iLen       =          lenarray(kInArr)
+iN = (iN == -1) ? iLen : iN
+kOutArr[]  init       iN
+kIndx      =          0
+kLen = iLen
+;for kN elements:
+until kIndx == iN do
+ ;get one random element and put it in kOutArr
+kRndIndx   random     0, kLen-.0001
+kRndIndx   =          int(kRndIndx)
+kOutArr[kIndx] =      kInArr[kRndIndx]
+ ;shift the elements after this one to the left
+ until kRndIndx == kLen-1 do
+kInArr[kRndIndx] = kInArr[kRndIndx+1]
+kRndIndx   +=         1
+ enduntil
+ ;reset kLen and increase counter
+kLen       -=         1
+kIndx      +=         1
+enduntil
+           xout       kOutArr
+  endop
 
   opcode ArrPermRndIndx, k[], k[]k
 kInArr[], kN xin
@@ -1286,57 +1503,6 @@ kLen       -=         1
 kIndx      +=         1
 od
 
-           xout       kOutArr
-  endop
-
-  opcode ArrPermRndNi, i[], i[]i
-iInArr[], iN xin
-iLen       =          lenarray(iInArr)
-;copy input array 
-;(for future should be simply possible via iInArrCyp[] = iInArr)
-iInArrCpy[] =         iInArr
-;create out array and set index
-iOutArr[]  init       iN
-iIndx      =          0
-;for iN elements:
- until iIndx == iN do
- ;get one random element and put it in iOutArr
-iRndIndx   random     0, iLen-.0001
-iRndIndx   =          int(iRndIndx)
-iOutArr[iIndx] =      iInArrCpy[iRndIndx]
- ;shift the elements after this one to the left
-  until iRndIndx == iLen-1 do
-iInArrCpy[iRndIndx] = iInArrCpy[iRndIndx+1]
-iRndIndx   +=         1
-  enduntil
- ;reset iLen and increase counter
-iLen       -=         1
-iIndx      +=         1
- enduntil
-           xout       iOutArr
-  endop
-
-  opcode ArrPermRndNk, k[], k[]k
-kInArr[], kN xin
-kInArrCpy[] =         kInArr
-kOutArr[]  init       i(kN)
-kIndx      =          0
-kLen       =          lenarray(kInArrCpy)
-;for kN elements:
-until kIndx == kN do
- ;get one random element and put it in kOutArr
-kRndIndx   random     0, kLen-.0001
-kRndIndx   =          int(kRndIndx)
-kOutArr[kIndx] =      kInArrCpy[kRndIndx]
- ;shift the elements after this one to the left
- until kRndIndx == kLen-1 do
-kInArrCpy[kRndIndx] = kInArrCpy[kRndIndx+1]
-kRndIndx   +=         1
- enduntil
- ;reset kLen and increase counter
-kLen       -=         1
-kIndx      +=         1
-enduntil
            xout       kOutArr
   endop
 
@@ -1748,6 +1914,112 @@ kfinished	BufRec1	ainR, iftR, krec, kstart, kend, kwrap
  		xout		kfinished
   endop
 
+opcode Meter, 0, SSak
+ S_chan_sig, S_chan_over, aSig, kTrig	xin
+ iDbRange = 60 ;shows 60 dB
+ iHoldTim = 1 ;seconds to "hold the red light"
+ kOn init 0
+ kTim init 0
+ kStart init 0
+ kEnd init 0
+ kMax max_k aSig, kTrig, 1
+ if kTrig == 1 then
+  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
+  if kOn == 0 && kMax > 1 then
+   kTim = 0
+   kEnd = iHoldTim
+   chnset k(1), S_chan_over
+   kOn = 1
+  endif
+  if kOn == 1 && kTim > kEnd then
+   chnset k(0), S_chan_over
+   kOn =	0
+  endif
+ endif
+ kTim += ksmps/sr
+endop
+
+  opcode StrSum, i, S
+Sin xin 
+iPos, iSum init 0
+while iPos < strlen(Sin) do
+ iSum+= strchar(Sin, iPos)
+ iPos += 1
+od
+   xout iSum
+  endop
+
+  opcode StrNumP, i, S
+Str        xin
+ip         =          1; start at yes and falsify
+ilen       strlen     Str
+ if ilen == 0 then
+ip         =          0
+           igoto      end
+ endif
+ifirst     strchar    Str, 0
+ if ifirst == 45 then; a "-" is just allowed as first character
+Str        strsub     Str, 1, -1
+ilen       =          ilen-1
+ endif
+indx       =          0
+inpnts     =          0; how many points have there been
+loop:
+iascii     strchar    Str, indx; 48-57
+ if iascii < 48 || iascii > 57 then; if not 0-9
+  if iascii == 46 && inpnts == 0 then; if not the first point
+inpnts     =          1
+           else
+ip         =          0
+  endif
+ endif
+           loop_lt    indx, 1, ilen, loop
+end:       xout       ip
+  endop
+
+opcode StrayElCnt, i, Sjjjj
+  Sin, iElOpn, iElCls, iSep1, iSep2 xin
+  iElOpn = (iElOpn == -1 ? 91 : iElOpn) ; Defaults to [
+  iElCls = (iElCls == -1 ? 93 : iElCls) ; Defaults to ]
+  iSep1  = (iSep1  == -1 ? 32 : iSep1)  ; Defaults to Whitespace
+  iSep2  = (iSep2  == -1 ? 44 : iSep2)  ; Defaults to Comma
+
+  SElOpen   sprintf    "%c", iElOpn ; (default)'[' Symbol
+  SElClose  sprintf    "%c", iElCls ; (default) ']' Symbol
+  Sep1      sprintf    "%c", iSep1  ; (default) Whitespace
+  Sep2      sprintf    "%c", iSep2  ; (default) ',' Comma (optional)
+
+  ilen       strlen     Sin
+  ipcount   = 0
+  insidearr = 0
+  ipos      = 0
+  iOnSep    = 1
+  loop:
+    Schar  strsub Sin, ipos, ipos+1
+    icompElOpen  strcmp Schar, SElOpen ;is in an array?
+    icompElClose strcmp Schar, SElClose ;array ends?
+    icompSep1    strcmp Schar, Sep1    ;is a space?
+    icompSep2    strcmp Schar, Sep2    ;is a comma?
+
+    if icompElOpen == 0 then 
+      insidearr = 1
+      iOnSep = 0
+      ipcount += 1
+    endif
+    if icompElClose == 0 then
+      insidearr = 0
+      iOnSep = 0
+    endif
+    if ((icompSep1 == 0 ) || (icompSep2 == 0 )) && (insidearr == 0) then
+      iOnSep = 1
+    elseif iOnSep == 1 then
+      ipcount += 1
+      iOnSep = 0
+    endif
+    loop_lt ipos, 1, ilen, loop
+    xout ipcount
+endop
+
   opcode StrayLen, i, Sjj
 Stray, isepA, isepB xin
  ;seperators
@@ -1805,37 +2077,289 @@ kwarsep   =         0; and tell you are not sep1 nor sep2
 end:      xout      kcount
   endop 
 
-  opcode StrNumP, i, S
-Str        xin
-ip         =          1; start at yes and falsify
-ilen       strlen     Str
- if ilen == 0 then
-ip         =          0
-           igoto      end
- endif
-ifirst     strchar    Str, 0
- if ifirst == 45 then; a "-" is just allowed as first character
-Str        strsub     Str, 1, -1
-ilen       =          ilen-1
- endif
-indx       =          0
-inpnts     =          0; how many points have there been
+  opcode StrayGetNum, i, Sijj
+;returns ielindex in Stray. this element must be a number
+Stray, ielindx, isepA, isepB xin
+;;DEFINE THE SEPERATORS
+isep1     =         (isepA == -1 ? 32 : isepA)
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1      sprintf   "%c", isep1
+Sep2      sprintf   "%c", isep2
+;;INITIALIZE SOME PARAMETERS
+ilen      strlen    Stray
+istartsel =         -1; startindex for searched element
+iendsel   =         -1; endindex for searched element
+iel       =         0; actual number of element while searching
+iwarleer  =         1
+indx      =         0
+ if ilen == 0 igoto end ;don't go into the loop if Stray is empty
 loop:
-iascii     strchar    Str, indx; 48-57
- if iascii < 48 || iascii > 57 then; if not 0-9
-  if iascii == 46 && inpnts == 0 then; if not the first point
-inpnts     =          1
-           else
-ip         =          0
-  endif
- endif
-           loop_lt    indx, 1, ilen, loop
-end:       xout       ip
-  endop
+Snext     strsub    Stray, indx, indx+1; next sign
+isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
+isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
+;;NEXT SIGN IS NOT SEP1 NOR SEP2
+if isep1p != 0 && isep2p != 0 then
+ if iwarleer == 1 then; first character after a seperator 
+  if iel == ielindx then; if searched element index
+istartsel =         indx; set it
+iwarleer  =         0
+  else 			;if not searched element index
+iel       =         iel+1; increase it
+iwarleer  =         0; log that it's not a seperator 
+  endif 
+ endif 
+;;NEXT SIGN IS SEP1 OR SEP2
+else 
+ if istartsel > -1 then; if this is first selector after searched element
+iendsel   =         indx; set iendsel
+          igoto     end ;break
+ else	
+iwarleer  =         1
+ endif 
+endif
+          loop_lt   indx, 1, ilen, loop 
+end: 		
+Snum      strsub    Stray, istartsel, iendsel
+if strcmp(Snum,"") == 0 then
+ Snum     =         "nan"
+endif
+inum      strtod    Snum
+          xout      inum
+  endop 
+  opcode StrayGetNum, k, Skjj
+;returns kelindex in Stray. this element must be a number
+Str, kelindx, isepA, isepB xin
+;;DEFINE THE SEPERATORS
+isep1     =         (isepA == -1 ? 32 : isepA)
+isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
+Sep1      sprintf   "%c", isep1
+Sep2      sprintf   "%c", isep2
+;;INITIALIZE SOME PARAMETERS
+Stray     strcpyk   Str ;make sure to update in performance
+klen      strlenk   Stray
+kstartsel =         -1; startindex for searched element
+kendsel   =         -1; endindex for searched element
+kel       =         0; actual number of element while searching
+kwarleer  =         1
+kndx      =         0
+ if klen == 0 kgoto end ;don't go into the loop if Stray is empty
+loop:
+Snext     strsubk   Stray, kndx, kndx+1; next sign
+ksep1p    strcmpk   Snext, Sep1; returns 0 if Snext is sep1
+ksep2p    strcmpk   Snext, Sep2; 0 if Snext is sep2
+;;NEXT SIGN IS NOT SEP1 NOR SEP2
+if ksep1p != 0 && ksep2p != 0 then
+ if kwarleer == 1 then; first character after a seperator 
+  if kel == kelindx then; if searched element index
+kstartsel =         kndx; set it
+kwarleer  =         0
+  else 			;if not searched element index
+kel       =         kel+1; increase it
+kwarleer  =         0; log that it's not a seperator 
+  endif 
+ endif 
+;;NEXT SIGN IS SEP1 OR SEP2
+else 
+ if kstartsel > -1 then; if this is first selector after searched element
+kendsel   =         kndx; set iendsel
+          kgoto     end ;break
+ else	
+kwarleer  =         1
+ endif 
+endif
+          loop_lt   kndx, 1, klen, loop 
+end: 		
+Snum      strsubk   Stray, kstartsel, kendsel
+Snum      init      "nan"
+knum      strtodk   Snum
+          xout      knum
+  endop 
 
-opcode live_loop, 0, SSSoj
-;Made by Hlöðver Sigurðsson 2016
-SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
+opcode EvtPtrnz, kkk,iiS
+  ; Give it a string with numbers and it outputs trigger 1 or no-trigger 0
+  ; Made by Hlödver Sigurdsson 2016
+  iTimeSignature, iBPM, Spattern xin
+  kOffTrigger init 0
+  kPatLen StrayLen Spattern
+  kPatMax StrayGetNum Spattern, kPatLen - 1
+  krate_counter timek
+  iOneSecond =  kr
+  iBeatsPerSecond = iBPM / 60
+  iTicksPerBeat = iOneSecond / iBeatsPerSecond
+  if iTimeSignature != 0 then
+    kBeatCounts = (ceil(kPatMax) >= iTimeSignature ? ceil((kPatMax+0.00001)/iTimeSignature)*iTimeSignature : iTimeSignature)
+  endif
+  kPatternLength = (iTimeSignature < 1 ? ceil(kPatMax+0.00001) * iTicksPerBeat : kBeatCounts * iTicksPerBeat)
+  kIndex init 0
+  kNextEvent StrayGetNum Spattern, kIndex % kPatLen
+  kLastEvent StrayGetNum Spattern, (kPatLen - 1)
+
+  if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kLastEvent) then
+    kOffTrigger = 1
+  else
+    kOffTrigger = 0
+  endif
+  if int(krate_counter % kPatternLength) == int(iTicksPerBeat * kNextEvent) then
+    kTrigger = 1
+    kIndex += 1
+  else
+    kTrigger = 0
+  endif
+  xout kTrigger, kOffTrigger, kIndex
+endop
+
+opcode EvtS2P, SS, SSSii
+ ; String to Pattern, to be used with EvtPtrnz and EvtLvLp opcodes
+ ; Made by Hlödver Sigurdsson 2016
+SPatName, SPar, SPattern, iTimeSignature, iBPM xin
+SPatNameState strcat SPatName, "_s"
+SInits init ""
+SInitsDef init ""
+SInitsLen init ""
+SInitsLenDef init ""
+SPToStringNum init ""
+SPToStringArr init ""
+SInstr init ""
+Schedule init ""
+SAlways init ""
+State init ""
+Sep1		sprintf 	"%c", 32 ; Space
+Sep2		sprintf    "%c", 9  ; Tab
+SarrOpen   sprintf    "%c", 91 ; '[' Symbol
+SarrClose  sprintf    "%c", 93 ; ']' Symbol
+indx = 0
+iarrndx = 0
+iSpaceCount init 0
+iMoreThanOneSpace = 0
+iInstr = 1 ;Pattern begins with instrument name/number, 0 means strings are passed to parameter fields
+iInsideArray = 0
+iStrLen strlen SPar
+SFirstLetter strsub SPar, 0, 1
+iNumberedInstrument StrNumP SFirstLetter
+loop:
+  Snext 	strsub		SPar, indx, indx+1
+  isep1p	strcmp		Snext, Sep1
+  isep2p	strcmp		Snext, Sep2
+  iArrOpen strcmp   Snext, SarrOpen
+  iArrClose strcmp  Snext, SarrClose
+if isep1p != 0 && isep2p != 0 then
+  if iInsideArray == 0 &&  iInstr == 1 then
+  SInstr strcat SInstr, Snext
+  elseif iArrOpen == 0 && iInsideArray == 0 then ;Here the array opens
+  iInsideArray = 1
+  elseif iArrClose == 0 && iInsideArray == 1 then ;Here the array closes
+  iInsideArray = 0
+  iarrndx = 0
+  SInits strcat SInits, "\n"
+  ;SInitsLen strcat SInitsLen, "\"\n"
+  elseif iInstr == 0 && iInsideArray == 1 then
+    if iarrndx > 0 && iMoreThanOneSpace == 0 then ;In array, commas preceed all numbers 
+      SInitsDef strcat SInitsDef, Snext           ;except for first element (fillarray)
+      SInits strcat SInits, SInitsDef
+      SInitsLen strcat SInitsLen, Snext
+      SInitsLenDef = ""
+      SInitsDef = ""
+      iarrndx += 1
+    elseif iarrndx > 0 && iMoreThanOneSpace == 1 then ;If this is multidigit number in array
+      SInitsDef strcat ", ", Snext
+      SInits strcat SInits, SInitsDef
+      SInitsLen strcat SInitsLen, " "
+      SInitsLen strcat SInitsLen, Snext
+      SInitsLenDef = ""
+      SInitsDef = ""
+      iarrndx += 1
+    else
+      SInitsLen strcat SInitsLen, Snext
+      SInitsLenDef = ""
+      SInitsDef strcat SInitsDef, Snext
+      SInits strcat SInits, SInitsDef
+      SInitsDef = ""
+      iarrndx += 1
+   endif
+  else
+    SInitsLen strcat SInitsLen, Snext
+    SInitsLenDef = "" 
+    SInitsDef strcat SInitsDef, Snext
+    SInits strcat SInits, SInitsDef
+    SInitsDef = ""
+  endif
+ iMoreThanOneSpace = 0 ;Each time an alphabetical letter or number arrives, space locker is returned to 0
+ else
+   iInstr = 0 ;Safe way to make sure that defenition of instrument quits after first space
+   if (iInsideArray == 0) && (iMoreThanOneSpace == 0)  then
+     SInits strcat SInits, "\n"
+     if iSpaceCount > 0 then
+     SInitsLen strcat SInitsLen,"\"\n"
+     endif
+     iSpaceCount += 1
+   endif
+   if iMoreThanOneSpace == 0 then
+    if iarrndx == 0 && (iStrLen-indx) != 1 then
+      ;SPToString2a sprintf "%i[kIndex %% gi", (iSpaceCount+2) ;Len%i]
+      SPToString sprintf ", gip%s%i[kIndex %% gip%sLen%i]",SPatName,(iSpaceCount+2), SPatName, (iSpaceCount+2)
+      ;SPToString2b strcat SPToString2a,"Len%i]"
+      ;SPToString2 sprintf SPToString2b, (iSpaceCount+2), (iSpaceCount+2)
+      ;SCurrentPar strcat ", gip", SPatName
+      ;SCurrentPar strcat SCurrentPar, SPToString
+      Schedule strcat Schedule, SPToString
+      SPToStringNum sprintf "%i", (iSpaceCount + 2)
+      SPToStringArr strcat "gip", SPatName
+      SPToStringArr strcat SPToStringArr, SPToStringNum
+      SPToStringArr2 strcat "gip", SPatName
+      SPToStringArr2 strcat SPToStringArr2, "Len"
+      SPToStringArr2 strcat SPToStringArr2, SPToStringNum
+      SInitsLenDef  strcat SPToStringArr2," StrayLen \""
+      ;SInitsLenDef  strcat SInitsLenDef, SPToStringArr
+      SInitsLen strcat SInitsLen, SInitsLenDef
+      ;SInitsLen strcat SInitsLen, 
+      ;SInitsLen strcat SInitsLen, "\n"
+      SInitsDef    strcat SPToStringArr, "[] fillarray "
+      iMoreThanOneSpace = 1
+       else
+      iMoreThanOneSpace = 1
+     endif
+   endif
+endif
+loop_lt	 indx, 1, iStrLen, loop
+;Here comes Arguments for Schedkwhen
+if iNumberedInstrument == 1 then    
+  SInstrCat strcat "iInstr = ", SInstr ;If instrument name is number
+  SInstrCat strcat SInstr, "\n"
+  ;SInstr strcat SInstr, "\n"
+  Schedule strcat "schedkwhen kTrigger, 0, 0, iInstr, 0 ", Schedule
+elseif iNumberedInstrument == 0 then
+  SInstrCat strcat "SInstr = \"", SInstr ;If instrument name is string
+  SInstrCat strcat SInstrCat, "\"\n"
+  Schedule strcat "\nschedkwhen kTrigger, 0, 0, SInstr, 0", Schedule
+endif
+Schedule strcat "\n;;Here comes the scheduler", Schedule ;;Useless but fixes a bug.
+SInits strcat SInits, "\n"
+Schedule strcat Schedule, "\n"
+SPatName1 strcat "\ninstr ", SPatName
+SPatName2 strcat  "\ninstr ",SPatNameState
+SPatName1 strcat SPatName1, " \n"
+SPatName3 strcat "\nSPatName = \"",SPatName
+SPatName3 strcat SPatName3, "\"\n"
+SPatternizerParam sprintf "giTimeSignature%s = %i\ngiBPM%s = %i\ngSpattern%s = \"%s\"\n", SPatName, iTimeSignature,SPatName, iBPM,SPatName, SPattern
+SPatternizer sprintf "kTrigger, kOffTrigger, kIndex EvtPtrnz giTimeSignature%s, giBPM%s, gSpattern%s", SPatName,SPatName,SPatName
+SAlways strcat SAlways, SPatternizer
+SAlways strcat SAlways, Schedule
+SAlways strcat SAlways,"\nif kOffTrigger == 1 then \n turnoff \n endif \n endin \n"
+SAlways strcat SInstrCat, SAlways
+SAlways strcat SPatName1, SAlways
+State = "\"\nkActive active SPatName\nif kActive < 1 then\nschedkwhen 1, 0, 1, SPatName, 0, 100000\nendif\nendin\n;"
+State strcat SInitsLen, State
+State strcat SInits, State
+State strcat SPatternizerParam, State
+State strcat SPatName3, State
+State strcat SPatName2, State
+xout SAlways, State
+;prints SAlways
+;prints State
+endop
+
+opcode EvtLvLp, 0, SSSi[][]oj
+SPatName, SPattern, SParameters, iTrackStates[][], iTimeSignature, iBPM xin
   SPatName2 strcat SPatName, "_s"
   iTurnOff strcmp "", SPattern
   if iTurnOff == 0 goto donothing
@@ -1847,23 +2371,23 @@ SPatName, SPattern, SParameters, iTimeSignature, iBPM xin
   endif
   iActive active SPatName
   iActive_state active SPatName2
-  iTrackID stringsum SPatName
-  iPatSum  stringsum SPattern
-  iParSum  stringsum SParameters
-  iParCount paramcount SParameters
-if giTrackStates[iTrackID][0] != iPatSum  || \
-   giTrackStates[iTrackID][1] != iParSum  || \
-   giTrackStates[iTrackID][2] != iTimeSignature || \
-   giTrackStates[iTrackID][3] != iBPM then
+  iTrackID StrSum SPatName
+  iPatSum  StrSum SPattern
+  iParSum  StrSum SParameters
+  iParCount StrayElCnt SParameters
+if iTrackStates[iTrackID][0] != iPatSum  || \
+   iTrackStates[iTrackID][1] != iParSum  || \
+   iTrackStates[iTrackID][2] != iTimeSignature || \
+   iTrackStates[iTrackID][3] != iBPM then
   SConsoleLog sprintf "Pattern: %s was evaluated!\n", SPatName
   prints SConsoleLog
-  SAlways, State StrToPar SPatName, SParameters, SPattern, iTimeSignature, iBPM
+  SAlways, State EvtS2P SPatName, SParameters, SPattern, iTimeSignature, iBPM
   iFailTest1 compilestr State
   if iFailTest1 != 0 then
     SConsoleLogFailEval sprintf "ERROR: FAILED TO EVALUATE PATTERN %s\n", SPatName 
     prints SConsoleLogFailEval
   endif
-  if (iActive < 1) || (giTrackStates[iTrackID][4] != iParCount) then
+  if (iActive < 1) || (iTrackStates[iTrackID][4] != iParCount) then
     iFailTest2 compilestr SAlways
     if iFailTest2 != 0 then
       SConsoleLogStartFail sprintf "ERROR: FAILED TO START THE PATTERN %s\n", SPatName
@@ -1871,11 +2395,11 @@ if giTrackStates[iTrackID][0] != iPatSum  || \
     endif
   endif
 endif
-  giTrackStates[iTrackID][0] = iPatSum
-  giTrackStates[iTrackID][1] = iParSum
-  giTrackStates[iTrackID][2] = iTimeSignature
-  giTrackStates[iTrackID][3] = iBPM
-  giTrackStates[iTrackID][4] = iParCount
+  iTrackStates[iTrackID][0] = iPatSum
+  iTrackStates[iTrackID][1] = iParSum
+  iTrackStates[iTrackID][2] = iTimeSignature
+  iTrackStates[iTrackID][3] = iBPM
+  iTrackStates[iTrackID][4] = iParCount
   schedkwhen 1, 1, 1, SPatName2, 0, 1
 donothing:
 endop
@@ -2095,6 +2619,17 @@ iVal, iInMin, iInMax, iOutMin, iOutMax xin
 iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
 xout iValOut
   endop
+
+opcode StepIncr, i, iiii
+ iValStart, iValEnd, iNumSteps, iThisStep xin
+ iOut = ((iValEnd-iValStart) / iNumSteps) * iThisStep + iValStart
+ xout iOut
+endop
+opcode StepIncr, k, kkkk
+ kValStart, kValEnd, kNumSteps, kThisStep xin
+ kOut = ((kValEnd-kValStart) / kNumSteps) * kThisStep + kValStart
+ xout kOut
+endop
 
   opcode LpPhsr, a, kkkki
 kloopstart, kloopend, kspeed, kdir, irefdur xin
@@ -2420,104 +2955,6 @@ endif
 end:
 Sout      strsub    Stray, istartsel, iendsel
           xout      Sout
-  endop 
-
-  opcode StrayGetNum, i, Sijj
-;returns ielindex in Stray. this element must be a number
-Stray, ielindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;;INITIALIZE SOME PARAMETERS
-ilen      strlen    Stray
-istartsel =         -1; startindex for searched element
-iendsel   =         -1; endindex for searched element
-iel       =         0; actual number of element while searching
-iwarleer  =         1
-indx      =         0
- if ilen == 0 igoto end ;don't go into the loop if Stray is empty
-loop:
-Snext     strsub    Stray, indx, indx+1; next sign
-isep1p    strcmp    Snext, Sep1; returns 0 if Snext is sep1
-isep2p    strcmp    Snext, Sep2; 0 if Snext is sep2
-;;NEXT SIGN IS NOT SEP1 NOR SEP2
-if isep1p != 0 && isep2p != 0 then
- if iwarleer == 1 then; first character after a seperator 
-  if iel == ielindx then; if searched element index
-istartsel =         indx; set it
-iwarleer  =         0
-  else 			;if not searched element index
-iel       =         iel+1; increase it
-iwarleer  =         0; log that it's not a seperator 
-  endif 
- endif 
-;;NEXT SIGN IS SEP1 OR SEP2
-else 
- if istartsel > -1 then; if this is first selector after searched element
-iendsel   =         indx; set iendsel
-          igoto     end ;break
- else	
-iwarleer  =         1
- endif 
-endif
-          loop_lt   indx, 1, ilen, loop 
-end: 		
-Snum      strsub    Stray, istartsel, iendsel
-if strcmp(Snum,"") == 0 then
- Snum     =         "nan"
-endif
-inum      strtod    Snum
-          xout      inum
-  endop 
-  opcode StrayGetNum, k, Skjj
-;returns kelindex in Stray. this element must be a number
-Str, kelindx, isepA, isepB xin
-;;DEFINE THE SEPERATORS
-isep1     =         (isepA == -1 ? 32 : isepA)
-isep2     =         (isepA == -1 && isepB == -1 ? 9 : (isepB == -1 ? isep1 : isepB))
-Sep1      sprintf   "%c", isep1
-Sep2      sprintf   "%c", isep2
-;;INITIALIZE SOME PARAMETERS
-Stray     strcpyk   Str ;make sure to update in performance
-klen      strlenk   Stray
-kstartsel =         -1; startindex for searched element
-kendsel   =         -1; endindex for searched element
-kel       =         0; actual number of element while searching
-kwarleer  =         1
-kndx      =         0
- if klen == 0 kgoto end ;don't go into the loop if Stray is empty
-loop:
-Snext     strsubk   Stray, kndx, kndx+1; next sign
-ksep1p    strcmpk   Snext, Sep1; returns 0 if Snext is sep1
-ksep2p    strcmpk   Snext, Sep2; 0 if Snext is sep2
-;;NEXT SIGN IS NOT SEP1 NOR SEP2
-if ksep1p != 0 && ksep2p != 0 then
- if kwarleer == 1 then; first character after a seperator 
-  if kel == kelindx then; if searched element index
-kstartsel =         kndx; set it
-kwarleer  =         0
-  else 			;if not searched element index
-kel       =         kel+1; increase it
-kwarleer  =         0; log that it's not a seperator 
-  endif 
- endif 
-;;NEXT SIGN IS SEP1 OR SEP2
-else 
- if kstartsel > -1 then; if this is first selector after searched element
-kendsel   =         kndx; set iendsel
-          kgoto     end ;break
- else	
-kwarleer  =         1
- endif 
-endif
-          loop_lt   kndx, 1, klen, loop 
-end: 		
-Snum      strsubk   Stray, kstartsel, kendsel
-Snum      init      "nan"
-knum      strtodk   Snum
-          xout      knum
   endop 
 
   opcode StrayNumLen, i, Sjj
@@ -3389,7 +3826,6 @@ kRange     =          kRange-1
   endop
 
   opcode StrLineBreak, S, Si
-;inserts line breaks after iNum characters in the input string
 String, iNum xin
 Sres    =        ""
 loop:

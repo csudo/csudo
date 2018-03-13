@@ -11,6 +11,7 @@ kval, kfin Linek kthis, knext, ktim, ktrig
 performs a linear interpolation from one value to another value in a certain time whenever a trigger is received
 
 Performs a linear interpolation from kthis to knext in ktim whenever ktrig is 1. Otherwise kthis is bypassed (before the first trigger impulse) or kval is held. The behaviour should be the same as in PD's/Max' "line" object.
+written by joachim heintz
 
 kthis - starting value
 knext - target value

@@ -13,6 +13,7 @@ aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, k
 A simplified version of the Partikkel opcode, but with some additional parameters
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+written by joachim heintz
 
 ifiltab - function table with the input sound file (usually with GEN01)
 iskip - skiptime (sec)
@@ -25,7 +26,8 @@ kgrainrate - number of grains per seconds
 kgrainsize - grain duration in ms
 kcent - transposition in cent
 kposrand - random deviation (offset) of the pointer in ms
-kcentrand - random transposition in cents (up and down) ****************************************************************************/
+kcentrand - random transposition in cents (up and down) 
+****************************************************************************/
 /*length of input file*/
 /*amplitude*/
 /*transposition*/
@@ -36,6 +38,7 @@ apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kp
 The same as PtkSmpA, but with a time pointer input
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+written by joachim heintz
 
 ifiltab: function table with the input sound file (usually with GEN01)
 icosintab: function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
@@ -47,7 +50,8 @@ kgrainrate: number of grains per seconds
 kgrainsize: grain duration in ms
 kcent: transposition in cent
 kposrand: random deviation (offset) of the pointer in ms
-kcentrand: random transposition in cents (up and down) ****************************************************************************/
+kcentrand: random transposition in cents (up and down) 
+****************************************************************************/
 /*amplitude*/
 /*transposition*/
 /* other parameters */
@@ -61,6 +65,7 @@ General notes:
 2. Two function tables are generated from inside the UDO, which is actually bad style. The reason is not to bother the user with tables which are not important for him. But if you want to use this UDO in a real time context, you should definitely put the iWinTab and iDistTab tables outside the UDO.
 3. The default values for grain rate (200 Hz) and grain size (100 ms) can be changed easily inside the UDO.
 Requires Csound 5.18 or higher.
+written by joachim heintz
 
 aPos - position in the sound in seconds
 iFilTab - function table containing the mono sound file (use GEN01 with 1 as last parameter to import any sample)

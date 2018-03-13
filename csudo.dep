@@ -1,7 +1,8 @@
 # internal dependencies in csudo.udo
 # UDO: dependency [, dependency2 [, ...]]
 
-live_loop: StrayLen,StrNumP
+EvtLvLp: StrSum,StrNumP,StrayElCnt,StrayLen,StrayGetNum,EvtPtrnz,EvtS2P
+EvtPtrnz: StrayGetNum,StrayLen
 ExtrOrc: StripL
 StrayNumLen: StrayGetEl,StrayLen,StrNumP
 StrayNumMem: StrNumP

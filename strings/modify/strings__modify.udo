@@ -4,7 +4,8 @@ UDO DEFINITIONS IN strings/modify:
 *****************************************************************************
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
-StrLineBreak: StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrLineBreak: Sres StrLineBreak String, iNum
+StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
 StripL     : Sout StripL Sin
 *****************************************************************************
 ****************************************************************************/
@@ -14,6 +15,7 @@ Sout StrAgrm Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
 Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
+written by joachim heintz
 
 Sin - input string 
 iLen - length of Sin. If -1 (default), the length is calculated internally. 
@@ -30,10 +32,20 @@ iLen - length of Sin. If -1 (default), the length is calculated internally.
 Sout - output string
 ****************************************************************************/
 /****************************************************************************
+Sres StrLineBreak String, iNum
+
+Inserts line breaks after iNum characters in the input string.
+written by joachim heintz
+
+Sin - Input string which may contain starting spaces or tabs.
+Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
 Sout StrRmvST Sin, iStrt, iEnd
 Removes all spaces or tabs from iStrt to iEnd (both included)
 
 Removes all spaces or tabs in input string Sin from iStrt to iEnd and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
@@ -45,6 +57,7 @@ Sout StripL Sin
 Strips all initial spaces or tabs from a string.
 
 Strips all spaces or tabs at the beginning of the input string Sin and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 Sout - Output string with removed initial spaces/tabs.
@@ -119,7 +132,6 @@ endif
   endop
 
   opcode StrLineBreak, S, Si
-;inserts line breaks after iNum characters in the input string
 String, iNum xin
 Sres    =        ""
 loop:

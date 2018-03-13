@@ -16,10 +16,12 @@ StrIsOp    : iOp StrIsOp Str, iPos
 StrLNoth   : iTrue StrLNoth Str, iMin, iPos
 StrL_NvO   : iTrue StrL_NvO Str, iMin, iPos
 StrL_Prth  : iPrPos StrL_Prth Str, iMin, iPos
-StrLineBreak: StrMems    : iSumEls StrMems Str, Sel
+StrLineBreak: Sres StrLineBreak String, iNum
+StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
 StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrSum     : iSum StrSum Sin
 StrToArr   : S_Arr[], iLen StrToArr S_in, S_sep
 StrToAscS  : Sout StrToAscS Sin
 StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
@@ -32,6 +34,7 @@ Sdir FilDir Spath
 Returns the directory in a given path
 
 Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
+written by joachim heintz
 
 Spath - full path name as string
 Sdir - directory
@@ -41,6 +44,7 @@ SUpDir FilDirUp SCurDir
 Returns the directory above the current directory
 
 Returns the directory above the current directory.
+written by joachim heintz
 
 SCurDir - current directory (with or without an ending slash)
 SUpDir - directory above the current directory (returned without an ending slash)
@@ -51,6 +55,7 @@ Returns the file name in a given path
 
 Returns the file name (= everything after the last slash) in a given path.
 Requires Csound 5.15 or higher.
+written by joachim heintz
 
 Spath - full path name as string
 Snam - name part
@@ -60,6 +65,7 @@ Suf FilSuf Spath [,ilow]
 Returns the suffix of a filename or path, optional in lower case 
 
 Returns the suffix (extension) of a filename or a full path, optional in lower case.
+written by joachim heintz
 
 Spath - full pathname (or filename) as string
 ilow - return ensuring lower case (1) or return as in Spath (0 = default)
@@ -69,6 +75,7 @@ Sout StrAgrm Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
 Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
+written by joachim heintz
 
 Sin - input string 
 iLen - length of Sin. If -1 (default), the length is calculated internally. 
@@ -89,6 +96,7 @@ iNum StrExpr Str [, iStrt [, iEnd]]
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1.
 
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1. Spaces (or tabs) are allowed. Supported math operations are +, -, *, /, % and ^. The precedence of bindings is as usual (^ is stronger than *%/ than +-).
+written by joachim heintz
 
 Str - input string with a math expression.
 iStrt - first index to read in Str (default = 0)
@@ -101,6 +109,7 @@ Converts a string expression to a number. Note that the string MUST be WITHOUT a
 Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
 Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
+written by joachim heintz
 
 Str - Input string with a common math expression
 iStrt - First index (position) to be considered (default = 0)
@@ -111,6 +120,7 @@ iNum - Result of the math expression as number
 iNum StrExpr2 iNum1, iNum2, iOp
 
 Evaluates two numbers which are combined by the operator iOp.
+written by joachim heintz
 
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
@@ -119,6 +129,7 @@ iNum - Result as number
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
 Returns 1 if the positions >= istrt and <= iend are nothing but spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrt - first index (position) to be considered in Str (default = 0)
@@ -130,6 +141,7 @@ iOp StrIsOp Str, iPos
 Looks whether the iPos character in Str is a mathematical operator. Returns 
 1 for for +, 2 for -, 3 for *, 4 for /, 5 for %, 6 for ^ and 0 for anything 
 else.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) to read in Str (default = 0)
@@ -140,6 +152,7 @@ iTrue StrLNoth Str, iMin, iPos
 
 Looks whether left of iPos >= iMin is nothing but spaces or tabs. Returns 1 
 if true, 0 if false.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -152,6 +165,7 @@ iTrue StrL_NvO Str, iMin, iPos
 Looks whether the next real sign (= except spaces or tabs) left of iPos >= iMin 
 is an operator. Returns 1 if true, 0 if false.
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -162,6 +176,7 @@ iTrue - 1 = true, 0 = false
 iPrPos StrL_Prth Str, iMin, iPos
 
 Looks for the next corresponding opening parenthesis < iPos and >= iMin.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position.
@@ -170,10 +185,20 @@ iMin - minimum position (index) which is regarded for left search (default 0)
 iPrPos - position (index) of next opening parenthesis (-1 if none)
 ****************************************************************************/
 /****************************************************************************
+Sres StrLineBreak String, iNum
+
+Inserts line breaks after iNum characters in the input string.
+written by joachim heintz
+
+Sin - Input string which may contain starting spaces or tabs.
+Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
 iSumEls StrMems Str, Sel
 Returns the number of occurencies of a string in another string.
 
 Returns the number of occurencies of a string in another string.
+written by joachim heintz
 
 Str - Input string
 Sel - Another string which is asked to be a member of Str
@@ -184,6 +209,7 @@ itest StrNumP String
 Tests whether a string is a numerical string
 
 Tests whether a string is a numerical string ("1" or "1.23435" but not "1a"). Returns 1 for "yes" and 0 for "no". If "yes", the string can be converted to a number by the opcode strtod.
+written by joachim heintz
 
 String - any string
 itest - 1 if String is a numerical string, 0 if not
@@ -195,6 +221,7 @@ Returns position and type of next operator < iPos and >= iMin. Anything inside
 Parentheses will be disregarded.
 
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -207,6 +234,7 @@ Sout StrRmvST Sin, iStrt, iEnd
 Removes all spaces or tabs from iStrt to iEnd (both included)
 
 Removes all spaces or tabs in input string Sin from iStrt to iEnd and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
@@ -214,8 +242,17 @@ iEnd - Last indes to consider in Sin (default = -1 = end of string)
 Sout - Output string with removed initial spaces/tabs.
 ****************************************************************************/
 /****************************************************************************
+iSum StrSum Sin
+Returns the sum of all ASCII values in Sin
+written by Hlödver Sigurdsson and joachim heintz
+
+Sin - input string
+iSum - sum of all ASCII numbers for the elements in Sin
+****************************************************************************/
+/****************************************************************************
 S_Arr[], iLen StrToArr S_in, S_sep
 Transforms the sections of the input string S_in to elements of a string array. The sections in S_in are seperated by the seperator S_in. 
+written by joachim heintz
 
 S_in - Input string.
 S_sep - Seperator string.
@@ -227,7 +264,7 @@ Sout StrToAscS Sin
 Returns the ASCII numbers of the input string as string.
 
 Returns the ASCII numbers of the input string as string. The integers in the output string are seperated by one space.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 Sin - Input string with any sequence of characters or numbers.
 Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.
@@ -236,6 +273,7 @@ Sout - Output string containing the ASCII numbers of all characters, seperated b
 iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 Returns the next position >= iStrtIn and <= iEndIn without possible starting 
 and/or ending spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrtIn - first index to read in Str (default = 0)
@@ -248,6 +286,7 @@ Sout StripL Sin
 Strips all initial spaces or tabs from a string.
 
 Strips all spaces or tabs at the beginning of the input string Sin and returns the result as Sout.
+written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 Sout - Output string with removed initial spaces/tabs.
@@ -375,6 +414,16 @@ iop StrIsOp Str, ipos
  endif
 enduntil
 xout ipos, iop
+  endop
+
+  opcode StrSum, i, S
+Sin xin 
+iPos, iSum init 0
+while iPos < strlen(Sin) do
+ iSum+= strchar(Sin, iPos)
+ iPos += 1
+od
+   xout iSum
   endop
 
   opcode StrTrmPos, ii, Soj
@@ -702,7 +751,6 @@ endif
   endop
 
   opcode StrLineBreak, S, Si
-;inserts line breaks after iNum characters in the input string
 String, iNum xin
 Sres    =        ""
 loop:

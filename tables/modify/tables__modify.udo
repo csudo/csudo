@@ -13,6 +13,7 @@ TbPrmRnd ift
 Permutes the values of a function table randomly, at i-time
 
 Permutes the values of ift randomly and overwrites this table with the result. See TbPrmRndk for the k-rate version
+written by joachim heintz
 
 ift: function table to be permuted
 ****************************************************************************/
@@ -21,6 +22,7 @@ TbPrmRndk ift, ktrig
 Permutes the values of a function table randomly, at k-time
 
 Permutes the values of ift randomly and overwrites this table with the result. This operation is performed once a k-cycle, as long as a trigger is positive. See TbPrmRnd for the i-rate version
+written by joachim heintz
 
 ift - function table to be permuted
 ktrig - if > 0, the permutation is performed once a k-cycle
@@ -31,6 +33,7 @@ Removes duplicates from a function table
 
 Removes duplicates from a function table, copies the elements in a new table, and returns the end position (which can be used to build a table with just these elements).
 Requires the UDO TbMem
+written by joachim heintz
 
 iftsrc - source function table
 iftdst - table (usually with the same length as iftsrc) for copying the non-duplicated elements of iftsrc

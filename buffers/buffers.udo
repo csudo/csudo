@@ -26,6 +26,7 @@ ift BufCt1 ilen [, inum]
 creates a function table of ilen seconds for recording
 
 creates an "empty" function table (filled with zeros) of ilen seconds, using GEN02, for recording sound
+written by joachim heintz
 
 ilen - length in seconds
 inum - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -36,6 +37,7 @@ iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 creates two function tables of ilen seconds for recording
 
 creates two "empty" function tables (filled with zeros) of ilen seconds, using GEN02, for recording stereo sound input
+written by joachim heintz
 
 ilen - length in seconds
 inumL, inumR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -47,6 +49,7 @@ creates a gen01 function table from a mono soundfile
 
 Creates a gen01 function table from a mono soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 iftnum - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -59,6 +62,7 @@ creates two gen01 function table from a stereo soundfile
 
 Creates two gen01 function table from a stereo soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifnL, ifnR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -71,6 +75,7 @@ creates fout gen01 function table from a four channel soundfile
 
 Creates four gen01 function table from a four channel soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifn1 ... ifn4 - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -83,6 +88,7 @@ creates eight gen01 function table from an eight channel soundfile
 
 Creates eight gen01 function table from an eight channel soundfile. This is nothing else than a simplification of creating the same with a ftgen statement.
 Use BufFiCtNd to create a non-deferred function table from a soundfile 
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ifn1 ... ifn8 - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -94,6 +100,7 @@ ift, ilen BufFiCtNd1 Sfilenam [, ichn [, iftnum [, inorm]]]
 creates a non deferred function table from a mono soundfile and returns its length
 
 Creates a non deferred function table from a mono soundfile and returns its length. This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichn - channel in Sfilenam to read (default=1)
@@ -107,6 +114,7 @@ iftL, iftR, ilen BufFiCtNd2 Sfilenam [, ichnL [, ichnR [, iftnumL [, iftnumR [, 
 creates two non deferred function tables from a stereo soundfile and returns the length
 
 Creates two non deferred function tables from a stereo (or any multichannel) soundfile and returns the length as table size (= sample frames). This can be useful is you want to use opcodes (for instance table3) which do not work with deferred size function tables
+written by joachim heintz
 
 Sfilenam - file name or path as string
 ichnL, ichnR - channels in Sfilenam to read (default = 1 for ichnL and 2 for ichnR)
@@ -121,6 +129,7 @@ Plays a mono sample from a GEN01 function table, including sample rate conversio
 
 Plays a mono sample from a GEN01 function table, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn - number of the function table which contains the sample (please use GEN01 - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt1 for creating the table - see the example below)
@@ -138,6 +147,7 @@ Plays a stereo sample from two GEN01 function tables, including sample rate conv
 
 Plays a stereo sample from two GEN01 function tables for the left and right channel, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifnL - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt2 for creating the tables for left and right channel - see the example below)
@@ -157,6 +167,7 @@ Plays a four channel sample from four GEN01 function tables, including sample ra
 
 Plays a four channel sample from four GEN01 function tables, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn1 - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt4 for creating the tables for all channels - see the example below)
@@ -172,13 +183,15 @@ a1 - audio output channel 1
 a2 - audio output channel 2
 a3 - audio output channel 3
 a4 - audio output channel 4
-kfin - 1 if iwrap=0 and playback has finished, otherwise 0 ****************************************************************************/
+kfin - 1 if iwrap=0 and playback has finished, otherwise 0 
+****************************************************************************/
 /****************************************************************************
 a1, a2, a3, a4, a5, a6, a7, a8 BufFiPl8 ifn1, ifn2, ifn3, ifn4, ifn5, ifn6, ifn7, ifn8, kplay, kspeed, kvol [, iskip [, iwrap]]
 Plays an eight channel sample from eight GEN01 function tables, including sample rate conversion
 
 Plays an eight channel sample from eight GEN01 function tables, including sample rate conversion. The input parameters are similar to diskin (speed, loop play or play once, skiptime) plus a factor for amplitude scaling.
 See the UDO BufPlay for playing any buffer, with some more options, but without sample rate conversion.
+written by joachim heintz
 
 ifn1 - number of the function table which contains channel 1 of the sample (use GEN01 with 1 for the channel parameter - any other GEN routine will lead to an error because it does not contain the sample rate of the soundfile)
 (you can also use BufFiCt8 for creating the tables for all channels - see the example below)
@@ -202,13 +215,15 @@ a5 - audio output channel 5
 a6 - audio output channel 6
 a7 - audio output channel 7
 a8 - audio output channel 8
-kfin - 1 if iwrap=0 and playback has finished, otherwise 0  ****************************************************************************/
+kfin - 1 if iwrap=0 and playback has finished, otherwise 0  
+****************************************************************************/
 /****************************************************************************
 aout, kfin BufPlay1 ift, kplay, kspeed, kvol, kstart, kend, kwrap
 Plays audio from a mono buffer (function table), with different options
 
 Plays audio from a mono buffer (function table), with control over speed (forward - backward), volume, start point, end point, and different options of wrapping/looping. All parameters can be modified during performance.
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
+written by joachim heintz
 
 ift - function table to play. This can be a non-power-of-two function table (given by a negative size, see example), but no deferred size GEN01 table.
 kplay - 1 for playing, 0 (or any other number) stops playing
@@ -222,7 +237,8 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aout - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 Plays audio from a stereo buffer (two function tables), with different options
@@ -231,7 +247,7 @@ Plays audio from a stereo buffer (two function tables), with control over speed 
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
 
 iftL, iftR - function tables to play. It is possible to use non-power-of-two function tables (given by a negative size, see example), but no deferred size GEN01 table.
-Performance
+written by joachim heintz
 
 kplay - 1 for playing, 0 (or any other number) stops playing
 kspeed - 1 for playing back in the same speed as the buffer has been recorded, 2 for double speed etc., negative numbers for backwards
@@ -244,13 +260,15 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aL, aR - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 Records in a mono buffer (function table)
 
 Records in a mono buffer (function table), with optional start point, end point, and wrap (= loop record).
 The example below has different tests for ensuring that BufRec works as expected. See the example for the UDO BufCt for another example with live recording.
+written by joachim heintz
 
 ift - function table for recording
 ain - audio signal to record
@@ -265,6 +283,7 @@ kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 Records in a stereo buffer (= two function tables)
 
 Records in a stereo buffer (two function tables), with optional start point, end point, and wrap (= loop record). 
+written by joachim heintz
 
 iftL, iftR - function tables for recording
 ainL, ainR - audio signals to record

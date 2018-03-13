@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN strays:
 *****************************************************************************
+StrayElCnt : ilen StrayElCnt Stray [, iElOpn] [, iElCls] [, iSep1] [, iSep2]
 StrayElMem : ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
 StrayGetEl : Sel StrayGetEl Stray, ielindx [, isep1 [, isep2]]
 StrayGetNum: inum StrayGetNum Stray, ielindx [, isep1 [, isep2]]
@@ -20,11 +21,25 @@ StraySub   : Sub StraySub Stray [, istart [, iend [, isepA [, isepB [, isepOut]]
 ****************************************************************************/
 
 /****************************************************************************
+ilen StrayElCnt Stray [, iElOpn] [, iElCls] [, iSep1] [, iSep2]
+Returns the number of elements from a string where a list/array can be counted as 1 element.
+
+Returns the number of elements in Stray. Elements are defined by lists/arrays: iElOpn defaults to 91 (ASCII for '['), iElCls (ASCII for ']'), or by seperators when used outside of lists/arrays: isep1 defaults to 32 (= space) and isep2 defaults to 44 (= comma).
+written by Hlöðver Sigurðsson
+
+Stray - a string as array
+iElOpn - open element deliminator (default=91: [)
+iElCls - close element deliminator (default=93: ])
+isep1  - the first seperator (default=32: space)
+isep2  - the second seperator (default=44: comma) 
+****************************************************************************/
+/****************************************************************************
 ipos StrayElMem Stray, Stest [, isep1 [, isep2]]
 Tests whether a string is contained as an element in an array-string
 
 Looks whether a string equals one of the elements in Stray. If yes, itest returns the position of the element, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires Csound 5.15 or higher.
+written by joachim heintz
 
 Stray - a string as array
 Stest - a string to be looked for in Stray
@@ -38,6 +53,7 @@ Gets one element from a string-array
 
 Returns (at i-rate) the element for ielindex in String, or an empty string, if the element has not been found. By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 Requires Csound 5.15 or higher
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -56,6 +72,7 @@ Gets one number from a string-array
 Returns the element with the position ielindex (starting from 0) in Stray. This element must be a number (the other elements can be strings or charcters). By default, the seperators between the elements are spaces and tabs. Others seperators can be defined by their ASCII code number.
 If ielindx is out of range, "nan" is returned.
 If the element is not a number, "nan" is returned at k-rate, but an error occurs at i-rate.
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -72,6 +89,7 @@ kLen StrayLen Stray [, isep1 [, isep2]]
 Returns the length of an array-string
 
 Returns the number of elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -83,6 +101,7 @@ Returns the length of numerical elements in an array-string
 
 Returns the number of numerical elements in Stray. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). if just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayGetEl, StrayLen and StrNumP
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -94,6 +113,7 @@ Tests whether a number is a member of an array-string
 
 Looks whether the number inum is a member of Stray. If yes, itest returns the position of inum in Stray, if no, -1. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDO StrNumP
+written by joachim heintz
 
 Stray - a string as array
 inum - the number which is being looked for
@@ -106,6 +126,7 @@ Adds the elements in a numerical array-string
 
 Adds all numbers in Stray (which must not contain non-numerical elements). Simple math expressions like +, -, *, /, ^ and % are allowed (no parentheses at the moment). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -118,6 +139,7 @@ Converts a string-array which just consists of numbers or simple math expression
 Puts all numbers in Stray (which must not contain non-numerical elements) in a function table and returns its variable ift (which is produced by iftno, default=0) and the length of the elements written iftlen. (An empty string as input writes a function table of size=1 to avoid an error but returns 0 as length of elements written.) Simple binary math expressions using +, -, *, /, ^ and % are allowed, with just one parenthesis in total (see the examples below). 
 Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires csound 5.15 or higher, and the UDOs StrayLen and StrExpr (which itself requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1).
+written by joachim heintz
 
 Stray - a string as array
 iftno - like in an ftgen statement: if 0 (which is also the default) an automatic number is generated by Csound; if any positive number, this is then the number of the function table
@@ -132,6 +154,7 @@ Removes duplicates in an array-string
 
 Removes duplicates in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 Requires the UDOs StrayLen and StrayGetEl
+written by joachim heintz
 
 Stray - a string as array
 isep1 - the first seperator (default=32: space)
@@ -144,6 +167,7 @@ Reverses the elements of an array-string
 
 Reverses the elements in Stray and returns the result. Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1. The elements in the resulting string Sres are seperated by isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 isepA - the first seperator for the elements in Stray (default=32: space)
@@ -157,6 +181,7 @@ Gets a random element from a string-array.
 
 Returns a random element from a string-array.
 Requires Csound 5.15 or higher and the UDOs StrayLen and StrayGetEl.
+written by joachim heintz
 
 Input:
 Stray - a string as array
@@ -172,6 +197,7 @@ Inserts an element in an array-string at a certain position
 
 Puts the string Sin at the position ielindx (default=-1: at the end) of Stray, and returns the result as a string. Elements in the string are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). If just isepA is given, it is also read as isepB. The new element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array 
 Sin - a string to be inserted 
@@ -186,6 +212,7 @@ Inserts a number in an array-string at a certain position
 
 Puts the number inum at the position ielindx (default=-1: at the end) of Stray, and returns the result as Sres. Elements in Stray are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). if just isepA is given, it is also read as isepB. the element is inserted using the seperator isepOut (default=isep1)
 Requires Csound 5.16 or higher, and the UDO FracLen.
+written by joachim heintz
 
 Stray - a string as array
 inum - the number to be inserted
@@ -202,6 +229,7 @@ Returns a subset of elements in an array-string
 Returns a subset of elements in Stray, from istart (included) to iend (excluded). The defaults are istart=0 (first element) and iend=-1 (end of string). Elements are defined by two seperators as ASCII coded characters: isep1 defaults to 32 (= space), isep2 defaults to 9 (= tab). If just one seperator is used, isep2 equals isep1.
 The resulting substring will use isepOut as seperator (default=isep1)
 Requires Csound 5.16 or higher (new parser)
+written by joachim heintz
 
 Stray - a string as array
 istart - first element to extract (default=0)
@@ -211,6 +239,49 @@ isep2 - second seperator for the elements in Stray (default=9: tab)
 isepOut - seperator for the elements in the output string (default=isep1)
 Sub - resulting subset of Stray
 ****************************************************************************/
+
+opcode StrayElCnt, i, Sjjjj
+  Sin, iElOpn, iElCls, iSep1, iSep2 xin
+  iElOpn = (iElOpn == -1 ? 91 : iElOpn) ; Defaults to [
+  iElCls = (iElCls == -1 ? 93 : iElCls) ; Defaults to ]
+  iSep1  = (iSep1  == -1 ? 32 : iSep1)  ; Defaults to Whitespace
+  iSep2  = (iSep2  == -1 ? 44 : iSep2)  ; Defaults to Comma
+
+  SElOpen   sprintf    "%c", iElOpn ; (default)'[' Symbol
+  SElClose  sprintf    "%c", iElCls ; (default) ']' Symbol
+  Sep1      sprintf    "%c", iSep1  ; (default) Whitespace
+  Sep2      sprintf    "%c", iSep2  ; (default) ',' Comma (optional)
+
+  ilen       strlen     Sin
+  ipcount   = 0
+  insidearr = 0
+  ipos      = 0
+  iOnSep    = 1
+  loop:
+    Schar  strsub Sin, ipos, ipos+1
+    icompElOpen  strcmp Schar, SElOpen ;is in an array?
+    icompElClose strcmp Schar, SElClose ;array ends?
+    icompSep1    strcmp Schar, Sep1    ;is a space?
+    icompSep2    strcmp Schar, Sep2    ;is a comma?
+
+    if icompElOpen == 0 then 
+      insidearr = 1
+      iOnSep = 0
+      ipcount += 1
+    endif
+    if icompElClose == 0 then
+      insidearr = 0
+      iOnSep = 0
+    endif
+    if ((icompSep1 == 0 ) || (icompSep2 == 0 )) && (insidearr == 0) then
+      iOnSep = 1
+    elseif iOnSep == 1 then
+      ipcount += 1
+      iOnSep = 0
+    endif
+    loop_lt ipos, 1, ilen, loop
+    xout ipcount
+endop
 
   opcode StrayElMem, i, SSjj
 ;looks whether Stest is an element of Stray. returns the index of the element if found, and -1 if not.

@@ -3,9 +3,8 @@
 UDO DEFINITIONS IN arrays:
 *****************************************************************************
 ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
+ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
-ArrPermRndNi: iOutArr[] ArrPermRndNi iInArr[], iN
-ArrPermRndNk: kOutArr[] ArrPermRndNk kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
 ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
 ArrSrti_simp: iOutArr[] ArrSrti_simp iInArr[]
@@ -42,36 +41,31 @@ iInArr[] - input array to search through
 iFound - count of instances found
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrPermRnd iInArr[] [, iN]
+kOutArr[] ArrPermRnd kInArr[] [, kN]
+Returns an array of i(k)N length which contains randomly permuted elements of i(k)InArr[]. 
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
+
+iInArr[] - input array
+i(k)N - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
+i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
+****************************************************************************/
+/****************************************************************************
 kOutArr[] ArrPermRndIndx kInArr[], kN
 Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
 This UDO is similar to ArrPermRndN but returns indices instead of values.
+written by joachim heintz
 
 kInArr[] - input array
 kN - desired length of the output array (must not be longer than kInArr)
 kOutArr[] - output array with kN randomly permuted indices of kInArr
 ****************************************************************************/
 /****************************************************************************
-iOutArr[] ArrPermRndNi iInArr[], iN
-Returns an array of iN length which contains randomly permuted elements of iInArr[]. 
-As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
-
-iInArr[] - input array
-iN - desired length of the output array (must not be longer than iInArr)
-iOutArr[] - output array with iN randomly permuted elements of iInArr
-****************************************************************************/
-/****************************************************************************
-kOutArr[] ArrPermRndNk kInArr[], kN
-Returns an array of kN length which contains randomly permuted elements of kInArr[]. 
-As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
-
-kInArr[] - input array
-kN - desired length of the output array (must not be longer than kInArr)
-kOutArr[] - output array with kN randomly permuted elements of kInArr
-****************************************************************************/
-/****************************************************************************
 iOutArr[] ArrRmvIndxk iInArr[], iIndx
 Removes the element with the index iIndx from iInArr and returns the result as new array.
+written by joachim heintz
 
 iInArr[] - input array
 iIndx - index to be removed from iInArr
@@ -80,6 +74,7 @@ iOutArr[] - output array as copy of iInArr without iIndx
 /****************************************************************************
 kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
 Removes the element with the index Kindx from kInArr and returns the result as new array.
+written by joachim heintz
 
 kInArr[] - input array
 kIndx - index to be removed from kInArr
@@ -90,6 +85,7 @@ kOutArr[] - output array as copy of kInArr without kIndx
 iOutArr[] ArrSrti_simp iInArr[]
 Sorts the content of iInArr[] and returns the sorted array as iOutArr[].
 This is a simple version of ArrSrti.
+written by joachim heintz
 
 iInArr[] - array to sort
 iOutArr[] - sorted array
@@ -102,6 +98,7 @@ Depending on kOutType, the output array can either contain the values, or the
 indices of the values (thus pointing to kInArr). A section of kInArr can be
 specified by kStart and kEnd. Instead of sorting every element, looking only
 for the even or odd elements can be done via the kHop parameter.
+written by joachim heintz
 
 kInArr[] - array to sort
 iOutN - length of the output array kOutArr
@@ -121,11 +118,62 @@ kOutArr[] - sorted array
 kOutArr[] ArrSrtk_simp kInArr[]
 Sorts the content of kInArr[] and returns the sorted array as kOutArr[].
 This is a simple version of ArrSrtk.
+written by joachim heintz
 
 kInArr[] - array to sort
 kOutArr[] - sorted array
 ****************************************************************************/
 
+
+  opcode ArrPermRnd, i[], i[]j
+iInArr[], iN xin
+iLen       =          lenarray(iInArr)
+;get output length
+iN = (iN == -1) ? iLen : iN
+;create out array and set index
+iOutArr[]  init       iN
+iIndx      =          0
+;for iN elements:
+ until iIndx == iN do
+ ;get one random element and put it in iOutArr
+iRndIndx   random     0, iLen-.0001
+iRndIndx   =          int(iRndIndx)
+iOutArr[iIndx] =      iInArr[iRndIndx]
+ ;shift the elements after this one to the left
+  until iRndIndx == iLen-1 do
+iInArr[iRndIndx] = iInArr[iRndIndx+1]
+iRndIndx   +=         1
+  enduntil
+ ;reset iLen and increase counter
+iLen       -=         1
+iIndx      +=         1
+ enduntil
+           xout       iOutArr
+  endop
+  opcode ArrPermRnd, k[], k[]j
+kInArr[], iN xin
+iLen       =          lenarray(kInArr)
+iN = (iN == -1) ? iLen : iN
+kOutArr[]  init       iN
+kIndx      =          0
+kLen = iLen
+;for kN elements:
+until kIndx == iN do
+ ;get one random element and put it in kOutArr
+kRndIndx   random     0, kLen-.0001
+kRndIndx   =          int(kRndIndx)
+kOutArr[kIndx] =      kInArr[kRndIndx]
+ ;shift the elements after this one to the left
+ until kRndIndx == kLen-1 do
+kInArr[kRndIndx] = kInArr[kRndIndx+1]
+kRndIndx   +=         1
+ enduntil
+ ;reset kLen and increase counter
+kLen       -=         1
+kIndx      +=         1
+enduntil
+           xout       kOutArr
+  endop
 
   opcode ArrPermRndIndx, k[], k[]k
 kInArr[], kN xin
@@ -150,57 +198,6 @@ kLen       -=         1
 kIndx      +=         1
 od
 
-           xout       kOutArr
-  endop
-
-  opcode ArrPermRndNi, i[], i[]i
-iInArr[], iN xin
-iLen       =          lenarray(iInArr)
-;copy input array 
-;(for future should be simply possible via iInArrCyp[] = iInArr)
-iInArrCpy[] =         iInArr
-;create out array and set index
-iOutArr[]  init       iN
-iIndx      =          0
-;for iN elements:
- until iIndx == iN do
- ;get one random element and put it in iOutArr
-iRndIndx   random     0, iLen-.0001
-iRndIndx   =          int(iRndIndx)
-iOutArr[iIndx] =      iInArrCpy[iRndIndx]
- ;shift the elements after this one to the left
-  until iRndIndx == iLen-1 do
-iInArrCpy[iRndIndx] = iInArrCpy[iRndIndx+1]
-iRndIndx   +=         1
-  enduntil
- ;reset iLen and increase counter
-iLen       -=         1
-iIndx      +=         1
- enduntil
-           xout       iOutArr
-  endop
-
-  opcode ArrPermRndNk, k[], k[]k
-kInArr[], kN xin
-kInArrCpy[] =         kInArr
-kOutArr[]  init       i(kN)
-kIndx      =          0
-kLen       =          lenarray(kInArrCpy)
-;for kN elements:
-until kIndx == kN do
- ;get one random element and put it in kOutArr
-kRndIndx   random     0, kLen-.0001
-kRndIndx   =          int(kRndIndx)
-kOutArr[kIndx] =      kInArrCpy[kRndIndx]
- ;shift the elements after this one to the left
- until kRndIndx == kLen-1 do
-kInArrCpy[kRndIndx] = kInArrCpy[kRndIndx+1]
-kRndIndx   +=         1
- enduntil
- ;reset kLen and increase counter
-kLen       -=         1
-kIndx      +=         1
-enduntil
            xout       kOutArr
   endop
 

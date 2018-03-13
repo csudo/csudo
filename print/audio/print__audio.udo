@@ -12,6 +12,7 @@ Prints an audio signal (vector) every kPeriod seconds.
 
 Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
 You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 aSig - input signal to be printed
 kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.

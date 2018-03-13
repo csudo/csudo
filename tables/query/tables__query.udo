@@ -12,6 +12,7 @@ ipos TbMem ival, ift [, indxstrt [, indxend]]
 Looks whether a number is in a function table
 
 Looks whether a number is a member of a function table, in a range between indxstart (included) and indxend (excluded). Returns the position of the element if found, or -1 otherwise.
+written by joachim heintz
 
 ival - element (number) to be looked for
 ift - function table
@@ -24,6 +25,7 @@ iPeak TbPeak ift [, indxstrt [, indxend]]
 Returns the peak (highest absolute number) value of a function table.
 
 Returns the peak value of a function table, or a part of it, in a range between indxstart (included, defaults to zero) and indxend (excluded, defaults to table length). The return value is always positive.
+written by joachim heintz
 
 ift - function table
 indxstart - starting index in ift to look for ival (default=0)

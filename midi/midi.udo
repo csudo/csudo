@@ -11,6 +11,7 @@ iNotNum F2M iFreq [,iRound]
 Converts a frequency to MIDI.Cent note number, with optional rounding to the next key.
 
 Converts a frequency to MIDI.Cent note number, for instance 60.024759 for an input of 262 Hz. If the round option is turned on, the frequency is mapped to the nearest key, so that an integer is returned.
+written by joachim heintz
 
 iFreq - Frequency to be converted
 iRound - 0 = off (default), 1 = on

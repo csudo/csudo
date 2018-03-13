@@ -11,6 +11,7 @@ kLin TbToLin iFt
 Reads a table in the same way as a linseg opcode
 
 Reads a table which contains segments of value - duration - value in the same way as a linseg opcocde would do.
+written by joachim heintz
 
 iFt - a function table, usually generated with GEN02 and not normaized
 kLin - k-rate output

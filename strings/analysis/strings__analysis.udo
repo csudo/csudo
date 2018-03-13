@@ -9,6 +9,7 @@ StrL_NvO   : iTrue StrL_NvO Str, iMin, iPos
 StrL_Prth  : iPrPos StrL_Prth Str, iMin, iPos
 StrMems    : iSumEls StrMems Str, Sel
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
+StrSum     : iSum StrSum Sin
 StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 *****************************************************************************
 ****************************************************************************/
@@ -16,6 +17,7 @@ StrTrmPos  : iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
 Returns 1 if the positions >= istrt and <= iend are nothing but spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrt - first index (position) to be considered in Str (default = 0)
@@ -27,6 +29,7 @@ iOp StrIsOp Str, iPos
 Looks whether the iPos character in Str is a mathematical operator. Returns 
 1 for for +, 2 for -, 3 for *, 4 for /, 5 for %, 6 for ^ and 0 for anything 
 else.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) to read in Str (default = 0)
@@ -37,6 +40,7 @@ iTrue StrLNoth Str, iMin, iPos
 
 Looks whether left of iPos >= iMin is nothing but spaces or tabs. Returns 1 
 if true, 0 if false.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -49,6 +53,7 @@ iTrue StrL_NvO Str, iMin, iPos
 Looks whether the next real sign (= except spaces or tabs) left of iPos >= iMin 
 is an operator. Returns 1 if true, 0 if false.
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -59,6 +64,7 @@ iTrue - 1 = true, 0 = false
 iPrPos StrL_Prth Str, iMin, iPos
 
 Looks for the next corresponding opening parenthesis < iPos and >= iMin.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position.
@@ -71,6 +77,7 @@ iSumEls StrMems Str, Sel
 Returns the number of occurencies of a string in another string.
 
 Returns the number of occurencies of a string in another string.
+written by joachim heintz
 
 Str - Input string
 Sel - Another string which is asked to be a member of Str
@@ -83,6 +90,7 @@ Returns position and type of next operator < iPos and >= iMin. Anything inside
 Parentheses will be disregarded.
 
 Requires the UDO StrIsOp.
+written by joachim heintz
 
 Str - input string
 iPos - position (index) in Str. the UDO will look "left to" this position
@@ -91,9 +99,18 @@ iOpPos - position of operator
 iOp - type of operator: 1-6 for operators '+ - * / % ^', 0 for anything else
 ****************************************************************************/
 /****************************************************************************
+iSum StrSum Sin
+Returns the sum of all ASCII values in Sin
+written by Hlödver Sigurdsson and joachim heintz
+
+Sin - input string
+iSum - sum of all ASCII numbers for the elements in Sin
+****************************************************************************/
+/****************************************************************************
 iStrtOut, iEndOut StrTrmPos Str, iStrtIn, iEndIn
 Returns the next position >= iStrtIn and <= iEndIn without possible starting 
 and/or ending spaces or tabs.
+written by joachim heintz
 
 Str - input string
 iStrtIn - first index to read in Str (default = 0)
@@ -224,6 +241,16 @@ iop StrIsOp Str, ipos
  endif
 enduntil
 xout ipos, iop
+  endop
+
+  opcode StrSum, i, S
+Sin xin 
+iPos, iSum init 0
+while iPos < strlen(Sin) do
+ iSum+= strchar(Sin, iPos)
+ iPos += 1
+od
+   xout iSum
   endop
 
   opcode StrTrmPos, ii, Soj

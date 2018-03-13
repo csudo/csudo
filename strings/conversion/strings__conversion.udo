@@ -16,6 +16,7 @@ iNum StrExpr Str [, iStrt [, iEnd]]
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1.
 
 Converts a string expression to a number. Requires the UDOs StrIsOp, StrLNoth, StrL_NvO, StrL_Prth, StrNxtOpL, StrExpr2, StrRmvST and StrExpr1. Spaces (or tabs) are allowed. Supported math operations are +, -, *, /, % and ^. The precedence of bindings is as usual (^ is stronger than *%/ than +-).
+written by joachim heintz
 
 Str - input string with a math expression.
 iStrt - first index to read in Str (default = 0)
@@ -28,6 +29,7 @@ Converts a string expression to a number. Note that the string MUST be WITHOUT a
 Requires the UDOs StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrIsOp, StrL_NvO
 
 Calculates a math expression in a string (optional a part of it >= iStrt <= iEnd) and returns the result as a number. Supported math operations are +, -, *, /, ^, and %. Parentheses are allowed. A simple number string is also accepted and converted to a number. No spaces are allowed; use the UDO StrRmvST if necessary to remove spaces or tabs.
+written by joachim heintz
 
 Str - Input string with a common math expression
 iStrt - First index (position) to be considered (default = 0)
@@ -38,6 +40,7 @@ iNum - Result of the math expression as number
 iNum StrExpr2 iNum1, iNum2, iOp
 
 Evaluates two numbers which are combined by the operator iOp.
+written by joachim heintz
 
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
@@ -48,6 +51,7 @@ itest StrNumP String
 Tests whether a string is a numerical string
 
 Tests whether a string is a numerical string ("1" or "1.23435" but not "1a"). Returns 1 for "yes" and 0 for "no". If "yes", the string can be converted to a number by the opcode strtod.
+written by joachim heintz
 
 String - any string
 itest - 1 if String is a numerical string, 0 if not
@@ -55,6 +59,7 @@ itest - 1 if String is a numerical string, 0 if not
 /****************************************************************************
 S_Arr[], iLen StrToArr S_in, S_sep
 Transforms the sections of the input string S_in to elements of a string array. The sections in S_in are seperated by the seperator S_in. 
+written by joachim heintz
 
 S_in - Input string.
 S_sep - Seperator string.
@@ -66,7 +71,7 @@ Sout StrToAscS Sin
 Returns the ASCII numbers of the input string as string.
 
 Returns the ASCII numbers of the input string as string. The integers in the output string are seperated by one space.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
 
 Sin - Input string with any sequence of characters or numbers.
 Sout - Output string containing the ASCII numbers of all characters, seperated by spaces.

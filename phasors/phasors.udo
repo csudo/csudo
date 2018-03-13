@@ -11,6 +11,7 @@ atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
 creates a time pointer for loops
 
 creates a time pointer signal for typical loop applications, for instance in the mincer opcode, with optional backward playing
+written by joachim heintz
 
 irefdur - the overall duration. must be in the same scale as kloopstart and kloopend (e.g. seconds)
 kloopstart - starting point of the loop (in the scale of irefdur)

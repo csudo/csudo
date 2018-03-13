@@ -16,6 +16,7 @@ ift BufCt1 ilen [, inum]
 creates a function table of ilen seconds for recording
 
 creates an "empty" function table (filled with zeros) of ilen seconds, using GEN02, for recording sound
+written by joachim heintz
 
 ilen - length in seconds
 inum - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -26,6 +27,7 @@ iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 creates two function tables of ilen seconds for recording
 
 creates two "empty" function tables (filled with zeros) of ilen seconds, using GEN02, for recording stereo sound input
+written by joachim heintz
 
 ilen - length in seconds
 inumL, inumR - if zero (which is also the default), the number of the function table is given by Csound. Any other positive integer will represent the function table, but the user must take care of not using a number twice
@@ -37,6 +39,7 @@ Plays audio from a mono buffer (function table), with different options
 
 Plays audio from a mono buffer (function table), with control over speed (forward - backward), volume, start point, end point, and different options of wrapping/looping. All parameters can be modified during performance.
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
+written by joachim heintz
 
 ift - function table to play. This can be a non-power-of-two function table (given by a negative size, see example), but no deferred size GEN01 table.
 kplay - 1 for playing, 0 (or any other number) stops playing
@@ -50,7 +53,8 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aout - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 Plays audio from a stereo buffer (two function tables), with different options
@@ -59,7 +63,7 @@ Plays audio from a stereo buffer (two function tables), with control over speed 
 See the UDO BufFiPl if you want to play back a soundfile which has been loaded into a buffer. BufFiPl performs also sample rate conversion
 
 iftL, iftR - function tables to play. It is possible to use non-power-of-two function tables (given by a negative size, see example), but no deferred size GEN01 table.
-Performance
+written by joachim heintz
 
 kplay - 1 for playing, 0 (or any other number) stops playing
 kspeed - 1 for playing back in the same speed as the buffer has been recorded, 2 for double speed etc., negative numbers for backwards
@@ -72,13 +76,15 @@ kwrap = 1: wraps between kstart and kend
 kwrap = 2: wraps between 0 and kend
 kwrap = 3: wraps between kstart and end of table
 aL, aR - audio output signal
-kfin - 1 if playing has ended (wrap=0), otherwise 0  ****************************************************************************/
+kfin - 1 if playing has ended (wrap=0), otherwise 0  
+****************************************************************************/
 /****************************************************************************
 kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 Records in a mono buffer (function table)
 
 Records in a mono buffer (function table), with optional start point, end point, and wrap (= loop record).
 The example below has different tests for ensuring that BufRec works as expected. See the example for the UDO BufCt for another example with live recording.
+written by joachim heintz
 
 ift - function table for recording
 ain - audio signal to record
@@ -93,6 +99,7 @@ kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 Records in a stereo buffer (= two function tables)
 
 Records in a stereo buffer (two function tables), with optional start point, end point, and wrap (= loop record). 
+written by joachim heintz
 
 iftL, iftR - function tables for recording
 ainL, ainR - audio signals to record

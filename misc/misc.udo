@@ -12,6 +12,7 @@ Extracts the orc part of a csd file.
 
 Extracts the orc part (= the text in the <CsInstruments> tag) from the csd 
 file Sfil, and returns it as string Sorc. Requires the UDO StripL.
+written by joachim heintz
 
 Sfil - csd file (either full path or name if in the same directory)
 Sorc - orc part of Sfil as string

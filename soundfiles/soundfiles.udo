@@ -12,6 +12,7 @@ aout FilPlay1 Sfil, kspeed [, iskip [, iloop]]
 Plays a mono signal from a mono or stereo soundfile
 
 Gives mono output regardless a soundfile is mono or stereo (if stereo, just the first channel is used).
+written by joachim heintz
 
 Sfil - Sound file name (or path) in double quotes
 iskip - skiptime in seconds (default=0)
@@ -22,6 +23,7 @@ aL, aR FilPlay2 Sfil, kspeed [, iskip [, iloop]]
 Plays a stereo signal from a mono or stereo soundfile
 
 Gives stereo output regardless a soundfile is mono or stereo (if mono, this signal is sent to both channels).
+written by joachim heintz
 
 Sfil - Sound file name (or path) in double quotes
 iskip - skiptime in seconds (default=0)
