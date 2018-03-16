@@ -124,6 +124,45 @@ kInArr[] - array to sort
 kOutArr[] - sorted array
 ****************************************************************************/
 
+opcode ArrElCnt,k,ki[]
+  kNeedle, iInArr[] xin
+  kLen lenarray iInArr
+  kIndx = 0
+  kFound = 0
+  while (kIndx<kLen) do
+    if (kNeedle == iInArr[kIndx]) then
+      kFound = kFound+1
+    endif
+    kIndx = kIndx+1
+  od
+  xout kFound
+endop
+opcode ArrElCnt,k,kk[]
+  kNeedle, kInArray[] xin
+  kLen lenarray kInArray
+  kIndx = 0
+  kFound = 0
+  while (kIndx<kLen) do
+    if (kNeedle == kInArray[kIndx]) then
+      kFound = kFound+1
+    endif
+    kIndx = kIndx+1
+  od
+  xout kFound
+endop
+opcode ArrElCnt,i,ii[]
+  iNeedle, iInArr[] xin
+  iLen lenarray iInArr
+  iIndex = 0
+  iFound = 0
+  while (iIndex<iLen) do
+    if (iNeedle == iInArr[iIndex]) then
+      iFound = iFound+1
+    endif
+    iIndex = iIndex+1
+  od
+  xout iFound
+endop
 
   opcode ArrPermRnd, i[], i[]j
 iInArr[], iN xin

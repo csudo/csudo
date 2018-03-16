@@ -14,6 +14,10 @@
 # for now, try to name the dependencies all (as i did in strays.setdep) and
 # in a good order.
 
+# 2018/03/17 todo: overloaded udos (e.g. ArrCntEl) are only displayed once
+# in the title (short syntax). not sure why - definitions and 
+# comments are written correctly
+
 
 ############################################
 #### ENTER YOUR CSOUND6 EXECUTABLE HERE ####
@@ -71,7 +75,7 @@ def isFileUdo(line, filename):
     """returns 1 if the line 
     opcode TbDmp etc 
     is inside the file TbDmp.csd"""
-    if line.split()[1].rstrip(',') == filename[:-4]:
+    if line.split()[1].split(',')[0] == filename[:-4]:
         return 1
     else:
         return 0
@@ -122,7 +126,7 @@ def extractTCU(fileobj, filename):
         elif readUdoDef:
             udodef = '%s%s' % (udodef, line)
     if hasBeenNone:
-        print '*WARNING: There is no UDO named %s in file %s.' % (filename, filename)
+        print '*WARNING: There is no UDO named %s in file %s.' % (filename[:-4], filename)
     return (title, comment, udodef)
 
 def listTCU(resList, dir):
