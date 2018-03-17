@@ -2,15 +2,14 @@
 *****************************************************************************
 UDO DEFINITIONS IN strings:
 *****************************************************************************
-FilDir     : Sdir FilDir Spath
-FilDirUp   : SUpDir FilDirUp SCurDir
-FilNam     : Snam FilNam Spath
-FilSuf     : Suf FilSuf Spath [,ilow]
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
+StrDir     : Sdir StrDir Spath
+StrDirUp   : SUpDir StrDirUp SCurDir
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
 StrExpr1   : iNum StrExpr1 Str, iStrt, iEnd
 StrExpr2   : iNum StrExpr2 iNum1, iNum2, iOp
+StrFiln    : Snam StrFiln Spath
 StrIsEmpty : iTrue StrIsEmpty Str, iStrt, iEnd
 StrIsOp    : iOp StrIsOp Str, iPos
 StrLNoth   : iTrue StrLNoth Str, iMin, iPos
@@ -21,6 +20,7 @@ StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
 StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrSuf     : Suf StrSuf Spath [,ilow]
 StrSum     : iSum StrSum Sin
 StrToArr   : S_Arr[], iLen StrToArr S_in, S_sep
 StrToAscS  : Sout StrToAscS Sin
@@ -30,7 +30,28 @@ StripL     : Sout StripL Sin
 ****************************************************************************/
 
 /****************************************************************************
-Sdir FilDir Spath
+Sout StrAgrm Sin [,iLen]
+Changes the order of the characters in Sin randomly, like in an anagram.
+
+Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
+written by joachim heintz
+
+Sin - input string 
+iLen - length of Sin. If -1 (default), the length is calculated internally. 
+Sout - output string
+****************************************************************************/
+/****************************************************************************
+Sout StrAgrm Sin [,iLen]
+Changes the order of the characters in Sin randomly, like in an anagram.
+
+Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
+
+Sin - input string 
+iLen - length of Sin. If -1 (default), the length is calculated internally. 
+Sout - output string
+****************************************************************************/
+/****************************************************************************
+Sdir StrDir Spath
 Returns the directory in a given path
 
 Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
@@ -40,7 +61,7 @@ Spath - full path name as string
 Sdir - directory
 ****************************************************************************/
 /****************************************************************************
-SUpDir FilDirUp SCurDir
+SUpDir StrDirUp SCurDir
 Returns the directory above the current directory
 
 Returns the directory above the current directory.
@@ -48,48 +69,6 @@ written by joachim heintz
 
 SCurDir - current directory (with or without an ending slash)
 SUpDir - directory above the current directory (returned without an ending slash)
-****************************************************************************/
-/****************************************************************************
-Snam FilNam Spath
-Returns the file name in a given path
-
-Returns the file name (= everything after the last slash) in a given path.
-Requires Csound 5.15 or higher.
-written by joachim heintz
-
-Spath - full path name as string
-Snam - name part
-****************************************************************************/
-/****************************************************************************
-Suf FilSuf Spath [,ilow]
-Returns the suffix of a filename or path, optional in lower case 
-
-Returns the suffix (extension) of a filename or a full path, optional in lower case.
-written by joachim heintz
-
-Spath - full pathname (or filename) as string
-ilow - return ensuring lower case (1) or return as in Spath (0 = default)
-****************************************************************************/
-/****************************************************************************
-Sout StrAgrm Sin [,iLen]
-Changes the order of the characters in Sin randomly, like in an anagram.
-
-Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
-written by joachim heintz
-
-Sin - input string 
-iLen - length of Sin. If -1 (default), the length is calculated internally. 
-Sout - output string
-****************************************************************************/
-/****************************************************************************
-Sout StrAgrm Sin [,iLen]
-Changes the order of the characters in Sin randomly, like in an anagram.
-
-Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
-
-Sin - input string 
-iLen - length of Sin. If -1 (default), the length is calculated internally. 
-Sout - output string
 ****************************************************************************/
 /****************************************************************************
 iNum StrExpr Str [, iStrt [, iEnd]]
@@ -125,6 +104,17 @@ written by joachim heintz
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
 iNum - Result as number
+****************************************************************************/
+/****************************************************************************
+Snam StrFiln Spath
+Returns the file name in a given path
+
+Returns the file name (= everything after the last slash) in a given path.
+Requires Csound 5.15 or higher.
+written by joachim heintz
+
+Spath - full path name as string
+Snam - name part
 ****************************************************************************/
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
@@ -240,6 +230,16 @@ Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
 iEnd - Last indes to consider in Sin (default = -1 = end of string)
 Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
+Suf StrSuf Spath [,ilow]
+Returns the suffix of a filename or path, optional in lower case 
+
+Returns the suffix (extension) of a filename or a full path, optional in lower case.
+written by joachim heintz
+
+Spath - full pathname (or filename) as string
+ilow - return ensuring lower case (1) or return as in Spath (0 = default)
 ****************************************************************************/
 /****************************************************************************
 iSum StrSum Sin
@@ -767,7 +767,7 @@ Sres    strcat   Sres, String
         xout     Sres
   endop
 
-  opcode FilDir, S, S
+  opcode StrDir, S, S
 ;returns the directory of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -775,7 +775,7 @@ Sdir      strsub    Spath, 0, ipos
           xout      Sdir
   endop
 
-  opcode FilDirUp, S, S
+  opcode StrDirUp, S, S
   ;returns the directory above the current directory
 SCurDir    xin
 ;make sure the input does not end with '/'
@@ -791,7 +791,7 @@ SUpDir     strsub     Sok, 0, ipos
            xout       SUpDir
   endop
 
-  opcode FilNam, S, S
+  opcode StrFiln, S, S
 ;returns the name of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -799,7 +799,7 @@ Snam      strsub    Spath, ipos+1
           xout      Snam
   endop
 
-  opcode FilSuf, S, So
+  opcode StrSuf, S, So
   ;returns the suffix of a filename or path, optional in lower case 
 Spath,ilow xin
 ipos      strrindex Spath, "."

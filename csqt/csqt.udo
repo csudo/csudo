@@ -2,12 +2,12 @@
 *****************************************************************************
 UDO DEFINITIONS IN csqt:
 *****************************************************************************
-Meter      : Meter S_chan_sig, S_chan_over, aSig, kTrig
+CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 *****************************************************************************
 ****************************************************************************/
 
 /****************************************************************************
-Meter S_chan_sig, S_chan_over, aSig, kTrig
+CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 Shows an audio signal in a CsoundQt controller widget
 
 Shows an audio signal in a CsoundQt controller widget. For efficiency, chnset is used instead outvalue.
@@ -20,7 +20,7 @@ aSig - audio signal to show
 kTrig - trigger signal for refreshing the display
 ****************************************************************************/
 
-opcode Meter, 0, SSak
+opcode CsQtMeter, 0, SSak
  S_chan_sig, S_chan_over, aSig, kTrig	xin
  iDbRange = 60 ;shows 60 dB
  iHoldTim = 1 ;seconds to "hold the red light"

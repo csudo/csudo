@@ -1,5 +1,5 @@
 /****************************************************************************
-Snam FilNam Spath
+Snam StrFiln Spath
 Returns the file name in a given path
 
 Returns the file name (= everything after the last slash) in a given path.
@@ -17,7 +17,7 @@ Snam - name part
 </CsOptions>
 <CsInstruments>
 
-  opcode FilNam, S, S
+  opcode StrFiln, S, S
 ;returns the name of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -27,7 +27,7 @@ Snam      strsub    Spath, ipos+1
   
   instr name
           prints    "Printing name:\n"
-Snam      FilNam    "/my/dir/my/file.WAV"
+Snam      StrFiln    "/my/dir/my/file.WAV"
           puts      Snam, 1  
   endin
   

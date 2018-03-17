@@ -1,5 +1,5 @@
 /****************************************************************************
-SUpDir FilDirUp SCurDir
+SUpDir StrDirUp SCurDir
 Returns the directory above the current directory
 
 Returns the directory above the current directory.
@@ -16,7 +16,7 @@ SUpDir - directory above the current directory (returned without an ending slash
 </CsOptions>
 <CsInstruments>
 
-  opcode FilDirUp, S, S
+  opcode StrDirUp, S, S
   ;returns the directory above the current directory
 SCurDir    xin
 ;make sure the input does not end with '/'
@@ -35,7 +35,7 @@ SUpDir     strsub     Sok, 0, ipos
   instr DirUp
 SCurDir   pwd     
           puts      SCurDir, 1  
-SDirUp    FilDirUp  SCurDir
+SDirUp    StrDirUp  SCurDir
           puts      SDirUp, 1
   endin
   

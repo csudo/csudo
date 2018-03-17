@@ -1,5 +1,5 @@
 /****************************************************************************
-TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
+PrtTb ifn [,istart [,iend [,iprec [,ippr]]]]
 Prints a function table at i-time.
 
 Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
@@ -24,7 +24,7 @@ gitab      ftgen      1, 0, -7, -2, 0, 1, 2, 3, 4, 5, 6
 gisin      ftgen      2, 0, 64, 10, 1
 
 
-  opcode TbDmp, 0, iojjo
+  opcode PrtTb, 0, iojjo
 ifn, istart, iend, iprec, ippr xin
 ippr       =          (ippr == 0 ? 10 : ippr)
 iend       =          (iend == -1 ? ftlen(ifn) : iend)
@@ -50,22 +50,22 @@ Slast      strsub     Sdump, 0, ilen-2
 
   instr SimplePrinting
            prints     "\nSimple Printing with defaults:\n"
-           TbDmp      1
+           PrtTb      1
   endin
 
   instr PrintingParts
            prints     "\nPrinting a subset of the table (start =  2, end =  5):\n"
-           TbDmp      1, 2, 5
+           PrtTb      1, 2, 5
   endin
 
   instr PrintingPrec
            prints     "\nPrinting a subset of the table with float precision 0:\n"
-           TbDmp      1, 2, 5, 0
+           PrtTb      1, 2, 5, 0
   endin
 
   instr PrintingPpr
            prints     "\nPrinting table 2 with 8 elements per row:\n"
-           TbDmp      2, 0, -1, 3, 8
+           PrtTb      2, 0, -1, 3, 8
            prints     "\n"
   endin
 

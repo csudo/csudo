@@ -1,5 +1,5 @@
 /****************************************************************************
-kcount Counter kup, kdown [, kstep [, istart]]
+kcount NmCntr kup, kdown [, kstep [, istart]]
 Step counter
 
 Counts steps upwards or downwards, whenever a trigger signal has been received. This is meant to be used in live interaction, and is simliar to counter objects in realtime programs like Max or Pd. The example shows how the basic function can be extended to repeat sequences in a certain range.
@@ -19,7 +19,7 @@ kcount - current count as output
 </CsOptions>
 <CsInstruments>
 
-  opcode Counter, k, kkPo
+  opcode NmCntr, k, kkPo
 kup, kdown, kstep, istart xin
 kcount    init      istart
 kchange   changed   kup, kdown
@@ -67,7 +67,7 @@ kStep     =         2
           printks   "Step = 3!%n", 0
 kStep     =         3
  endif
-kcount    Counter   kup, kdown, kStep
+kcount    NmCntr   kup, kdown, kStep
 kseq      =         kcount % iseq ;sequencer 1-7
 kseq      =         (kseq > 0 ? kseq : iseq+kseq)
 knew      changed   kcount

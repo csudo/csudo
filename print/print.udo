@@ -2,30 +2,17 @@
 *****************************************************************************
 UDO DEFINITIONS IN print:
 *****************************************************************************
-Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
 PrtArr1S   : PrtArr1S SArr [,istart [,iend]]
 PrtArr1i   : PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
 PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-TbDmp      : TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
-TbDmpS     : TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
-TbDmpSk    : TbDmpSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-TbDmpk     : TbDmpk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+PrtTb      : PrtTb ifn [,istart [,iend [,iprec [,ippr]]]]
+PrtTbS     : PrtTbS ifn, String [,istart [,iend [,iprec [,ippr]]]]
+PrtTbSk    : PrtTbSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+PrtTbk     : PrtTbk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+Prt_a      : Prt_a aSig [,kPeriod [,kSpaces]]
 *****************************************************************************
 ****************************************************************************/
 
-/****************************************************************************
-Print_a aSig [,kPeriod [,kSpaces]]
-Prints an audio signal (vector) every kPeriod seconds.
-
-Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
-written by joachim heintz
-
-aSig - input signal to be printed
-kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
-kSpaces - number of spaces to insert before printing (default = 0)
-
-****************************************************************************/
 /****************************************************************************
 PrtArr1S SArr [,istart [,iend]]
 Prints a one-dimensional string array at i-time.
@@ -68,7 +55,7 @@ kprec - float precision while printing (default = 3)
 kppr - parameters per row (default = 10, maximum = 32)
 ****************************************************************************/
 /****************************************************************************
-TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
+PrtTb ifn [,istart [,iend [,iprec [,ippr]]]]
 Prints a function table at i-time.
 
 Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
@@ -83,7 +70,7 @@ ippr - parameters per row (default = 10, maximum = 32)
 
 ****************************************************************************/
 /****************************************************************************
-TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
+PrtTbS ifn, String [,istart [,iend [,iprec [,ippr]]]]
 Prints a table with an introducing string at i-time
 
 Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
@@ -97,7 +84,7 @@ iprec - float precision while printing (default = 3)
 ippr - parameters per row (default = 10, maximum = 32)
 ****************************************************************************/
 /****************************************************************************
-TbDmpSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+PrtTbSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 Prints a table with an introducing string at k-time
 
 Prints the content of a function table with a string as 'introduction' at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
@@ -114,7 +101,7 @@ kprec - float precision while printing
 kppr - parameters per row (maximum = 32)
 ****************************************************************************/
 /****************************************************************************
-TbDmpk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+PrtTbk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 Prints a function table at k-time.
 
 Prints the content of a function table at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
@@ -128,6 +115,19 @@ kstart - first index to be printed (default = 0)
 kend - first index not to be printed. -1 or 0.5 (default) mean the end of the table
 kprec - float precision while printing (default = 3)
 kppr - parameters per row (default = 10, maximum = 32)
+****************************************************************************/
+/****************************************************************************
+Prt_a aSig [,kPeriod [,kSpaces]]
+Prints an audio signal (vector) every kPeriod seconds.
+
+Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
+You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
+
+aSig - input signal to be printed
+kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
+kSpaces - number of spaces to insert before printing (default = 0)
+
 ****************************************************************************/
 
   opcode PrtArr1i, 0, i[]ojjj
@@ -193,7 +193,7 @@ indx       +=         1
            printf_i   "%s]\n", 1, SArr[indx]
   endop
 
-  opcode Print_a, 0, aPO
+  opcode Prt_a, 0, aPO
 aSig, kPeriod, kSpaces xin
 kTim       timeinsts
 kNextPeriod init      0
@@ -219,7 +219,7 @@ kNextPeriod =         kPeriod
 endif
   endop
 
-  opcode TbDmp, 0, iojjo
+  opcode PrtTb, 0, iojjo
 ifn, istart, iend, iprec, ippr xin
 ippr       =          (ippr == 0 ? 10 : ippr)
 iend       =          (iend == -1 ? ftlen(ifn) : iend)
@@ -242,7 +242,7 @@ Slast      strsub     Sdump, 0, ilen-2
            printf_i   "%s]\n", 1, Slast
   endop
 
-  opcode TbDmpk, 0, iPOVVO
+  opcode PrtTbk, 0, iPOVVO
 ifn, ktrig, kstart, kend, kprec, kppr xin
 kprint     init       0
 if ktrig > 0 then
@@ -269,7 +269,7 @@ Slast      strsubk    Sdump, 0, klen-2
 endif
   endop
 
-  opcode TbDmpS, 0, iSojjo
+  opcode PrtTbS, 0, iSojjo
 ;prints the content of a table in a simple way, with an additional string as 'introduction'
 ifn, String, istart, iend, iprec, ippr xin; function table, first index to print, first index not to be printed (-1 =whole table), float precision while printing, String, parameters per row (maximum =  32)
 ippr       =          (ippr == 0 ? 10 : ippr)
@@ -293,7 +293,7 @@ Slast      strsub     Sdump, 0, ilen-2
            printf_i   "%s]\n", 1, Slast
   endop
 
-  opcode TbDmpSk, 0, iSPOVVO
+  opcode PrtTbSk, 0, iSPOVVO
 ifn, String, ktrig, kstart, kend, kprec, kppr xin
 kprint     init       0
 if ktrig > 0 then

@@ -1,6 +1,6 @@
 /****************************************************************************
-iOut StepIncr iValStart, iValEnd, iNumSteps, iThisStep
-kOut StepIncr kValStart, kValEnd, kNumSteps, kThisStep
+iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
+kOut NmStpInc kValStart, kValEnd, kNumSteps, kThisStep
 
 Step increment
 
@@ -25,13 +25,13 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-opcode StepIncr, i, iiii
+opcode NmStpInc, i, iiii
  iValStart, iValEnd, iNumSteps, iThisStep xin
  iOut = ((iValEnd-iValStart) / iNumSteps) * iThisStep + iValStart
  xout iOut
 endop
 
-opcode StepIncr, k, kkkk
+opcode NmStpInc, k, kkkk
  kValStart, kValEnd, kNumSteps, kThisStep xin
  kOut = ((kValEnd-kValStart) / kNumSteps) * kThisStep + kValStart
  xout kOut
@@ -54,7 +54,7 @@ instr 1
 
  while iStep < lenarray(SPoints) do
  
-  iVal StepIncr iDbStart, iDbEnd, iNumSteps, iStep
+  iVal NmStpInc iDbStart, iDbEnd, iNumSteps, iStep
   printf_i "Point = %s, iStep = %d, iVal = %f\n", iStep+1, SPoints[iStep], iStep, iVal
  
   iStep += 1
@@ -78,7 +78,7 @@ instr 2 ;k-rate example
  
  kStep init 0
 
- kVal StepIncr kPitchStart, kPitchEnd, kNumSteps, kStep
+ kVal NmStpInc kPitchStart, kPitchEnd, kNumSteps, kStep
  printf "Point = %s, kStep = %d, kVal = %f\n", kStep+1, SPoints[kStep], kStep, kVal
  
  kStep += 1
@@ -110,20 +110,4 @@ Point = C, kStep = 2, kVal = 65.000000
 Point = D, kStep = 3, kVal = 63.000000
 Point = E, kStep = 4, kVal = 61.000000
 Point = F, kStep = 5, kVal = 59.000000
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

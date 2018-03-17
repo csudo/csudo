@@ -1,5 +1,5 @@
 /****************************************************************************
-iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
+iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
@@ -20,14 +20,14 @@ iValOut - iVal scaled
 </CsOptions>
 <CsInstruments>
 
-  opcode Scale, i, iiiii
+  opcode NmScl, i, iiiii
 iVal, iInMin, iInMax, iOutMin, iOutMax xin
 iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
 xout iValOut
   endop
 
 instr 1
-iRes   Scale     p4, p5, p6, p7, p8
+iRes   NmScl     p4, p5, p6, p7, p8
        prints    "Input range = %d..%d\nOutput range = %d..%d\nInput = %d\nOutput = %.3f\n\n", p5, p6, p7, p8, p4, iRes
 endin
 

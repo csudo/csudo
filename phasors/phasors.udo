@@ -2,12 +2,12 @@
 *****************************************************************************
 UDO DEFINITIONS IN phasors:
 *****************************************************************************
-LpPhsr     : atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
+PhsTmPnt   : atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
 *****************************************************************************
 ****************************************************************************/
 
 /****************************************************************************
-atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
+atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
 creates a time pointer for loops
 
 creates a time pointer signal for typical loop applications, for instance in the mincer opcode, with optional backward playing
@@ -20,7 +20,7 @@ kspeed - 1 = normal speed, 0.5 = half speed, etc.
 kdir - 1 = forward, -1 = backward
 ****************************************************************************/
 
-  opcode LpPhsr, a, kkkki
+  opcode PhsTmPnt, a, kkkki
 kloopstart, kloopend, kspeed, kdir, irefdur xin
 
 kstart01   =          kloopstart/irefdur ;start in 0-1 range

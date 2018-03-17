@@ -1,5 +1,5 @@
 /****************************************************************************
-iFracs FracLen iNum
+iFracs NmFrcLen iNum
 Returns the real length of the fractional part of a number
 
 Returns the real length of digits in the the fractional part of a number. "Real" means that the number 1.000 actually has no fractional part but is in this sense an integer.
@@ -15,21 +15,21 @@ iFracs - number of digits in the fractional part. 0 means that iNum is an intege
 </CsOptions>
 <CsInstruments>
 
-  opcode FracLen, i, io
+  opcode NmFrcLen, i, io
 ;returns the number of digits in the fractional part of inum (0=integer)
 inum, ifracs xin
 ifac      =         10^ifracs
 if int(inum*ifac) == inum*ifac then
           igoto     end
 else
-ifracs    FracLen   inum, ifracs+1
+ifracs    NmFrcLen   inum, ifracs+1
 endif
 end:      xout      ifracs
   endop
 
 instr 1
 iNum      =         p4
-iFracs    FracLen   iNum
+iFracs    NmFrcLen   iNum
           printf_i  "Length of fractional part in %f = %d digits\n", 1, iNum, iFracs
 endin 
 

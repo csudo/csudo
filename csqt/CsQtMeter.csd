@@ -1,5 +1,5 @@
 /****************************************************************************
-Meter S_chan_sig, S_chan_over, aSig, kTrig
+CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 Shows an audio signal in a CsoundQt controller widget
 
 Shows an audio signal in a CsoundQt controller widget. For efficiency, chnset is used instead outvalue.
@@ -21,7 +21,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-opcode Meter, 0, SSak
+opcode CsQtMeter, 0, SSak
  S_chan_sig, S_chan_over, aSig, kTrig	xin
  iDbRange = 60 ;shows 60 dB
  iHoldTim = 1 ;seconds to "hold the red light"
@@ -61,8 +61,8 @@ endin
 instr GUI
  aL, aR monitor
  kTrigDisp metro 10
- Meter "outL", "outL_over", aL, kTrigDisp
- Meter "outR", "outR_over", aR, kTrigDisp
+ CsQtMeter "outL", "outL_over", aL, kTrigDisp
+ CsQtMeter "outR", "outR_over", aR, kTrigDisp
 endin
 
 </CsInstruments>

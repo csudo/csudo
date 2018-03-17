@@ -1,5 +1,5 @@
 /****************************************************************************
-Sdir FilDir Spath
+Sdir StrDir Spath
 Returns the directory in a given path
 
 Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
@@ -16,7 +16,7 @@ Sdir - directory
 </CsOptions>
 <CsInstruments>
   
-  opcode FilDir, S, S
+  opcode StrDir, S, S
 ;returns the directory of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -26,7 +26,7 @@ Sdir      strsub    Spath, 0, ipos
   
   instr dir
           prints    "Printing directory:\n"
-Sdir      FilDir    "/my/dir/my/file.WAV"
+Sdir      StrDir    "/my/dir/my/file.WAV"
           puts      Sdir, 1  
   endin
   

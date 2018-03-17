@@ -3,7 +3,7 @@ Sres StraySetNum Stray, inum [, ielindx [, isep1 [, isep2 [,isepOut]]]]
 Inserts a number in an array-string at a certain position
 
 Puts the number inum at the position ielindx (default=-1: at the end) of Stray, and returns the result as Sres. Elements in Stray are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). if just isepA is given, it is also read as isepB. the element is inserted using the seperator isepOut (default=isep1)
-Requires Csound 5.16 or higher, and the UDO FracLen.
+Requires Csound 5.16 or higher, and the UDO NmFrcLen.
 written by joachim heintz
 
 Stray - a string as array
@@ -23,20 +23,20 @@ isepOut - the seperator for the insertion (default=isep1)
 </CsOptions>
 <CsInstruments>
 
-  opcode FracLen, i, io
+  opcode NmFrcLen, i, io
 ;returns the number of digits in the fractional part of inum (0=integer)
 inum, ifracs xin
 ifac      =         10^ifracs
 if int(inum*ifac) == inum*ifac then
           igoto     end
 else
-ifracs    FracLen   inum, ifracs+1
+ifracs    NmFrcLen   inum, ifracs+1
 endif
 end:      xout      ifracs
   endop
 
   opcode StraySetNum, S, Sijjjj
-  ;requires the UDO FracLen
+  ;requires the UDO NmFrcLen
 Stray, inum, ielindx, isepA, isepB, isepOut xin
 ;;DEFINE THE SEPERATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
@@ -46,7 +46,7 @@ Sep1      sprintf   "%c", isep1
 Sep2      sprintf   "%c", isep2
 SepOut    sprintf   "%c", isepOut
 ;;INITIALIZE SOME PARAMETERS
-ifracs    FracLen   inum
+ifracs    NmFrcLen   inum
 ilen      strlen    Stray
 iel       =         0; actual element position
 iwarsep   =         1

@@ -1,5 +1,5 @@
 /****************************************************************************
-aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 Uses the partikkel opcode to do some sound warping, similar to sndwarp 
 
 Uses the partikkel opcode to do standard sound warping like time freeze, stretch or compress, and pitch shift, on a table with one channel of an audio sample. The goal is to simplify the usage as much as possible, with just setting the position in the sound, and the GEN01 table as inputs. All other parameters are set to  default values.
@@ -36,7 +36,7 @@ giSound    ftgen      0, 0, 0, -1, "../_sourcefiles/fox.wav", 0, 0, 1
 
 
 
-  opcode PtkWrp, a, aiPOOOOP
+  opcode GrPtkWrp, a, aiPOOOOP
 
 aPos, iFilTab, kAmp, kCent, kPosRnd, kGrainRate, kGrainSize, kDistribution xin
 
@@ -83,7 +83,7 @@ aOut       partikkel  kGrainRate, kDistribution, iDistTab, aSync, 1, iWinTab, -1
 kpnter     =          p4 ;position in seconds
 apnter     upsamp     kpnter
 
-aWrp       PtkWrp     apnter, giSound
+aWrp       GrPtkWrp     apnter, giSound
 aOut       linen      aWrp, 0, p3, .01
            out        aOut
 
@@ -94,7 +94,7 @@ aOut       linen      aWrp, 0, p3, .01
 kpnter     linseg     0, p3, 2.757
 apnter     upsamp     kpnter
 
-aWrp       PtkWrp     apnter, giSound
+aWrp       GrPtkWrp     apnter, giSound
 aOut       linen      aWrp, 0, p3, .01
            out        aOut
 
@@ -105,7 +105,7 @@ aOut       linen      aWrp, 0, p3, .01
 kpnter     linseg     0, p3, 2.757
 apnter     upsamp     kpnter
 
-aWrp       PtkWrp     apnter, giSound
+aWrp       GrPtkWrp     apnter, giSound
 aOut       linen      aWrp, 0, p3, .01
            out        aOut
 

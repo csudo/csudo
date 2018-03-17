@@ -1,5 +1,5 @@
 /****************************************************************************
-aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 A simplified version of the Partikkel opcode, but with some additional parameters
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
@@ -30,7 +30,7 @@ giDisttab  ftgen      0, 0, 32768, 7, 0, 32768, 1; for kdistribution
 giFile     ftgen      0, 0, 0, 1, "../_sourcefiles/fox.wav", 0, 0, 1
 giWin      ftgen      0, 0, 4096, 20, 9, 1; window
 
-	opcode PtkSmpA, a, iikkkkkkkiii
+	opcode GrPtkSmpA, a, iikkkkkkkiii
 ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin xin
 
 /*length of input file*/
@@ -69,7 +69,7 @@ instr 1
 iskip      =          p4
 ispeed     =          p5
 icent      =          p6
-apartikkel PtkSmpA    giFile, iskip, ispeed, .1, 100, 30, icent, 0, 0, giCosine, giDisttab, giWin
+apartikkel GrPtkSmpA    giFile, iskip, ispeed, .1, 100, 30, icent, 0, 0, giCosine, giDisttab, giWin
            out        apartikkel
 endin
 </CsInstruments>

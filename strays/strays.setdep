@@ -7,7 +7,7 @@ StrayNumSum: StrayLen, StrayGetEl
 StrayNumToFt: StrayLen, StrIsOp, StrL_Prth, StrNxtOpL, StrLNoth, StrExpr2, StrL_NvO, StrRmvST, StrExpr1, StrExpr
 StrayRemDup: StrayLen, StrayGetEl
 StrayRndEl: StrayLen, StrayGetEl
-StraySetNum: FracLen
+StraySetNum: NmFrcLen
 
 
 

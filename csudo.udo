@@ -26,36 +26,39 @@ BufPlay1   : aout, kfin BufPlay1 ift, kplay, kspeed, kvol, kstart, kend, kwrap
 BufPlay2   : aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 BufRec1    : kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 BufRec2    : kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
-Counter    : kcount Counter kup, kdown [, kstep [, istart]]
+CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 EvtLvLp    : EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
 EvtPtrnz   : kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
 EvtS2P     : SAlways, State EvtS2P SPatName, SPar, SPattern, iTimeSignature, iBPM
 ExtrOrc    : Sorc ExtrOrc Sfil
 F2M        : iNotNum F2M iFreq [,iRound]
-FilDir     : Sdir FilDir Spath
-FilDirUp   : SUpDir FilDirUp SCurDir
-FilNam     : Snam FilNam Spath
-FilPlay1   : aout FilPlay1 Sfil, kspeed [, iskip [, iloop]]
-FilPlay2   : aL, aR FilPlay2 Sfil, kspeed [, iskip [, iloop]]
-FilSuf     : Suf FilSuf Spath [,ilow]
-FracLen    : iFracs FracLen iNum
+GrPtkSmpA  : aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+GrPtkSmpB  : apartikkel GrPtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+GrPtkWrp   : aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
-LpPhsr     : atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
-Meter      : Meter S_chan_sig, S_chan_over, aSig, kTrig
-Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
+NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
+NmFrcLen   : iFracs NmFrcLen iNum
+NmScl      : iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
+NmStpInc   : iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
+PhsTmPnt   : atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
 PrtArr1S   : PrtArr1S SArr [,istart [,iend]]
 PrtArr1i   : PrtArr1 iArr [,istart [,iend [,iprec [,ippr]]]]]
 PrtArr1k   : PrtArr1k kArr [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-PtkSmpA    : aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
-Scale      : iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
-StepIncr   : iOut StepIncr iValStart, iValEnd, iNumSteps, iThisStep
+PrtTb      : PrtTb ifn [,istart [,iend [,iprec [,ippr]]]]
+PrtTbS     : PrtTbS ifn, String [,istart [,iend [,iprec [,ippr]]]]
+PrtTbSk    : PrtTbSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+PrtTbk     : PrtTbk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+Prt_a      : Prt_a aSig [,kPeriod [,kSpaces]]
+SfPlay1    : aout SfPlay1 Sfil, kspeed [, iskip [, iloop]]
+SfPlay2    : aL, aR SfPlay2 Sfil, kspeed [, iskip [, iloop]]
 StrAgrm    : Sout StrAgrm Sin [,iLen]
 StrAgrmk   : Sout StrAgrm Sin [,iLen]
+StrDir     : Sdir StrDir Spath
+StrDirUp   : SUpDir StrDirUp SCurDir
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
 StrExpr1   : iNum StrExpr1 Str, iStrt, iEnd
 StrExpr2   : iNum StrExpr2 iNum1, iNum2, iOp
+StrFiln    : Snam StrFiln Spath
 StrIsEmpty : iTrue StrIsEmpty Str, iStrt, iEnd
 StrIsOp    : iOp StrIsOp Str, iPos
 StrLNoth   : iTrue StrLNoth Str, iMin, iPos
@@ -66,6 +69,7 @@ StrMems    : iSumEls StrMems Str, Sel
 StrNumP    : itest StrNumP String
 StrNxtOpL  : iOpPos, iOp StrNxtOpL Str, iMinPos, iPos
 StrRmvST   : Sout StrRmvST Sin, iStrt, iEnd
+StrSuf     : Suf StrSuf Spath [,ilow]
 StrSum     : iSum StrSum Sin
 StrToArr   : S_Arr[], iLen StrToArr S_in, S_sep
 StrToAscS  : Sout StrToAscS Sin
@@ -86,10 +90,6 @@ StraySetEl : Sres StraySetEl Stray, Sin [, ielindx [, isep1 [, isep2 [,isepOut]]
 StraySetNum: Sres StraySetNum Stray, inum [, ielindx [, isep1 [, isep2 [,isepOut]]]]
 StraySub   : Sub StraySub Stray [, istart [, iend [, isepA [, isepB [, isepOut]]]]]
 StripL     : Sout StripL Sin
-TbDmp      : TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
-TbDmpS     : TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
-TbDmpSk    : TbDmpSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-TbDmpk     : TbDmpk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
 TbMem      : ipos TbMem ival, ift [, indxstrt [, indxend]]
 TbPeak     : iPeak TbPeak ift [, indxstrt [, indxend]]
 TbPrmRnd   : TbPrmRnd ift
@@ -485,17 +485,17 @@ kwrap - if 1, recording wraps between kend and the beginning of the buffer (see 
 kfin - 1 if record has finished
 ****************************************************************************/
 /****************************************************************************
-kcount Counter kup, kdown [, kstep [, istart]]
-Step counter
+CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
+Shows an audio signal in a CsoundQt controller widget
 
-Counts steps upwards or downwards, whenever a trigger signal has been received. This is meant to be used in live interaction, and is simliar to counter objects in realtime programs like Max or Pd. The example shows how the basic function can be extended to repeat sequences in a certain range.
+Shows an audio signal in a CsoundQt controller widget. For efficiency, chnset is used instead outvalue.
+Because of this, the software channel names must be declared outside this UDO via chn_k to work properly.
 written by joachim heintz
 
-kstep - step size (default = 1)
-istart - starting value (default = 0)
-kup - counts upwards when 1
-kdown - counts downwards when 1
-kcount - current count as output
+S_chan_sig - channel name for the controller widget showing the signal
+S_chan_over - channel name for the controller widget showing the out of range signal
+aSig - audio signal to show
+kTrig - trigger signal for refreshing the display
 ****************************************************************************/
 /**********
 EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
@@ -567,78 +567,73 @@ iRound - 0 = off (default), 1 = on
 iNotNum - Midi note number (60 = middle c)
 ****************************************************************************/
 /****************************************************************************
-Sdir FilDir Spath
-Returns the directory in a given path
+aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+A simplified version of the Partikkel opcode, but with some additional parameters
 
-Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
+A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
 written by joachim heintz
 
-Spath - full path name as string
-Sdir - directory
+ifiltab - function table with the input sound file (usually with GEN01)
+iskip - skiptime (sec)
+icosintab - function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
+idisttab - function table with distribution (e.g. giDisttab ftgen 0, 0, 32768, 7, 0, 32768, 1)
+iwin - function table with window shape (e.g. giWin ftgen 0, 0, 4096, 20, 9, 1)
+kspeed - speed of the pointer
+kgrainamp - multiplier of the grain amplitude (the overall amplitude depends also from grainrate and grainsize)
+kgrainrate - number of grains per seconds
+kgrainsize - grain duration in ms
+kcent - transposition in cent
+kposrand - random deviation (offset) of the pointer in ms
+kcentrand - random transposition in cents (up and down) 
 ****************************************************************************/
+/*length of input file*/
+/*amplitude*/
+/*transposition*/
+/*pointer*/
+/* other parameters */
 /****************************************************************************
-SUpDir FilDirUp SCurDir
-Returns the directory above the current directory
+apartikkel GrPtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+The same as PtkSmpA, but with a time pointer input
 
-Returns the directory above the current directory.
+A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
 written by joachim heintz
 
-SCurDir - current directory (with or without an ending slash)
-SUpDir - directory above the current directory (returned without an ending slash)
+ifiltab: function table with the input sound file (usually with GEN01)
+icosintab: function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
+idisttab: function table with distribution (e.g. giDisttab ftgen 0, 0, 32768, 7, 0, 32768, 1)
+iwin: function table with window shape (e.g. giWin ftgen 0, 0, 4096, 20, 9, 1)
+apnter: pointer into the function table (0-1)
+kgrainamp: multiplier of the grain amplitude (the overall amplitude depends also on grainrate and grainsize)
+kgrainrate: number of grains per seconds
+kgrainsize: grain duration in ms
+kcent: transposition in cent
+kposrand: random deviation (offset) of the pointer in ms
+kcentrand: random transposition in cents (up and down) 
 ****************************************************************************/
+/*amplitude*/
+/*transposition*/
+/* other parameters */
 /****************************************************************************
-Snam FilNam Spath
-Returns the file name in a given path
+aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+Uses the partikkel opcode to do some sound warping, similar to sndwarp 
 
-Returns the file name (= everything after the last slash) in a given path.
-Requires Csound 5.15 or higher.
+Uses the partikkel opcode to do standard sound warping like time freeze, stretch or compress, and pitch shift, on a table with one channel of an audio sample. The goal is to simplify the usage as much as possible, with just setting the position in the sound, and the GEN01 table as inputs. All other parameters are set to  default values.
+General notes:
+1. The quality of sound transformation with granular synthesis depends mainly on the combination of the different input parameters, at least grain rate, grain size and distribution. So you cannot expect to get excellent results with some default values. Try to use the optional inputs in case of bad results, and if you want to go very much in detail, use the partikkel opcode with all its flexibility. (See, for instance,  SF_Granular.csd in CsoundQt's example menu.)
+2. Two function tables are generated from inside the UDO, which is actually bad style. The reason is not to bother the user with tables which are not important for him. But if you want to use this UDO in a real time context, you should definitely put the iWinTab and iDistTab tables outside the UDO.
+3. The default values for grain rate (200 Hz) and grain size (100 ms) can be changed easily inside the UDO.
+Requires Csound 5.18 or higher.
 written by joachim heintz
 
-Spath - full path name as string
-Snam - name part
-****************************************************************************/
-/****************************************************************************
-aout FilPlay1 Sfil, kspeed [, iskip [, iloop]]
-Plays a mono signal from a mono or stereo soundfile
-
-Gives mono output regardless a soundfile is mono or stereo (if stereo, just the first channel is used).
-written by joachim heintz
-
-Sfil - Sound file name (or path) in double quotes
-iskip - skiptime in seconds (default=0)
-iloop - 1 = loop, 0 = no loop (default=0)
-kspeed - speed to read the file (1 = normal, 2 = octave higher, 0.5 = octave lower) ****************************************************************************/
-/****************************************************************************
-aL, aR FilPlay2 Sfil, kspeed [, iskip [, iloop]]
-Plays a stereo signal from a mono or stereo soundfile
-
-Gives stereo output regardless a soundfile is mono or stereo (if mono, this signal is sent to both channels).
-written by joachim heintz
-
-Sfil - Sound file name (or path) in double quotes
-iskip - skiptime in seconds (default=0)
-iloop - 1 = loop, 0 = no loop (default=0)
-kspeed - speed to read the file (1 = normal, 2 = octave higher, 0.5 = octave lower)
-****************************************************************************/
-/****************************************************************************
-Suf FilSuf Spath [,ilow]
-Returns the suffix of a filename or path, optional in lower case 
-
-Returns the suffix (extension) of a filename or a full path, optional in lower case.
-written by joachim heintz
-
-Spath - full pathname (or filename) as string
-ilow - return ensuring lower case (1) or return as in Spath (0 = default)
-****************************************************************************/
-/****************************************************************************
-iFracs FracLen iNum
-Returns the real length of the fractional part of a number
-
-Returns the real length of digits in the the fractional part of a number. "Real" means that the number 1.000 actually has no fractional part but is in this sense an integer.
-written by joachim heintz
-
-iNum - incoming number
-iFracs - number of digits in the fractional part. 0 means that iNum is an integer
+aPos - position in the sound in seconds
+iFilTab - function table containing the mono sound file (use GEN01 with 1 as last parameter to import any sample)
+kAmp - amplitude (default = 1). note that the amplitude depends mainly on the combination of grain size and grain rate, so you cannot expect 0 dB when using kAmp=1
+kCent - transposition in cent (default = 0)
+kPosRnd - position randomness of the time pointer in the sound, in milliseconds (default=0). this can be used in combination with kDistribution to avoid artifacts deriving from synchronous granular synthesis
+kGrainRate - grains per second (default = 200)
+kGrainSize - grain size in milliseconds (default = 100)
+kDistribution - distribution of the grains in time. 0 means periodic, 1 means scattered (which is the dafault), with any value in between possible
+see the Csound Manual for partikkel for more information about the input parameters
 ****************************************************************************/
 /****************************************************************************
 kval, kfin Linek kthis, knext, ktim, ktrig
@@ -655,7 +650,59 @@ kval - output value
 kfin - 1 if target has been reached
 ****************************************************************************/
 /****************************************************************************
-atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
+kcount NmCntr kup, kdown [, kstep [, istart]]
+Step counter
+
+Counts steps upwards or downwards, whenever a trigger signal has been received. This is meant to be used in live interaction, and is simliar to counter objects in realtime programs like Max or Pd. The example shows how the basic function can be extended to repeat sequences in a certain range.
+written by joachim heintz
+
+kstep - step size (default = 1)
+istart - starting value (default = 0)
+kup - counts upwards when 1
+kdown - counts downwards when 1
+kcount - current count as output
+****************************************************************************/
+/****************************************************************************
+iFracs NmFrcLen iNum
+Returns the real length of the fractional part of a number
+
+Returns the real length of digits in the the fractional part of a number. "Real" means that the number 1.000 actually has no fractional part but is in this sense an integer.
+written by joachim heintz
+
+iNum - incoming number
+iFracs - number of digits in the fractional part. 0 means that iNum is an integer
+****************************************************************************/
+/****************************************************************************
+iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+
+Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+written by joachim heintz
+
+iVal - incoming number
+iInMin - minimum possible incoming number
+iInMax - maximum possible incoming numer
+iOutMin - minimum possible outgoing number
+iOutMax - maximum possible outgoing number
+iValOut - iVal scaled
+****************************************************************************/
+/****************************************************************************
+iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
+kOut NmStpInc kValStart, kValEnd, kNumSteps, kThisStep
+
+Step increment
+
+The range between ValStart and ValEnd is divided in a number of steps. The opcode 
+returns the proper value for one of these steps.
+written by joachim heintz
+
+iValStart (kValStart) - value at start (ThisStep=0)
+iValEnd (kValEnd) - value at end (ThisStep=NumSteps)
+iNumSteps (kNumSteps) - number of steps between ValStart and ValEnd
+iThisStep (kThisStep) - index of this step (starting at zero)
+****************************************************************************/
+/****************************************************************************
+atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
 creates a time pointer for loops
 
 creates a time pointer signal for typical loop applications, for instance in the mincer opcode, with optional backward playing
@@ -666,32 +713,6 @@ kloopstart - starting point of the loop (in the scale of irefdur)
 kloopend - end point of the loop (in the scale of irefdur)
 kspeed - 1 = normal speed, 0.5 = half speed, etc.
 kdir - 1 = forward, -1 = backward
-****************************************************************************/
-/****************************************************************************
-Meter S_chan_sig, S_chan_over, aSig, kTrig
-Shows an audio signal in a CsoundQt controller widget
-
-Shows an audio signal in a CsoundQt controller widget. For efficiency, chnset is used instead outvalue.
-Because of this, the software channel names must be declared outside this UDO via chn_k to work properly.
-written by joachim heintz
-
-S_chan_sig - channel name for the controller widget showing the signal
-S_chan_over - channel name for the controller widget showing the out of range signal
-aSig - audio signal to show
-kTrig - trigger signal for refreshing the display
-****************************************************************************/
-/****************************************************************************
-Print_a aSig [,kPeriod [,kSpaces]]
-Prints an audio signal (vector) every kPeriod seconds.
-
-Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
-written by joachim heintz
-
-aSig - input signal to be printed
-kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
-kSpaces - number of spaces to insert before printing (default = 0)
-
 ****************************************************************************/
 /****************************************************************************
 PrtArr1S SArr [,istart [,iend]]
@@ -735,102 +756,102 @@ kprec - float precision while printing (default = 3)
 kppr - parameters per row (default = 10, maximum = 32)
 ****************************************************************************/
 /****************************************************************************
-aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-A simplified version of the Partikkel opcode, but with some additional parameters
+PrtTb ifn [,istart [,iend [,iprec [,ippr]]]]
+Prints a function table at i-time.
 
-A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
+Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
+You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpk for the k-rate equivalent.
 written by joachim heintz
 
-ifiltab - function table with the input sound file (usually with GEN01)
-iskip - skiptime (sec)
-icosintab - function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
-idisttab - function table with distribution (e.g. giDisttab ftgen 0, 0, 32768, 7, 0, 32768, 1)
-iwin - function table with window shape (e.g. giWin ftgen 0, 0, 4096, 20, 9, 1)
-kspeed - speed of the pointer
-kgrainamp - multiplier of the grain amplitude (the overall amplitude depends also from grainrate and grainsize)
-kgrainrate - number of grains per seconds
-kgrainsize - grain duration in ms
-kcent - transposition in cent
-kposrand - random deviation (offset) of the pointer in ms
-kcentrand - random transposition in cents (up and down) 
-****************************************************************************/
-/*length of input file*/
-/*amplitude*/
-/*transposition*/
-/*pointer*/
-/* other parameters */
-/****************************************************************************
-apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-The same as PtkSmpA, but with a time pointer input
+ifn - function table number
+istart - first index to be printed (default = 0)
+iend - first index not to be printed (default = -1: end of table)
+iprec - float precision while printing (default = 3)
+ippr - parameters per row (default = 10, maximum = 32)
 
-A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
-written by joachim heintz
-
-ifiltab: function table with the input sound file (usually with GEN01)
-icosintab: function table with cosine (e.g. giCosine ftgen 0, 0, 8193, 9, 1, 1, 90)
-idisttab: function table with distribution (e.g. giDisttab ftgen 0, 0, 32768, 7, 0, 32768, 1)
-iwin: function table with window shape (e.g. giWin ftgen 0, 0, 4096, 20, 9, 1)
-apnter: pointer into the function table (0-1)
-kgrainamp: multiplier of the grain amplitude (the overall amplitude depends also on grainrate and grainsize)
-kgrainrate: number of grains per seconds
-kgrainsize: grain duration in ms
-kcent: transposition in cent
-kposrand: random deviation (offset) of the pointer in ms
-kcentrand: random transposition in cents (up and down) 
-****************************************************************************/
-/*amplitude*/
-/*transposition*/
-/* other parameters */
-/****************************************************************************
-aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
-Uses the partikkel opcode to do some sound warping, similar to sndwarp 
-
-Uses the partikkel opcode to do standard sound warping like time freeze, stretch or compress, and pitch shift, on a table with one channel of an audio sample. The goal is to simplify the usage as much as possible, with just setting the position in the sound, and the GEN01 table as inputs. All other parameters are set to  default values.
-General notes:
-1. The quality of sound transformation with granular synthesis depends mainly on the combination of the different input parameters, at least grain rate, grain size and distribution. So you cannot expect to get excellent results with some default values. Try to use the optional inputs in case of bad results, and if you want to go very much in detail, use the partikkel opcode with all its flexibility. (See, for instance,  SF_Granular.csd in CsoundQt's example menu.)
-2. Two function tables are generated from inside the UDO, which is actually bad style. The reason is not to bother the user with tables which are not important for him. But if you want to use this UDO in a real time context, you should definitely put the iWinTab and iDistTab tables outside the UDO.
-3. The default values for grain rate (200 Hz) and grain size (100 ms) can be changed easily inside the UDO.
-Requires Csound 5.18 or higher.
-written by joachim heintz
-
-aPos - position in the sound in seconds
-iFilTab - function table containing the mono sound file (use GEN01 with 1 as last parameter to import any sample)
-kAmp - amplitude (default = 1). note that the amplitude depends mainly on the combination of grain size and grain rate, so you cannot expect 0 dB when using kAmp=1
-kCent - transposition in cent (default = 0)
-kPosRnd - position randomness of the time pointer in the sound, in milliseconds (default=0). this can be used in combination with kDistribution to avoid artifacts deriving from synchronous granular synthesis
-kGrainRate - grains per second (default = 200)
-kGrainSize - grain size in milliseconds (default = 100)
-kDistribution - distribution of the grains in time. 0 means periodic, 1 means scattered (which is the dafault), with any value in between possible
-see the Csound Manual for partikkel for more information about the input parameters
 ****************************************************************************/
 /****************************************************************************
-iValOut Scale iVal, iInMin, iInMax, iOutMin, iOutMax
-Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+PrtTbS ifn, String [,istart [,iend [,iprec [,ippr]]]]
+Prints a table with an introducing string at i-time
 
-Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
 written by joachim heintz
 
-iVal - incoming number
-iInMin - minimum possible incoming number
-iInMax - maximum possible incoming numer
-iOutMin - minimum possible outgoing number
-iOutMax - maximum possible outgoing number
-iValOut - iVal scaled
+ifn - function table number
+String - string to be printed as introduction
+istart - first index to be printed (default = 0)
+iend - first index not to be printed (default = -1: end of table)
+iprec - float precision while printing (default = 3)
+ippr - parameters per row (default = 10, maximum = 32)
 ****************************************************************************/
 /****************************************************************************
-iOut StepIncr iValStart, iValEnd, iNumSteps, iThisStep
-kOut StepIncr kValStart, kValEnd, kNumSteps, kThisStep
+PrtTbSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+Prints a table with an introducing string at k-time
 
-Step increment
-
-The range between ValStart and ValEnd is divided in a number of steps. The opcode 
-returns the proper value for one of these steps.
+Prints the content of a function table with a string as 'introduction' at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
+You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpS for the i-time equivalent.
+Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
 written by joachim heintz
 
-iValStart (kValStart) - value at start (ThisStep=0)
-iValEnd (kValEnd) - value at end (ThisStep=NumSteps)
-iNumSteps (kNumSteps) - number of steps between ValStart and ValEnd
-iThisStep (kThisStep) - index of this step (starting at zero)
+ifn - function table number
+String - string to be printed as introduction / comment
+ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
+kstart - first index to be printed
+kend - first index not to be printed. -1 means the end of the table
+kprec - float precision while printing
+kppr - parameters per row (maximum = 32)
+****************************************************************************/
+/****************************************************************************
+PrtTbk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
+Prints a function table at k-time.
+
+Prints the content of a function table at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
+You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmp for the i-time equivalent.
+Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
+written by joachim heintz
+
+ifn - function table number
+ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
+kstart - first index to be printed (default = 0)
+kend - first index not to be printed. -1 or 0.5 (default) mean the end of the table
+kprec - float precision while printing (default = 3)
+kppr - parameters per row (default = 10, maximum = 32)
+****************************************************************************/
+/****************************************************************************
+Prt_a aSig [,kPeriod [,kSpaces]]
+Prints an audio signal (vector) every kPeriod seconds.
+
+Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
+You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. 
+written by joachim heintz
+
+aSig - input signal to be printed
+kPeriod - time in seconds between print operations (default = 1). 0 means that printing is performed in each control cycle.
+kSpaces - number of spaces to insert before printing (default = 0)
+
+****************************************************************************/
+/****************************************************************************
+aout SfPlay1 Sfil, kspeed [, iskip [, iloop]]
+Plays a mono signal from a mono or stereo soundfile
+
+Gives mono output regardless a soundfile is mono or stereo (if stereo, just the first channel is used).
+written by joachim heintz
+
+Sfil - Sound file name (or path) in double quotes
+iskip - skiptime in seconds (default=0)
+iloop - 1 = loop, 0 = no loop (default=0)
+kspeed - speed to read the file (1 = normal, 2 = octave higher, 0.5 = octave lower) ****************************************************************************/
+/****************************************************************************
+aL, aR SfPlay2 Sfil, kspeed [, iskip [, iloop]]
+Plays a stereo signal from a mono or stereo soundfile
+
+Gives stereo output regardless a soundfile is mono or stereo (if mono, this signal is sent to both channels).
+written by joachim heintz
+
+Sfil - Sound file name (or path) in double quotes
+iskip - skiptime in seconds (default=0)
+iloop - 1 = loop, 0 = no loop (default=0)
+kspeed - speed to read the file (1 = normal, 2 = octave higher, 0.5 = octave lower)
 ****************************************************************************/
 /****************************************************************************
 Sout StrAgrm Sin [,iLen]
@@ -852,6 +873,26 @@ Changes the order of the characters in Sin randomly, like in an anagram, and ret
 Sin - input string 
 iLen - length of Sin. If -1 (default), the length is calculated internally. 
 Sout - output string
+****************************************************************************/
+/****************************************************************************
+Sdir StrDir Spath
+Returns the directory in a given path
+
+Returns the directory part of a given file path string (=everything before the last slash), at i-rate (csound 5.15 or higher).
+written by joachim heintz
+
+Spath - full path name as string
+Sdir - directory
+****************************************************************************/
+/****************************************************************************
+SUpDir StrDirUp SCurDir
+Returns the directory above the current directory
+
+Returns the directory above the current directory.
+written by joachim heintz
+
+SCurDir - current directory (with or without an ending slash)
+SUpDir - directory above the current directory (returned without an ending slash)
 ****************************************************************************/
 /****************************************************************************
 iNum StrExpr Str [, iStrt [, iEnd]]
@@ -887,6 +928,17 @@ written by joachim heintz
 iNum1, iNum2 - numbers
 iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
 iNum - Result as number
+****************************************************************************/
+/****************************************************************************
+Snam StrFiln Spath
+Returns the file name in a given path
+
+Returns the file name (= everything after the last slash) in a given path.
+Requires Csound 5.15 or higher.
+written by joachim heintz
+
+Spath - full path name as string
+Snam - name part
 ****************************************************************************/
 /****************************************************************************
 iTrue StrIsEmpty Str, iStrt, iEnd
@@ -1002,6 +1054,16 @@ Sin - Input string which may contain starting spaces or tabs.
 iStrt - First index (position) to consider in Sin (default = 0)
 iEnd - Last indes to consider in Sin (default = -1 = end of string)
 Sout - Output string with removed initial spaces/tabs.
+****************************************************************************/
+/****************************************************************************
+Suf StrSuf Spath [,ilow]
+Returns the suffix of a filename or path, optional in lower case 
+
+Returns the suffix (extension) of a filename or a full path, optional in lower case.
+written by joachim heintz
+
+Spath - full pathname (or filename) as string
+ilow - return ensuring lower case (1) or return as in Spath (0 = default)
 ****************************************************************************/
 /****************************************************************************
 iSum StrSum Sin
@@ -1234,7 +1296,7 @@ Sres StraySetNum Stray, inum [, ielindx [, isep1 [, isep2 [,isepOut]]]]
 Inserts a number in an array-string at a certain position
 
 Puts the number inum at the position ielindx (default=-1: at the end) of Stray, and returns the result as Sres. Elements in Stray are seperated by the two ascii-coded seperators isepA (default=32: space) and isepB (default=9: tab). if just isepA is given, it is also read as isepB. the element is inserted using the seperator isepOut (default=isep1)
-Requires Csound 5.16 or higher, and the UDO FracLen.
+Requires Csound 5.16 or higher, and the UDO NmFrcLen.
 written by joachim heintz
 
 Stray - a string as array
@@ -1271,68 +1333,6 @@ written by joachim heintz
 
 Sin - Input string which may contain starting spaces or tabs.
 Sout - Output string with removed initial spaces/tabs.
-****************************************************************************/
-/****************************************************************************
-TbDmp ifn [,istart [,iend [,iprec [,ippr]]]]
-Prints a function table at i-time.
-
-Prints the content of a function table at i-time, i.e. once at the initialization of an instrument. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpk for the k-rate equivalent.
-written by joachim heintz
-
-ifn - function table number
-istart - first index to be printed (default = 0)
-iend - first index not to be printed (default = -1: end of table)
-iprec - float precision while printing (default = 3)
-ippr - parameters per row (default = 10, maximum = 32)
-
-****************************************************************************/
-/****************************************************************************
-TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
-Prints a table with an introducing string at i-time
-
-Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
-written by joachim heintz
-
-ifn - function table number
-String - string to be printed as introduction
-istart - first index to be printed (default = 0)
-iend - first index not to be printed (default = -1: end of table)
-iprec - float precision while printing (default = 3)
-ippr - parameters per row (default = 10, maximum = 32)
-****************************************************************************/
-/****************************************************************************
-TbDmpSk ifn, String [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-Prints a table with an introducing string at k-time
-
-Prints the content of a function table with a string as 'introduction' at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmpS for the i-time equivalent.
-Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
-written by joachim heintz
-
-ifn - function table number
-String - string to be printed as introduction / comment
-ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
-kstart - first index to be printed
-kend - first index not to be printed. -1 means the end of the table
-kprec - float precision while printing
-kppr - parameters per row (maximum = 32)
-****************************************************************************/
-/****************************************************************************
-TbDmpk ifn [,ktrig [,kstart [,kend [,kprec [,kppr]]]]]
-Prints a function table at k-time.
-
-Prints the content of a function table at k-time, whenever a trigger is positive. The indices being printed can be selected, the float precision and the number of values per line (up to 32).
-You may have to set the flag -+max_str_len=10000 to avoid buffer overflow. See TbDmp for the i-time equivalent.
-Requires Csound 5.18 or higher for the usage of the k-rate default values P, O and V (thanks to Victor Lazzarini for implementing this feature).
-written by joachim heintz
-
-ifn - function table number
-ktrig - if > 0, ifn is printed once in each k-cycle (= default). for any other value, no printing is performed
-kstart - first index to be printed (default = 0)
-kend - first index not to be printed. -1 or 0.5 (default) mean the end of the table
-kprec - float precision while printing (default = 3)
-kppr - parameters per row (default = 10, maximum = 32)
 ****************************************************************************/
 /****************************************************************************
 ipos TbMem ival, ift [, indxstrt [, indxend]]
@@ -1970,7 +1970,7 @@ kfinished	BufRec1	ainR, iftR, krec, kstart, kend, kwrap
  		xout		kfinished
   endop
 
-opcode Meter, 0, SSak
+opcode CsQtMeter, 0, SSak
  S_chan_sig, S_chan_over, aSig, kTrig	xin
  iDbRange = 60 ;shows 60 dB
  iHoldTim = 1 ;seconds to "hold the red light"
@@ -2460,7 +2460,7 @@ endif
 donothing:
 endop
 
-	opcode PtkSmpA, a, iikkkkkkkiii
+	opcode GrPtkSmpA, a, iikkkkkkkiii
 ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin xin
 
 /*length of input file*/
@@ -2495,7 +2495,7 @@ kwavfreq, 0, -1, -1, awavfm, \
            xout       aout
 	endop
 
-  opcode PtkSmpB, a, iakkkkkkiii
+  opcode GrPtkSmpB, a, iakkkkkkiii
 ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin xin
 
 /*amplitude*/
@@ -2520,7 +2520,7 @@ kwavfreq, 0, -1, -1, awavfm, \
            xout       aout
   endop
 
-  opcode PtkWrp, a, aiPOOOOP
+  opcode GrPtkWrp, a, aiPOOOOP
 
 aPos, iFilTab, kAmp, kCent, kPosRnd, kGrainRate, kGrainSize, kDistribution xin
 
@@ -2644,7 +2644,7 @@ if iLineNum != -1 && iIsEnd != 0 igoto read
            xout       Sorc
   endop
 
-  opcode Counter, k, kkPo
+  opcode NmCntr, k, kkPo
 kup, kdown, kstep, istart xin
 kcount    init      istart
 kchange   changed   kup, kdown
@@ -2658,36 +2658,36 @@ endif
           xout      kcount
   endop
 
-  opcode FracLen, i, io
+  opcode NmFrcLen, i, io
 ;returns the number of digits in the fractional part of inum (0=integer)
 inum, ifracs xin
 ifac      =         10^ifracs
 if int(inum*ifac) == inum*ifac then
           igoto     end
 else
-ifracs    FracLen   inum, ifracs+1
+ifracs    NmFrcLen   inum, ifracs+1
 endif
 end:      xout      ifracs
   endop
 
-  opcode Scale, i, iiiii
+  opcode NmScl, i, iiiii
 iVal, iInMin, iInMax, iOutMin, iOutMax xin
 iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
 xout iValOut
   endop
 
-opcode StepIncr, i, iiii
+opcode NmStpInc, i, iiii
  iValStart, iValEnd, iNumSteps, iThisStep xin
  iOut = ((iValEnd-iValStart) / iNumSteps) * iThisStep + iValStart
  xout iOut
 endop
-opcode StepIncr, k, kkkk
+opcode NmStpInc, k, kkkk
  kValStart, kValEnd, kNumSteps, kThisStep xin
  kOut = ((kValEnd-kValStart) / kNumSteps) * kThisStep + kValStart
  xout kOut
 endop
 
-  opcode LpPhsr, a, kkkki
+  opcode PhsTmPnt, a, kkkki
 kloopstart, kloopend, kspeed, kdir, irefdur xin
 
 kstart01   =          kloopstart/irefdur ;start in 0-1 range
@@ -2764,7 +2764,7 @@ indx       +=         1
            printf_i   "%s]\n", 1, SArr[indx]
   endop
 
-  opcode Print_a, 0, aPO
+  opcode Prt_a, 0, aPO
 aSig, kPeriod, kSpaces xin
 kTim       timeinsts
 kNextPeriod init      0
@@ -2790,7 +2790,7 @@ kNextPeriod =         kPeriod
 endif
   endop
 
-  opcode TbDmp, 0, iojjo
+  opcode PrtTb, 0, iojjo
 ifn, istart, iend, iprec, ippr xin
 ippr       =          (ippr == 0 ? 10 : ippr)
 iend       =          (iend == -1 ? ftlen(ifn) : iend)
@@ -2813,7 +2813,7 @@ Slast      strsub     Sdump, 0, ilen-2
            printf_i   "%s]\n", 1, Slast
   endop
 
-  opcode TbDmpk, 0, iPOVVO
+  opcode PrtTbk, 0, iPOVVO
 ifn, ktrig, kstart, kend, kprec, kppr xin
 kprint     init       0
 if ktrig > 0 then
@@ -2840,7 +2840,7 @@ Slast      strsubk    Sdump, 0, klen-2
 endif
   endop
 
-  opcode TbDmpS, 0, iSojjo
+  opcode PrtTbS, 0, iSojjo
 ;prints the content of a table in a simple way, with an additional string as 'introduction'
 ifn, String, istart, iend, iprec, ippr xin; function table, first index to print, first index not to be printed (-1 =whole table), float precision while printing, String, parameters per row (maximum =  32)
 ippr       =          (ippr == 0 ? 10 : ippr)
@@ -2864,7 +2864,7 @@ Slast      strsub     Sdump, 0, ilen-2
            printf_i   "%s]\n", 1, Slast
   endop
 
-  opcode TbDmpSk, 0, iSPOVVO
+  opcode PrtTbSk, 0, iSPOVVO
 ifn, String, ktrig, kstart, kend, kprec, kppr xin
 kprint     init       0
 if ktrig > 0 then
@@ -2891,7 +2891,7 @@ Slast      strsubk    Sdump, 0, klen-2
 endif
   endop
 
-  opcode FilPlay1, a, Skoo
+  opcode SfPlay1, a, Skoo
 Sfil, kspeed, iskip, iloop xin
 ichn       filenchnls Sfil
 if ichn == 1 then
@@ -2902,7 +2902,7 @@ endif
            xout       aout
   endop
 
-  opcode FilPlay2, aa, Skoo
+  opcode SfPlay2, aa, Skoo
 Sfil, kspeed, iskip, iloop xin
 ichn       filenchnls Sfil
 if ichn == 1 then
@@ -3624,7 +3624,7 @@ end:      xout      Sres
   endop 
 
   opcode StraySetNum, S, Sijjjj
-  ;requires the UDO FracLen
+  ;requires the UDO NmFrcLen
 Stray, inum, ielindx, isepA, isepB, isepOut xin
 ;;DEFINE THE SEPERATORS
 isep1     =         (isepA == -1 ? 32 : isepA)
@@ -3634,7 +3634,7 @@ Sep1      sprintf   "%c", isep1
 Sep2      sprintf   "%c", isep2
 SepOut    sprintf   "%c", isepOut
 ;;INITIALIZE SOME PARAMETERS
-ifracs    FracLen   inum
+ifracs    NmFrcLen   inum
 ilen      strlen    Stray
 iel       =         0; actual element position
 iwarsep   =         1
@@ -3898,7 +3898,7 @@ Sres    strcat   Sres, String
         xout     Sres
   endop
 
-  opcode FilDir, S, S
+  opcode StrDir, S, S
 ;returns the directory of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -3906,7 +3906,7 @@ Sdir      strsub    Spath, 0, ipos
           xout      Sdir
   endop
 
-  opcode FilDirUp, S, S
+  opcode StrDirUp, S, S
   ;returns the directory above the current directory
 SCurDir    xin
 ;make sure the input does not end with '/'
@@ -3922,7 +3922,7 @@ SUpDir     strsub     Sok, 0, ipos
            xout       SUpDir
   endop
 
-  opcode FilNam, S, S
+  opcode StrFiln, S, S
 ;returns the name of a file path
 Spath      xin
 ipos      strrindex Spath, "/"
@@ -3930,7 +3930,7 @@ Snam      strsub    Spath, ipos+1
           xout      Snam
   endop
 
-  opcode FilSuf, S, So
+  opcode StrSuf, S, So
   ;returns the suffix of a filename or path, optional in lower case 
 Spath,ilow xin
 ipos      strrindex Spath, "."

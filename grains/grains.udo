@@ -2,14 +2,14 @@
 *****************************************************************************
 UDO DEFINITIONS IN grains:
 *****************************************************************************
-PtkSmpA    : aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-PtkSmpB    : apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
-PtkWrp     : aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+GrPtkSmpA  : aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+GrPtkSmpB  : apartikkel GrPtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+GrPtkWrp   : aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 *****************************************************************************
 ****************************************************************************/
 
 /****************************************************************************
-aout PtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 A simplified version of the Partikkel opcode, but with some additional parameters
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
@@ -34,7 +34,7 @@ kcentrand - random transposition in cents (up and down)
 /*pointer*/
 /* other parameters */
 /****************************************************************************
-apartikkel PtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
+apartikkel GrPtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 The same as PtkSmpA, but with a time pointer input
 
 A simplified version of the Partikkel opcode, but with some additional parameters. It performs asynchronous granular synthesis with a maximal displacement of 1/grainrate seconds.
@@ -56,7 +56,7 @@ kcentrand: random transposition in cents (up and down)
 /*transposition*/
 /* other parameters */
 /****************************************************************************
-aWrp PtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
 Uses the partikkel opcode to do some sound warping, similar to sndwarp 
 
 Uses the partikkel opcode to do standard sound warping like time freeze, stretch or compress, and pitch shift, on a table with one channel of an audio sample. The goal is to simplify the usage as much as possible, with just setting the position in the sound, and the GEN01 table as inputs. All other parameters are set to  default values.
@@ -78,7 +78,7 @@ kDistribution - distribution of the grains in time. 0 means periodic, 1 means sc
 see the Csound Manual for partikkel for more information about the input parameters
 ****************************************************************************/
 
-	opcode PtkSmpA, a, iikkkkkkkiii
+	opcode GrPtkSmpA, a, iikkkkkkkiii
 ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin xin
 
 /*length of input file*/
@@ -113,7 +113,7 @@ kwavfreq, 0, -1, -1, awavfm, \
            xout       aout
 	endop
 
-  opcode PtkSmpB, a, iakkkkkkiii
+  opcode GrPtkSmpB, a, iakkkkkkiii
 ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin xin
 
 /*amplitude*/
@@ -138,7 +138,7 @@ kwavfreq, 0, -1, -1, awavfm, \
            xout       aout
   endop
 
-  opcode PtkWrp, a, aiPOOOOP
+  opcode GrPtkWrp, a, aiPOOOOP
 
 aPos, iFilTab, kAmp, kCent, kPosRnd, kGrainRate, kGrainSize, kDistribution xin
 

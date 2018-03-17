@@ -1,5 +1,5 @@
 /****************************************************************************
-atimpt LpPhsr kloopstart, kloopend, kspeed, kdir, irefdur
+atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
 creates a time pointer for loops
 
 creates a time pointer signal for typical loop applications, for instance in the mincer opcode, with optional backward playing
@@ -27,7 +27,7 @@ gSnd       =         "../_sourcefiles/fox.wav"
 giftsnd    ftgen     0, 0, 0, 1, gSnd, 0, 0, 1
            seed      0
 
-  opcode LpPhsr, a, kkkki
+  opcode PhsTmPnt, a, kkkki
 kloopstart, kloopend, kspeed, kdir, irefdur xin
 
 kstart01   =          kloopstart/irefdur ;start in 0-1 range
@@ -48,7 +48,7 @@ kloopend   =          p5
 kspeed     =          p6
 kdir       =          p7
 isndlen    filelen    gSnd
-atimpt     LpPhsr     kloopstart, kloopend, kspeed, kdir, isndlen
+atimpt     PhsTmPnt     kloopstart, kloopend, kspeed, kdir, isndlen
 asnd       mincer     atimpt, 1, 1, giftsnd, 1
            out        asnd
   endin
@@ -61,7 +61,7 @@ kback      randomh     -1, 1, .3
 kdir       =           (kback < 0 ? -1 : 1)
 
 isndlen    filelen      gSnd
-atimpt     LpPhsr       kloopstart, kloopend, kspeed, kdir, isndlen
+atimpt     PhsTmPnt       kloopstart, kloopend, kspeed, kdir, isndlen
 asnd       mincer       atimpt, 1, 1, giftsnd, 1
            out          asnd
   endin

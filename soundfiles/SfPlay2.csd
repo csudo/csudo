@@ -1,5 +1,5 @@
 /****************************************************************************
-aL, aR FilPlay2 Sfil, kspeed [, iskip [, iloop]]
+aL, aR SfPlay2 Sfil, kspeed [, iskip [, iloop]]
 Plays a stereo signal from a mono or stereo soundfile
 
 Gives stereo output regardless a soundfile is mono or stereo (if mono, this signal is sent to both channels).
@@ -22,7 +22,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-  opcode FilPlay2, aa, Skoo
+  opcode SfPlay2, aa, Skoo
 Sfil, kspeed, iskip, iloop xin
 ichn       filenchnls Sfil
 if ichn == 1 then
@@ -36,12 +36,12 @@ endif
 
 
 instr 1
-aL, aR     FilPlay2  "../_sourcefiles/fox.wav", 1
+aL, aR     SfPlay2  "../_sourcefiles/fox.wav", 1
            outs       aL, aR
 endin
 
 instr 2
-aL, aR     FilPlay2  "../_sourcefiles/2_channel_file.wav", 1
+aL, aR     SfPlay2  "../_sourcefiles/2_channel_file.wav", 1
            outs       aL, aR
 endin
 </CsInstruments>

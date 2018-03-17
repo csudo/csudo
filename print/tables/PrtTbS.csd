@@ -1,5 +1,5 @@
 /****************************************************************************
-TbDmpS ifn, String [,istart [,iend [,iprec [,ippr]]]]
+PrtTbS ifn, String [,istart [,iend [,iprec [,ippr]]]]
 Prints a table with an introducing string at i-time
 
 Prints the content of a table, with an additional string as 'introduction' at i-time (= once at the initialization of an instrument). You may have to set the flag -+max_str_len=10000 for avoiding buffer overflow. See TbDmpSk for the k-rate variant
@@ -24,7 +24,7 @@ gitab      ftgen      1, 0, -7, -2, 0, 1, 2, 3, 4, 5, 6
 gisin      ftgen      2, 0, 64, 10, 1
 
 
-  opcode TbDmpS, 0, iSojjo
+  opcode PrtTbS, 0, iSojjo
 ;prints the content of a table in a simple way, with an additional string as 'introduction'
 ifn, String, istart, iend, iprec, ippr xin; function table, first index to print, first index not to be printed (-1 =whole table), float precision while printing, String, parameters per row (maximum =  32)
 ippr       =          (ippr == 0 ? 10 : ippr)
@@ -51,22 +51,22 @@ Slast      strsub     Sdump, 0, ilen-2
 
   instr SimplePrinting
 Smess      sprintf    "\n%s\n", "Simple Printing with defaults: "
-           TbDmpS     1, Smess
+           PrtTbS     1, Smess
   endin
 
   instr PrintingParts
 Smess      sprintf    "\n%s\n", "Printing a  subset of the table  (start =  2, end =  5): "
-           TbDmpS     1, Smess, 2, 5
+           PrtTbS     1, Smess, 2, 5
   endin
 
   instr PrintingPrec
 Smess      sprintf    "\n%s\n", "Printing a  subset of the table  with float precision 0: "
-           TbDmpS     1, Smess, 2, 5, 0
+           PrtTbS     1, Smess, 2, 5, 0
   endin
 
   instr PrintingPpr
 Smess      sprintf    "\n%s\n", "Printing table  2 with 8 elements per row: "
-           TbDmpS     2, Smess, 0, -1, 3, 8
+           PrtTbS     2, Smess, 0, -1, 3, 8
            prints     "\n"
   endin
 

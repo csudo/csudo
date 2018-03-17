@@ -2,12 +2,12 @@
 *****************************************************************************
 UDO DEFINITIONS IN print/audio:
 *****************************************************************************
-Print_a    : Print_a aSig [,kPeriod [,kSpaces]]
+Prt_a      : Prt_a aSig [,kPeriod [,kSpaces]]
 *****************************************************************************
 ****************************************************************************/
 
 /****************************************************************************
-Print_a aSig [,kPeriod [,kSpaces]]
+Prt_a aSig [,kPeriod [,kSpaces]]
 Prints an audio signal (vector) every kPeriod seconds.
 
 Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
@@ -20,7 +20,7 @@ kSpaces - number of spaces to insert before printing (default = 0)
 
 ****************************************************************************/
 
-  opcode Print_a, 0, aPO
+  opcode Prt_a, 0, aPO
 aSig, kPeriod, kSpaces xin
 kTim       timeinsts
 kNextPeriod init      0

@@ -1,5 +1,5 @@
 /****************************************************************************
-Print_a aSig [,kPeriod [,kSpaces]]
+Prt_a aSig [,kPeriod [,kSpaces]]
 Prints an audio signal (vector) every kPeriod seconds.
 
 Prints the values of an audio signal. As this is a list of single sample values in the length of ksmps, ksmps values are printed in []. Like in the printk opcode, you can specify the period between print operations, and the starting spaces.
@@ -24,7 +24,7 @@ ksmps = 32
 0dbfs = 1
 nchnls = 1
 
-  opcode Print_a, 0, aPO
+  opcode Prt_a, 0, aPO
 aSig, kPeriod, kSpaces xin
 kTim       timeinsts
 kNextPeriod init      0
@@ -55,14 +55,14 @@ endif
   ;print the first three k-cycles
            puts       "\ntest 1:", 1
 aSin       oscils     1, 400, 0
-           Print_a    aSin, 0
+           Prt_a    aSin, 0
   endin
   
   instr test2
   ;print once a second (default)
            puts       "\ntest 2:", 1
 aSin       oscils     1, 400, 0
-           Print_a    aSin
+           Prt_a    aSin
   endin
 
   instr test3
@@ -70,7 +70,7 @@ aSin       oscils     1, 400, 0
            puts       "\ntest 3:", 1
 aSin       oscils     1, 400, 0
 kPeriod    linseg     0, 1, 1
-           Print_a    aSin, kPeriod
+           Prt_a    aSin, kPeriod
   endin
 
   instr test4
@@ -78,7 +78,7 @@ kPeriod    linseg     0, 1, 1
            puts       "\ntest 4:", 1
 aSin       oscils     1, 400, 0
 kSpaces    linseg     0, p3/2, 10, p3/2, 0
-           Print_a    aSin, .5, kSpaces
+           Prt_a    aSin, .5, kSpaces
   endin
 
 </CsInstruments>
