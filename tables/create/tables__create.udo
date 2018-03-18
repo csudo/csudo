@@ -98,7 +98,7 @@ while iarrstep < inumgrades do
 od
 igoto EXITOPCODE
 NOTFOUND:
-prints "sclft didn't work. File not found\n"
+prints "TbScala didn't work. File not found\n"
 idummy_ = 0
 EXITOPCODE:
 xout idummy_
