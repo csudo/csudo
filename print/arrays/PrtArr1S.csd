@@ -21,7 +21,7 @@ ksmps = 32
 
   opcode PrtArr1S, 0, S[]oj
 SArr[], istart, iend xin
-iend       =          (iend == -1 ? lenarray(SArr) : iend)
+iend       =          (iend == -1 ? lenarray:i(SArr) : iend)
 indx       =          istart
            printf_i   "%s", 1, "["
  until indx >= iend-1 do

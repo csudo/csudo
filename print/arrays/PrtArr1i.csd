@@ -19,6 +19,7 @@ ippr - parameters per row (default = 10, maximum = 32)
 -n -m0
 </CsOptions>
 <CsInstruments>
+ksmps = 32
 
            seed       0
 
@@ -27,7 +28,7 @@ ippr - parameters per row (default = 10, maximum = 32)
 iArr[], istart, iend, iprec, ippr xin
 iprint     init       0
 ippr       =          (ippr == -1 ? 10 : ippr)
-iend       =          (iend == -1 ? lenarray(iArr) : iend)
+iend       =          (iend == -1 ? lenarray:i(iArr) : iend)
 iprec      =          (iprec == -1 ? 3 : iprec)
 indx       =          istart
 Sformat    sprintf    "%%%d.%df, ", iprec+3, iprec

@@ -134,7 +134,7 @@ kSpaces - number of spaces to insert before printing (default = 0)
 iArr[], istart, iend, iprec, ippr xin
 iprint     init       0
 ippr       =          (ippr == -1 ? 10 : ippr)
-iend       =          (iend == -1 ? lenarray(iArr) : iend)
+iend       =          (iend == -1 ? lenarray:i(iArr) : iend)
 iprec      =          (iprec == -1 ? 3 : iprec)
 indx       =          istart
 Sformat    sprintf    "%%%d.%df, ", iprec+3, iprec
@@ -160,7 +160,7 @@ kprint     init       0
 kndx       init       0
 if ktrig > 0 then
 kppr       =          (kppr == 0 ? 10 : kppr)
-kend       =          (kend == -1 || kend == .5 ? lenarray(kArr) : kend)
+kend       =          (kend == -1 || kend == .5 ? lenarray:k(kArr) : kend)
 kprec      =          (kprec == -1 || kprec == .5 ? 3 : kprec)
 kndx       =          kstart
 Sformat    sprintfk   "%%%d.%df, ", kprec+3, kprec
@@ -183,7 +183,7 @@ endif
 
   opcode PrtArr1S, 0, S[]oj
 SArr[], istart, iend xin
-iend       =          (iend == -1 ? lenarray(SArr) : iend)
+iend       =          (iend == -1 ? lenarray:i(SArr) : iend)
 indx       =          istart
            printf_i   "%s", 1, "["
  until indx >= iend-1 do

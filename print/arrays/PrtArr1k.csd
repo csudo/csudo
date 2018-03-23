@@ -31,7 +31,7 @@ kprint     init       0
 kndx       init       0
 if ktrig > 0 then
 kppr       =          (kppr == 0 ? 10 : kppr)
-kend       =          (kend == -1 || kend == .5 ? lenarray(kArr) : kend)
+kend       =          (kend == -1 || kend == .5 ? lenarray:k(kArr) : kend)
 kprec      =          (kprec == -1 || kprec == .5 ? 3 : kprec)
 kndx       =          kstart
 Sformat    sprintfk   "%%%d.%df, ", kprec+3, kprec
@@ -141,20 +141,4 @@ Printing with precision=5 and 4 elements per row:
  -4.86597, -2.42907, -5.44999,  2.07420, 
   1.00121,  7.33340, -7.53952,  3.23020, 
   9.93770,  2.84713, -8.23949, -1.12326]
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>72</x>
- <y>179</y>
- <width>400</width>
- <height>200</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="background">
-  <r>170</r>
-  <g>170</g>
-  <b>127</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+
