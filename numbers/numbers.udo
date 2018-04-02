@@ -34,17 +34,18 @@ iFracs - number of digits in the fractional part. 0 means that iNum is an intege
 ****************************************************************************/
 /****************************************************************************
 iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
+kValOut NmScl kVal, kInMin, kInMax, kOutMin, kOutMax
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 
 Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 written by joachim heintz
 
-iVal - incoming number
-iInMin - minimum possible incoming number
-iInMax - maximum possible incoming numer
-iOutMin - minimum possible outgoing number
-iOutMax - maximum possible outgoing number
-iValOut - iVal scaled
+i(k)Val - incoming number
+i(k)InMin - minimum possible incoming number
+i(k)InMax - maximum possible incoming numer
+i(k)OutMin - minimum possible outgoing number
+i(k)OutMax - maximum possible outgoing number
+i(k)ValOut - iVal scaled
 ****************************************************************************/
 /****************************************************************************
 iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
@@ -92,6 +93,11 @@ end:      xout      ifracs
 iVal, iInMin, iInMax, iOutMin, iOutMax xin
 iValOut = (((iOutMax - iOutMin) / (iInMax - iInMin)) * (iVal - iInMin)) + iOutMin
 xout iValOut
+  endop
+  opcode NmScl, k, kkkkk
+kVal, kInMin, kInMax, kOutMin, kOutMax xin
+kValOut = (((kOutMax - kOutMin) / (kInMax - kInMin)) * (kVal - kInMin)) + kOutMin
+xout kValOut
   endop
 
 opcode NmStpInc, i, iiii
