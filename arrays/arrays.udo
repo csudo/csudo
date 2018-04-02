@@ -4,9 +4,11 @@ UDO DEFINITIONS IN arrays:
 *****************************************************************************
 ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
+ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: kOutArr[] ArrPermRndIndx kInArr[], kN
 ArrRmvIndxi: iOutArr[] ArrRmvIndxk iInArr[], iIndx
 ArrRmvIndxk: kOutArr[] ArrRmvIndxk kInArr[], kIndx, iLenInArr
+ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 ArrSrti_simp: iOutArr[] ArrSrti_simp iInArr[]
 ArrSrtk    : kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
 ArrSrtk_simp: kOutArr[] ArrSrtk_simp kInArr[]
@@ -52,6 +54,19 @@ i(k)N - desired length of the output array (must not be longer than i(k)InArr), 
 i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
+kOutArr[] ArrPermRnd2 kInArr[] [, kStart [, kEnd]]
+Permutes randomly the elements of i(k)InArr[], from Start to End index (included).
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
+
+i(k)InArr[] - input array
+i(k)Start - first index to change (default = 0)
+iEnd - last index to change (default = -1: whole array)
+kEnd - last index to change (default = 0.5: whole array)
+i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
+****************************************************************************/
+/****************************************************************************
 kOutArr[] ArrPermRndIndx kInArr[], kN
 Returns an array of kN length which contains randomly permuted indices of kInArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
@@ -80,6 +95,19 @@ kInArr[] - input array
 kIndx - index to be removed from kInArr
 iLenInArr - length of input array
 kOutArr[] - output array as copy of kInArr without kIndx
+****************************************************************************/
+/****************************************************************************
+iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
+kEl ArrRndEl kInArr[] [, kStart [, kEnd]]
+Returns a random element of an array, or of a part of the array.
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
+
+i(k)InArr[] - input array
+i(k)Start - first index in i(k)InArr to use (default = 0)
+iEnd - last index in iInArr to use (default = -1: whole length)
+kEnd - last index in kInArr to use (default = 0.5: whole length)
+i(k)El - random element of array
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrSrti_simp iInArr[]
@@ -214,6 +242,56 @@ enduntil
            xout       kOutArr
   endop
 
+  opcode ArrPermRnd2, i[], i[]oj
+iInArr[], iStart, iEnd xin
+iLen = lenarray(iInArr)
+iEnd = (iEnd == -1) ? iLen-1 : iEnd
+;create out array and set index
+iOutArr[] = iInArr
+iIndx = iStart
+iLast = iEnd
+;for elements between iStart amd iEnd:
+ until iIndx > iLast do
+ ;get one random element and put it in iOutArr
+iRndIndx random iStart, iEnd+.9999
+iRndIndx = int(iRndIndx)
+iOutArr[iIndx] = iInArr[iRndIndx]
+ ;shift the elements after this one to the left
+  until iRndIndx >= iEnd do
+iInArr[iRndIndx] = iInArr[iRndIndx+1]
+iRndIndx += 1
+  od
+ ;reset end and increase counter
+iIndx += 1
+iEnd -= 1
+ od
+ xout iOutArr
+  endop
+  opcode ArrPermRnd2, k[], k[]OV
+kInArr[], kStart, kEnd xin
+kLen lenarray kInArr
+kEnd = (kEnd == 0.5) ? kLen-1 : kEnd
+;create out array and set index
+kOutArr[] = kInArr
+kIndx = kStart
+kLast = kEnd
+ until kIndx > kLast do
+ ;get one random element and put it in iOutArr
+kRndIndx random kStart, kEnd+.9999
+kRndIndx = int(kRndIndx)
+kOutArr[kIndx] = kInArr[kRndIndx]
+ ;shift the elements after this one to the left
+  until kRndIndx >= kEnd do
+kInArr[kRndIndx] = kInArr[kRndIndx+1]
+kRndIndx += 1
+  od
+ ;reset end and increase counter
+kIndx += 1
+kEnd -= 1
+ od
+ xout kOutArr
+  endop
+
   opcode ArrPermRndIndx, k[], k[]k
 kInArr[], kN xin
 iLen       lenarray   kInArr
@@ -277,6 +355,23 @@ kReadIndx += 1
  enduntil
            xout       kOutArr
   endop
+
+opcode ArrRndEl, i, i[]oj
+ iInArr[], iStart, iEnd xin
+ iLen lenarray (iInArr)
+ iEnd = (iEnd == -1) ? iLen-1 : iEnd
+ iElIndx random iStart, iEnd+0.999
+ iEl = iInArr[int(iElIndx)]
+ xout iEl
+endop
+opcode ArrRndEl, k, k[]OV
+ kInArr[], kStart, kEnd xin
+ kLen lenarray (kInArr)
+ kEnd = (kEnd == 0.5) ? kLen-1 : kEnd
+ kElIndx random kStart, kEnd+0.999
+ kEl = kInArr[int(kElIndx)]
+ xout kEl
+endop
 
   opcode ArrSrti_simp, i[], i[]
 iInArr[] xin    
