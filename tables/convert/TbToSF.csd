@@ -1,6 +1,7 @@
 /****************************************************************************
 TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
-Writes the content of a table to a soundfile
+Writes the content of a table to a soundfile.
+NOTE. After Csound 6.11 you can use the ftaudio opcode!
 
 Writes the content of a table to a soundfile, with optional start and end point
 written by joachim heintz
