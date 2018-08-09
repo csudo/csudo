@@ -9,6 +9,7 @@ F2M        : iNotNum F2M iFreq [,iRound]
 /****************************************************************************
 iNotNum F2M iFreq [,iRound]
 Converts a frequency to MIDI.Cent note number, with optional rounding to the next key.
+NOTE: Since Csound 6.09 you can use the ftom opcode!
 
 Converts a frequency to MIDI.Cent note number, for instance 60.024759 for an input of 262 Hz. If the round option is turned on, the frequency is mapped to the nearest key, so that an integer is returned.
 written by joachim heintz
