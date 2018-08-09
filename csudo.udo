@@ -40,6 +40,7 @@ GrPtkWrp   : aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
 NmFrcLen   : iFracs NmFrcLen iNum
+NmRndInt   : iRnd NmRndInt iMin, iMax
 NmScl      : iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 NmStpInc   : iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
 PhsTmPnt   : atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
@@ -586,6 +587,7 @@ Sorc - orc part of Sfil as string
 /****************************************************************************
 iNotNum F2M iFreq [,iRound]
 Converts a frequency to MIDI.Cent note number, with optional rounding to the next key.
+NOTE: Since Csound 6.09 you can use the ftom opcode!
 
 Converts a frequency to MIDI.Cent note number, for instance 60.024759 for an input of 262 Hz. If the round option is turned on, the frequency is mapped to the nearest key, so that an integer is returned.
 written by joachim heintz
@@ -699,6 +701,19 @@ written by joachim heintz
 
 iNum - incoming number
 iFracs - number of digits in the fractional part. 0 means that iNum is an integer
+****************************************************************************/
+/****************************************************************************
+iRnd NmRndInt iMin, iMax
+kRnd NmRndInt kMin, kMax
+Returns a random integer number bewteen Min and Max (included).
+
+Returns a random integer number bewteen Min and Max (included).
+As the random opcode is used, make sure to set 'seed 0'.
+written by joachim heintz
+
+i(k)Min - minimum possible number
+i(k)Max - maximum possible number
+i(k)Rnd - result
 ****************************************************************************/
 /****************************************************************************
 iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
@@ -1462,7 +1477,8 @@ kLin - k-rate output
 ****************************************************************************/
 /****************************************************************************
 TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
-Writes the content of a table to a soundfile
+Writes the content of a table to a soundfile.
+NOTE. After Csound 6.11 you can use the ftaudio opcode!
 
 Writes the content of a table to a soundfile, with optional start and end point
 written by joachim heintz
@@ -2764,6 +2780,17 @@ else
 ifracs    NmFrcLen   inum, ifracs+1
 endif
 end:      xout      ifracs
+  endop
+
+  opcode NmRndInt, i, ii
+iMin, iMax xin
+iRnd random iMin, iMax+.999999
+xout int(iRnd)
+  endop
+  opcode NmRndInt, k, kk
+kMin, kMax xin
+kRnd random kMin, kMax+.999999
+xout int(kRnd)
   endop
 
   opcode NmScl, i, iiiii

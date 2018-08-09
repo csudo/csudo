@@ -4,6 +4,7 @@ UDO DEFINITIONS IN numbers:
 *****************************************************************************
 NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
 NmFrcLen   : iFracs NmFrcLen iNum
+NmRndInt   : iRnd NmRndInt iMin, iMax
 NmScl      : iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 NmStpInc   : iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
 *****************************************************************************
@@ -31,6 +32,19 @@ written by joachim heintz
 
 iNum - incoming number
 iFracs - number of digits in the fractional part. 0 means that iNum is an integer
+****************************************************************************/
+/****************************************************************************
+iRnd NmRndInt iMin, iMax
+kRnd NmRndInt kMin, kMax
+Returns a random integer number bewteen Min and Max (included).
+
+Returns a random integer number bewteen Min and Max (included).
+As the random opcode is used, make sure to set 'seed 0'.
+written by joachim heintz
+
+i(k)Min - minimum possible number
+i(k)Max - maximum possible number
+i(k)Rnd - result
 ****************************************************************************/
 /****************************************************************************
 iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
@@ -87,6 +101,17 @@ else
 ifracs    NmFrcLen   inum, ifracs+1
 endif
 end:      xout      ifracs
+  endop
+
+  opcode NmRndInt, i, ii
+iMin, iMax xin
+iRnd random iMin, iMax+.999999
+xout int(iRnd)
+  endop
+  opcode NmRndInt, k, kk
+kMin, kMax xin
+kRnd random kMin, kMax+.999999
+xout int(kRnd)
   endop
 
   opcode NmScl, i, iiiii
