@@ -189,15 +189,16 @@ kOutArr[] - output array as copy of kInArr without kIndx
 /****************************************************************************
 iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 kEl ArrRndEl kInArr[] [, kStart [, kEnd]]
+SEl ArrRndEl SInArr[] [, iStart [, iEnd]]
 Returns a random element of an array, or of a part of the array.
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
 written by joachim heintz
 
-i(k)InArr[] - input array
-i(k)Start - first index in i(k)InArr to use (default = 0)
-iEnd - last index in iInArr to use (default = -1: whole length)
+i(kS)InArr[] - input array
+i(k)Start - first index in i(kS)InArr to use (default = 0)
+iEnd - last index in i(S)InArr to use (default = -1: whole length)
 kEnd - last index in kInArr to use (default = 0.5: whole length)
-i(k)El - random element of array
+i(kS)El - random element of array
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrSrti_simp iInArr[]
@@ -1697,7 +1698,7 @@ kReadIndx += 1
 
 opcode ArrRndEl, i, i[]oj
  iInArr[], iStart, iEnd xin
- iLen lenarray (iInArr)
+ iLen lenarray iInArr
  iEnd = (iEnd == -1) ? iLen-1 : iEnd
  iElIndx random iStart, iEnd+0.999
  iEl = iInArr[int(iElIndx)]
@@ -1705,11 +1706,19 @@ opcode ArrRndEl, i, i[]oj
 endop
 opcode ArrRndEl, k, k[]OV
  kInArr[], kStart, kEnd xin
- kLen lenarray (kInArr)
+ kLen lenarray kInArr
  kEnd = (kEnd == 0.5) ? kLen-1 : kEnd
  kElIndx random kStart, kEnd+0.999
  kEl = kInArr[int(kElIndx)]
  xout kEl
+endop
+opcode ArrRndEl, S, S[]oj
+ SInArr[], iStart, iEnd xin
+ iLen lenarray SInArr
+ iEnd = (iEnd == -1) ? iLen-1 : iEnd
+ iElIndx random iStart, iEnd+0.999
+ SEl = SInArr[int(iElIndx)]
+ xout SEl
 endop
 
   opcode ArrSrti_simp, i[], i[]
