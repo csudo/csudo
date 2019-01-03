@@ -142,4 +142,18 @@ i2 .2 .1
 i3 .4 .1
 </CsScore>
 </CsoundSynthesizer>
+prints:
+Test 1 - irate
+negative test (should be 0): 0
+positive test (should be 1): 1
+multiples test (should be 2): 2
+Test 2 - mixed rate
+mixed rate test 1 (should be 0): 0
+mixed rate test 2 (should be 1): 1
+mixed rate test 3 (should be 2): 2
+Test 3 - krate
+krate test 1 (should be 0): 0
+krate test 2 (should be 1): 1
+krate test 3 (should be 2): 2
+
 

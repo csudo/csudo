@@ -1,12 +1,12 @@
 /****************************************************************************
 iOutArr[] ArrPermRnd iInArr[] [, iN]
-kOutArr[] ArrPermRnd kInArr[] [, kN]
+kOutArr[] ArrPermRnd kInArr[] [, iN]
 Returns an array of i(k)N length which contains randomly permuted elements of i(k)InArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
 written by joachim heintz
 
-iInArr[] - input array
-i(k)N - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
+i(k)InArr[] - input array
+iN - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
 i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
 ****************************************************************************/
 
@@ -201,20 +201,4 @@ kPrmRnd3 = [11, 13, 12]
 kPrmRnd4 = [15, 11, 13, 12]
 kPrmRnd5 = [14, 12, 15, 11, 13]
 gkArr[] = [11, 12, 13, 14, 15]
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>100</x>
- <y>100</y>
- <width>320</width>
- <height>240</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+
