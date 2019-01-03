@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN arrays:
 *****************************************************************************
+ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
 ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
 ArrElIn    : iRes ArrElIn iEl, iArr[]
@@ -11,10 +12,22 @@ ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
 ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
 ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
 ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
-ArrSrt     : kOutArr[] ArrSrtk kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
+kAvrg ArrAvrg kArr[] [,iStart [,iEnd]]
+Calutates the average of the values in an array, 
+or optional a slice of an array.
+written by joachim heintz
+
+i(k)Arr[] - input array
+iStart - first position to read (default=0)
+iEnd - last position to read (excluded) (default=-1 means the last element)
+i(k)Avrg - average of all values in iArr
+****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrCat iArr1[], iArr2[]
 kOutArr[] ArrCat kArr1[], kArr2[]
@@ -132,7 +145,7 @@ kEnd - last index in kInArr to use (default = 0.5: whole length)
 i(kS)El - random element of array
 ****************************************************************************/
 /****************************************************************************
-kOutArr[] ArrSrtk kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
 Sorts the content of kInArr[] in descending order and returns the sorted array 
 as kOutArr[] of length iOutN.
 Depending on kOutType, the output array can either contain the values, or the
@@ -150,6 +163,48 @@ kEnd - end at this element (exclusive) (default = 0 means length of array)
 kHop - distance from element to element you are regarding (default = 1)
 kOutArr[] - sorted array
 ****************************************************************************/
+
+opcode ArrAvrg, i, i[]oj
+
+ iArr[], iStart, iEnd xin
+ iEnd = (iEnd == -1) ? lenarray(iArr) : iEnd
+ iAvrg = 0
+ if iStart >= iEnd then
+  prints "ERROR in ArrAvrg: iEnd must be larger than iStart\n"
+  igoto end
+ endif
+ iCnt = 0
+ while iStart < iEnd do
+  iAvrg += iArr[iStart]
+  iStart += 1
+  iCnt += 1
+ od
+ iAvrg /= iCnt
+ end:
+ xout iAvrg
+
+endop
+opcode ArrAvrg, k, k[]oj
+
+ kArr[], iStart, iEnd xin
+ iEnd = (iEnd == -1) ? lenarray(kArr) : iEnd
+ kAvrg = 0
+ if iStart >= iEnd then
+  prints "ERROR in ArrAvrg: iEnd must be larger than iStart\n"
+  igoto end
+ endif
+ kStart = iStart
+ kCnt = 0
+ while kStart < iEnd do
+  kAvrg += kArr[kStart]
+  kStart += 1
+  kCnt += 1
+ od
+ kAvrg /= kCnt
+ end:
+ xout kAvrg
+
+endop
 
 opcode ArrCat, i[], i[]i[]
 
@@ -502,5 +557,93 @@ opcode ArrRndEl, S, S[]oj
  xout SEl
 endop
 
+  opcode ArrSrt, k[], k[]jOOOP
+  
+kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
+
+;calculate some common values 
+kLen lenarray kArr
+kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
+
+;create the array for the result
+iOutN = (iOutN == -1) ? lenarray:i(kArr) : iOutN
+kRes[] init iOutN
+
+;fill this array with the smallest number minus 1 of kArr
+kIndx = 0
+kMin minarray kArr
+until kIndx == iOutN do
+  kRes[kIndx] = kMin-1
+  kIndx += 1
+enduntil
+
+;if necessary, create index array
+if kOutType != 0 then
+  kIndices[] init iOutN
+endif
+
+;initialize pointer
+kArrPnt = kStart
+
+;loop over the elements of the array
+until kArrPnt >= kEnd do
+ 
+  ;loop over kRes
+  kResPnt = 0
+  until kResPnt == iOutN do
+  
+    ;if an el in kRes is smaller than the element we are comparing with
+    if kRes[kResPnt] < kArr[kArrPnt] then
+    
+      ;shift the elements right to kResPnt one position to the right
+      kShiftPnt = iOutN-1 
+      until kShiftPnt == kResPnt do
+        kRes[kShiftPnt] = kRes[kShiftPnt-1]
+        kShiftPnt -= 1 
+      enduntil
+      
+      ;then put the element we are comparing with at this position
+      kRes[kResPnt] = kArr[kArrPnt]
+
+      ;if indices array 
+      if kOutType != 0 then
+      
+        ;shift the elements in kIndices one position to the right
+        kShiftPnt = iOutN-1 
+        until kShiftPnt == kResPnt do
+          kIndices[kShiftPnt] = kIndices[kShiftPnt-1]
+          kShiftPnt -= 1
+        enduntil
+
+        ;then put in the index
+        kIndices[kResPnt] = kArrPnt
+      endif
+      
+      ;and leave the loop
+      kgoto Break
+      
+    endif
+    
+    ;increase res pointer
+    kResPnt += 1
+    
+  enduntil
+  
+  Break:
+  ;increase array pointer
+  kArrPnt += kHop
+ 
+enduntil
+
+;copy array to final result
+if kOutType == 0 then
+kOut[] = kRes
+else
+kOut[] = kIndices
+endif
+
+xout kOut
+
+ endop
 
 
