@@ -1,5 +1,5 @@
 /****************************************************************************
-kOutArr[] ArrSrtk kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
 Sorts the content of kInArr[] in descending order and returns the sorted array 
 as kOutArr[] of length iOutN.
 Depending on kOutType, the output array can either contain the values, or the
@@ -26,7 +26,7 @@ kOutArr[] - sorted array
 ksmps = 32
 
 
-  opcode ArrSrtk, k[], k[]jOOOP
+  opcode ArrSrt, k[], k[]jOOOP
   
 kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
 
@@ -132,7 +132,7 @@ printks "]\n", 0
 
 
 //return all elements sorted
-kRes[] ArrSrtk gkArr
+kRes[] ArrSrt gkArr
 
  ;print result
 printks "Sort all elements, output = values:\n[", 0
@@ -145,7 +145,7 @@ printks "]\n", 0
 
 
 //all elements, but sort is indicated as indices
-kRes[] ArrSrtk gkArr, 13, 1
+kRes[] ArrSrt gkArr, 13, 1
 
  ;print result
 printks "Sort all elements, output = indices:\n[", 0
@@ -158,7 +158,7 @@ printks "]\n", 0
 
 
 //only the first 6 sorted values are returned
-kRes[] ArrSrtk gkArr, 6, 0
+kRes[] ArrSrt gkArr, 6, 0
 
  ;print result
 printks "Return only the first 6 sorted values:\n[", 0
@@ -171,7 +171,7 @@ printks "]\n", 0
 
 
 //6 largest values, start=2
-kRes[] ArrSrtk gkArr, 6, 0, 2
+kRes[] ArrSrt gkArr, 6, 0, 2
 
  ;print result
 printks "Return the 6 largest values, start=2:\n[", 0
@@ -184,7 +184,7 @@ printks "]\n", 0
 
 
 //6 largest values, start=2, end=10
-kRes[] ArrSrtk gkArr, 6, 0, 2, 10
+kRes[] ArrSrt gkArr, 6, 0, 2, 10
 
  ;print result
 printks "Return the 6 largest values, start=2, end=10 (exclusive):\n[", 0
@@ -197,7 +197,7 @@ printks "]\n", 0
 
 
 //6 largest values, start=2, end=0 (all), hop=2
-kRes[] ArrSrtk gkArr, 6, 0, 1, 0, 2
+kRes[] ArrSrt gkArr, 6, 0, 1, 0, 2
 
  ;print result
 printks "Return the 6 largest values, start=1, end=0(all), hop=2 (= all odd indices):\n[", 0
