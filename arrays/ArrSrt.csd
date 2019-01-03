@@ -1,15 +1,16 @@
 /****************************************************************************
-kOutArr[] ArrSrtk kInArr[], iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]] 
-Sorts the content of kInArr[] and returns the sorted array as kOutArr[] of 
-length iOutN.
+kOutArr[] ArrSrtk kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+Sorts the content of kInArr[] in descending order and returns the sorted array 
+as kOutArr[] of length iOutN.
 Depending on kOutType, the output array can either contain the values, or the
 indices of the values (thus pointing to kInArr). A section of kInArr can be
 specified by kStart and kEnd. Instead of sorting every element, looking only
 for the even or odd elements can be done via the kHop parameter.
+For simple sorting (ascending or descending), use the Csound opcodes sorta and sortd.
 written by joachim heintz
 
 kInArr[] - array to sort
-iOutN - length of the output array kOutArr
+iOutN - length of the output array kOutArr (default = -1 means the whole length)
 kOutType - 0 (default) = output as sorted values, 1 = output as indices
 kStart - start from this element (inclusive) (default = 0)
 kEnd - end at this element (exclusive) (default = 0 means length of array)
@@ -25,7 +26,7 @@ kOutArr[] - sorted array
 ksmps = 32
 
 
-  opcode ArrSrtk, k[], k[]iOOOP
+  opcode ArrSrtk, k[], k[]jOOOP
   
 kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
 
@@ -34,6 +35,7 @@ kLen lenarray kArr
 kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
 
 ;create the array for the result
+iOutN = (iOutN == -1) ? lenarray:i(kArr) : iOutN
 kRes[] init iOutN
 
 ;fill this array with the smallest number minus 1 of kArr
@@ -129,8 +131,8 @@ enduntil
 printks "]\n", 0
 
 
-/****return all elements sorted****/
-kRes[] ArrSrtk gkArr, 13
+//return all elements sorted
+kRes[] ArrSrtk gkArr
 
  ;print result
 printks "Sort all elements, output = values:\n[", 0
@@ -142,7 +144,7 @@ enduntil
 printks "]\n", 0
 
 
-/****all elements, but sort is indicated as indices****/
+//all elements, but sort is indicated as indices
 kRes[] ArrSrtk gkArr, 13, 1
 
  ;print result
@@ -155,7 +157,7 @@ enduntil
 printks "]\n", 0
 
 
-/****only the first 6 sorted values are returned****/
+//only the first 6 sorted values are returned
 kRes[] ArrSrtk gkArr, 6, 0
 
  ;print result
@@ -168,7 +170,7 @@ enduntil
 printks "]\n", 0
 
 
-/****6 largest values, start=2****/
+//6 largest values, start=2
 kRes[] ArrSrtk gkArr, 6, 0, 2
 
  ;print result
@@ -181,7 +183,7 @@ enduntil
 printks "]\n", 0
 
 
-/****6 largest values, start=2, end=10****/
+//6 largest values, start=2, end=10
 kRes[] ArrSrtk gkArr, 6, 0, 2, 10
 
  ;print result
@@ -194,7 +196,7 @@ enduntil
 printks "]\n", 0
 
 
-/****6 largest values, start=2, end=0 (all), hop=2****/
+//6 largest values, start=2, end=0 (all), hop=2
 kRes[] ArrSrtk gkArr, 6, 0, 1, 0, 2
 
  ;print result
