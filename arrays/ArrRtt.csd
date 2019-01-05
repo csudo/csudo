@@ -19,7 +19,6 @@ i(k)OutArr[] - output array
 ksmps = 32
 
 opcode ArrRtt, i[], i[]p
-
  iInArr[], iPos xin
  iLen lenarray iInArr
  iOutArr[] init iLen
@@ -30,11 +29,9 @@ opcode ArrRtt, i[], i[]p
   indx += 1
  od
  xout iOutArr
-
 endop
 
 opcode ArrRtt, k[], k[]P
-
  kInArr[], kPos xin
  iLen lenarray kInArr
  kOutArr[] init iLen
@@ -45,7 +42,6 @@ opcode ArrRtt, k[], k[]P
   kndx += 1
  od
  xout kOutArr
-
 endop
 
 

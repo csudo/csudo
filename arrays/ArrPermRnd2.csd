@@ -7,8 +7,7 @@ written by joachim heintz
 
 i(k)InArr[] - input array
 i(k)Start - first index to change (default = 0)
-iEnd - last index to change (default = -1: whole array)
-kEnd - last index to change (default = 0.5: whole array)
+i(k)End - last index to change (default = -1: whole array)
 i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
 ****************************************************************************/
 
@@ -46,10 +45,10 @@ iEnd -= 1
  xout iOutArr
   endop
 
-  opcode ArrPermRnd2, k[], k[]OV
+  opcode ArrPermRnd2, k[], k[]OJ
 kInArr[], kStart, kEnd xin
 kLen lenarray kInArr
-kEnd = (kEnd == 0.5) ? kLen-1 : kEnd
+kEnd = (kEnd == -1) ? kLen-1 : kEnd
 ;create out array and set index
 kOutArr[] = kInArr
 kIndx = kStart

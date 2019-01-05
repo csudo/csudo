@@ -16,10 +16,7 @@ i(k)Res - 1 for yes, 0 for no
 </CsOptions>
 
 <CsInstruments>
-sr = 44100
 ksmps = 32
-nchnls = 2
-0dbfs = 1
 
 opcode ArrElIn, i, ii[]
 
@@ -88,7 +85,7 @@ endin
 i "Test" 0 1
 </CsScore>
 </CsoundSynthesizer>
-returns:
+prints:
 
 i-VERSION:
 El = 1.0000, Res = 1

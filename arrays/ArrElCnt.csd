@@ -1,39 +1,21 @@
 /****************************************************************************
-kFound ArrElCnt kNeedle, iInArr[]
-Returns a count of instances of kNeedle in iInArray
-written by kevin welch
-
-kNeedle - numeric value to search for
-iInArr[] - input array to search through
-kFound - count of instances found
-****************************************************************************/
-
-/****************************************************************************
-kFound ArrElCnt kNeedle, kInArr[]
-Returns a count of instances of kNeedle in iInArray
-written by kevin welch
-
-kNeedle - numeric value to search for
-kInArr[] - input array to search through
-kFound - count of instances found
-****************************************************************************/
-
-/****************************************************************************
 iFound ArrElCnt iNeedle, iInArr[]
-Returns a count of instances of kNeedle in iInArray
+kFound ArrElCnt kNeedle, iInArr[]
+kFound ArrElCnt kNeedle, kInArr[]
+Returns a count of instances of an element in an array
 written by kevin welch
 
-iNeedle - numeric value to search for
-iInArr[] - input array to search through
-iFound - count of instances found
+i(k)Needle - numeric value to search for
+i(k)InArr[] - input array to search through
+i(k)Found - count of instances found
 ****************************************************************************/
+
 
 <CsoundSynthesizer>
 <CsOptions>
 -n -m 0
 </CsOptions>
 <CsInstruments>
-sr = 44100
 ksmps = 32
 
 opcode ArrElCnt,k,ki[]

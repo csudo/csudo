@@ -16,13 +16,9 @@ i(k)OutArr[] - output array
 </CsOptions>
 
 <CsInstruments>
-sr = 44100
 ksmps = 32
-nchnls = 2
-0dbfs = 1
 
 opcode ArrElIn, i, ii[]
-
  iEl, iArr[] xin
  iRes = 0
  indx = 0
@@ -35,11 +31,9 @@ opcode ArrElIn, i, ii[]
  od
  end:
  xout iRes
-
 endop
 
 opcode ArrElIn, k, kk[]
-
  kEl, kArr[] xin
  kRes = 0
  kndx = 0
@@ -52,12 +46,10 @@ opcode ArrElIn, k, kk[]
  od
  end:
  xout kRes
-
 endop
 
 
 opcode ArrRmDup, i[], i[]
-
  iInArr[] xin
  iOutArr[] init lenarray:i(iInArr)
  iReadIndx = 0
@@ -73,11 +65,9 @@ opcode ArrRmDup, i[], i[]
  od
  trim_i iOutArr, iCnt
  xout iOutArr
-
 endop
 
 opcode ArrRmDup, k[], k[]
-
  kInArr[] xin
  kOutArr[] init lenarray:i(kInArr)
  kReadIndx = 0
@@ -93,7 +83,6 @@ opcode ArrRmDup, k[], k[]
  od
  trim kOutArr, kCnt
  xout kOutArr
-
 endop
 
 

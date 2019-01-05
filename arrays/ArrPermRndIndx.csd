@@ -19,54 +19,48 @@ i(k)OutArr[] - output array with kN randomly permuted indices of kInArr
 ksmps = 32
 seed 0
 
-  opcode ArrPermRndIndx, i[], i[]j
-iInArr[], iN xin
-iLen       lenarray   iInArr
-iN = (iN == -1) ? iLen : iN
-iInd[]     genarray   0, iLen-1
-iIndCpy[]  =          iInd
-iOutArr[]  init       iN
-iIndx      =          0
-until iIndx == iN do
- iRndIndx   =          int(random:i(0, iLen-.0001))
- iOutArr[iIndx] =      iIndCpy[iRndIndx]
- until iRndIndx == iLen-1 do
-  iIndCpy[iRndIndx] = iIndCpy[iRndIndx+1]
-  iRndIndx   +=         1
+opcode ArrPermRndIndx, i[], i[]j
+ iInArr[], iN xin
+ iLen       lenarray   iInArr
+ iN = (iN == -1) ? iLen : iN
+ iInd[]     genarray   0, iLen-1
+ iIndCpy[]  =          iInd
+ iOutArr[]  init       iN
+ iIndx      =          0
+ until iIndx == iN do
+  iRndIndx   =          int(random:i(0, iLen-.0001))
+  iOutArr[iIndx] =      iIndCpy[iRndIndx]
+  until iRndIndx == iLen-1 do
+   iIndCpy[iRndIndx] = iIndCpy[iRndIndx+1]
+   iRndIndx   +=         1
+  od
+  iLen       -=         1
+  iIndx      +=         1
  od
- iLen       -=         1
- iIndx      +=         1
-od
-
            xout       iOutArr
-  endop
+endop
 
-  opcode ArrPermRndIndx, k[], k[]j
-kInArr[], iN xin
-iLen       lenarray   kInArr
-iN = (iN == -1) ? iLen : iN
-kInd[]     genarray_i  0, iLen-1
-kIndCpy[]  =          kInd
-kOutArr[]  init       iN
-kIndx      =          0
-kLen       =          iLen
-;for kN elements:
-until kIndx == iN do
- ;get one random element and put it in kOutArr
-kRndIndx   =          int(random:k(0, kLen-.0001))
-kOutArr[kIndx] =      kIndCpy[kRndIndx]
- ;shift the elements after this one to the left
- until kRndIndx == kLen-1 do
-kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
-kRndIndx   +=         1
+opcode ArrPermRndIndx, k[], k[]j
+ kInArr[], iN xin
+ iLen       lenarray   kInArr
+ iN = (iN == -1) ? iLen : iN
+ kInd[]     genarray_i  0, iLen-1
+ kIndCpy[]  =          kInd
+ kOutArr[]  init       iN
+ kIndx      =          0
+ kLen       =          iLen
+ until kIndx == iN do
+  kRndIndx   =          int(random:k(0, kLen-.0001))
+  kOutArr[kIndx] =      kIndCpy[kRndIndx]
+  until kRndIndx == kLen-1 do
+   kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
+   kRndIndx   +=         1
+  od
+  kLen       -=         1
+  kIndx      +=         1
  od
- ;reset kLen and increase counter
-kLen       -=         1
-kIndx      +=         1
-od
-
            xout       kOutArr
-  endop
+endop
 
 
 instr 1

@@ -21,7 +21,6 @@ i(k)OutArry[] - output array
 ksmps = 32
 
 opcode ArrPldrm, i[], i[]o
-
  iInArr[], iOpt xin
  iReadIndx = 0
  iWriteIndx = 0
@@ -48,11 +47,9 @@ opcode ArrPldrm, i[], i[]o
   od
  endif
  xout iOutArr
-
 endop
 
 opcode ArrPldrm, k[], k[]o
-
  kInArr[], iOpt xin
  kReadIndx = 0
  kWriteIndx = 0
@@ -79,7 +76,6 @@ opcode ArrPldrm, k[], k[]o
   od
  endif
  xout kOutArr
-
 endop
 
 

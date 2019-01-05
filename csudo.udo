@@ -5,7 +5,7 @@ UDO DEFINITIONS IN csudo:
 ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
 ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
-ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
+ArrElCnt   : iFound ArrElCnt iNeedle, iInArr[]
 ArrElIn    : iRes ArrElIn iEl, iArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
@@ -144,31 +144,15 @@ i(k)Arr1[], i(k)Arr2[] - input arrays (one dimension)
 i(k)OutArr[] - output array 
 ****************************************************************************/
 /****************************************************************************
-kFound ArrElCnt kNeedle, iInArr[]
-Returns a count of instances of kNeedle in iInArray
-written by kevin welch
-
-kNeedle - numeric value to search for
-iInArr[] - input array to search through
-kFound - count of instances found
-****************************************************************************/
-/****************************************************************************
-kFound ArrElCnt kNeedle, kInArr[]
-Returns a count of instances of kNeedle in iInArray
-written by kevin welch
-
-kNeedle - numeric value to search for
-kInArr[] - input array to search through
-kFound - count of instances found
-****************************************************************************/
-/****************************************************************************
 iFound ArrElCnt iNeedle, iInArr[]
-Returns a count of instances of kNeedle in iInArray
+kFound ArrElCnt kNeedle, iInArr[]
+kFound ArrElCnt kNeedle, kInArr[]
+Returns a count of instances of an element in an array
 written by kevin welch
 
-iNeedle - numeric value to search for
-iInArr[] - input array to search through
-iFound - count of instances found
+i(k)Needle - numeric value to search for
+i(k)InArr[] - input array to search through
+i(k)Found - count of instances found
 ****************************************************************************/
 /****************************************************************************
 iRes ArrElIn iEl, iArr[]
@@ -200,8 +184,7 @@ written by joachim heintz
 
 i(k)InArr[] - input array
 i(k)Start - first index to change (default = 0)
-iEnd - last index to change (default = -1: whole array)
-kEnd - last index to change (default = 0.5: whole array)
+i(k)End - last index to change (default = -1: whole array)
 i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
 ****************************************************************************/
 /****************************************************************************
@@ -1828,10 +1811,10 @@ iEnd -= 1
  od
  xout iOutArr
   endop
-  opcode ArrPermRnd2, k[], k[]OV
+  opcode ArrPermRnd2, k[], k[]OJ
 kInArr[], kStart, kEnd xin
 kLen lenarray kInArr
-kEnd = (kEnd == 0.5) ? kLen-1 : kEnd
+kEnd = (kEnd == -1) ? kLen-1 : kEnd
 ;create out array and set index
 kOutArr[] = kInArr
 kIndx = kStart
@@ -1853,56 +1836,49 @@ kEnd -= 1
  xout kOutArr
   endop
 
-  opcode ArrPermRndIndx, i[], i[]j
-iInArr[], iN xin
-iLen       lenarray   iInArr
-iN = (iN == -1) ? iLen : iN
-iInd[]     genarray   0, iLen-1
-iIndCpy[]  =          iInd
-iOutArr[]  init       iN
-iIndx      =          0
-until iIndx == iN do
- iRndIndx   =          int(random:i(0, iLen-.0001))
- iOutArr[iIndx] =      iIndCpy[iRndIndx]
- until iRndIndx == iLen-1 do
-  iIndCpy[iRndIndx] = iIndCpy[iRndIndx+1]
-  iRndIndx   +=         1
+opcode ArrPermRndIndx, i[], i[]j
+ iInArr[], iN xin
+ iLen       lenarray   iInArr
+ iN = (iN == -1) ? iLen : iN
+ iInd[]     genarray   0, iLen-1
+ iIndCpy[]  =          iInd
+ iOutArr[]  init       iN
+ iIndx      =          0
+ until iIndx == iN do
+  iRndIndx   =          int(random:i(0, iLen-.0001))
+  iOutArr[iIndx] =      iIndCpy[iRndIndx]
+  until iRndIndx == iLen-1 do
+   iIndCpy[iRndIndx] = iIndCpy[iRndIndx+1]
+   iRndIndx   +=         1
+  od
+  iLen       -=         1
+  iIndx      +=         1
  od
- iLen       -=         1
- iIndx      +=         1
-od
-
            xout       iOutArr
-  endop
-  opcode ArrPermRndIndx, k[], k[]j
-kInArr[], iN xin
-iLen       lenarray   kInArr
-iN = (iN == -1) ? iLen : iN
-kInd[]     genarray_i  0, iLen-1
-kIndCpy[]  =          kInd
-kOutArr[]  init       iN
-kIndx      =          0
-kLen       =          iLen
-;for kN elements:
-until kIndx == iN do
- ;get one random element and put it in kOutArr
-kRndIndx   =          int(random:k(0, kLen-.0001))
-kOutArr[kIndx] =      kIndCpy[kRndIndx]
- ;shift the elements after this one to the left
- until kRndIndx == kLen-1 do
-kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
-kRndIndx   +=         1
+endop
+opcode ArrPermRndIndx, k[], k[]j
+ kInArr[], iN xin
+ iLen       lenarray   kInArr
+ iN = (iN == -1) ? iLen : iN
+ kInd[]     genarray_i  0, iLen-1
+ kIndCpy[]  =          kInd
+ kOutArr[]  init       iN
+ kIndx      =          0
+ kLen       =          iLen
+ until kIndx == iN do
+  kRndIndx   =          int(random:k(0, kLen-.0001))
+  kOutArr[kIndx] =      kIndCpy[kRndIndx]
+  until kRndIndx == kLen-1 do
+   kIndCpy[kRndIndx] = kIndCpy[kRndIndx+1]
+   kRndIndx   +=         1
+  od
+  kLen       -=         1
+  kIndx      +=         1
  od
- ;reset kLen and increase counter
-kLen       -=         1
-kIndx      +=         1
-od
-
            xout       kOutArr
-  endop
+endop
 
 opcode ArrPldrm, i[], i[]o
-
  iInArr[], iOpt xin
  iReadIndx = 0
  iWriteIndx = 0
@@ -1929,10 +1905,8 @@ opcode ArrPldrm, i[], i[]o
   od
  endif
  xout iOutArr
-
 endop
 opcode ArrPldrm, k[], k[]o
-
  kInArr[], iOpt xin
  kReadIndx = 0
  kWriteIndx = 0
@@ -1959,11 +1933,9 @@ opcode ArrPldrm, k[], k[]o
   od
  endif
  xout kOutArr
-
 endop
 
 opcode ArrRmDup, i[], i[]
-
  iInArr[] xin
  iOutArr[] init lenarray:i(iInArr)
  iReadIndx = 0
@@ -1979,10 +1951,8 @@ opcode ArrRmDup, i[], i[]
  od
  trim_i iOutArr, iCnt
  xout iOutArr
-
 endop
 opcode ArrRmDup, k[], k[]
-
  kInArr[] xin
  kOutArr[] init lenarray:i(kInArr)
  kReadIndx = 0
@@ -1998,11 +1968,9 @@ opcode ArrRmDup, k[], k[]
  od
  trim kOutArr, kCnt
  xout kOutArr
-
 endop
 
 opcode ArrRmEl, i[], i[]i
-
  iInArr[], iEl xin
  iOutArr[] init lenarray:i(iInArr)
  iReadIndx = 0
@@ -2016,10 +1984,8 @@ opcode ArrRmEl, i[], i[]i
  od
  trim_i iOutArr, iWriteIndx
  xout iOutArr
-
 endop
 opcode ArrRmEl, k[], k[]k
-
  kInArr[], kEl xin
  kOutArr[] init lenarray:i(kInArr)
  kReadIndx = 0
@@ -2033,7 +1999,6 @@ opcode ArrRmEl, k[], k[]k
  od
  trim kOutArr, kWriteIndx
  xout kOutArr
-
 endop
 
   opcode ArrRmIndx, i[], i[]i
@@ -2093,7 +2058,6 @@ opcode ArrRndEl, S, S[]oj
 endop
 
 opcode ArrRtt, i[], i[]p
-
  iInArr[], iPos xin
  iLen lenarray iInArr
  iOutArr[] init iLen
@@ -2104,10 +2068,8 @@ opcode ArrRtt, i[], i[]p
   indx += 1
  od
  xout iOutArr
-
 endop
 opcode ArrRtt, k[], k[]P
-
  kInArr[], kPos xin
  iLen lenarray kInArr
  kOutArr[] init iLen
@@ -2118,11 +2080,9 @@ opcode ArrRtt, k[], k[]P
   kndx += 1
  od
  xout kOutArr
-
 endop
 
 opcode ArrRvrs, i[], i[]
-
  iInArr[] xin
  iOutArr[] init lenarray:i(iInArr)
  indx = 0
@@ -2131,10 +2091,8 @@ opcode ArrRvrs, i[], i[]
   indx += 1
  od
  xout iOutArr
-
 endop
 opcode ArrRvrs, k[], k[]
-
  kInArr[] xin
  kOutArr[] init lenarray:i(kInArr)
  kndx = 0
@@ -2143,7 +2101,6 @@ opcode ArrRvrs, k[], k[]
   kndx += 1
  od
  xout kOutArr
-
 endop
 
   opcode ArrSrt, k[], k[]jOOOP
