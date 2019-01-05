@@ -2,6 +2,7 @@
 *****************************************************************************
 UDO DEFINITIONS IN csudo:
 *****************************************************************************
+ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
 ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
 ArrElCnt   : kFound ArrElCnt kNeedle, iInArr[]
@@ -9,9 +10,13 @@ ArrElIn    : iRes ArrElIn iEl, iArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
+ArrPldrm   : iOutArr[] ArrPldrm iInArr[] [,iOpt]
 ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
+ArrRmEl    : iOutArr[] ArrRmEl iInArr[], iEl
 ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
 ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
+ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
+ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
 ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
 BufCt1     : ift BufCt1 ilen [, inum]
 BufCt2     : iftL, iftR BufCt2 ilen [, inumL [, inumR]]
@@ -107,6 +112,17 @@ TbToSF     : TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
 ****************************************************************************/
 
 /****************************************************************************
+iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
+kOutArr[] ArrAddEl kInArr[], kEl [,kPos]
+Adds an element to an array and returns the result as new array.
+written by joachim heintz
+
+i(k)InArr[] - input array (one dimension)
+i(k)El - element to be added
+i(k)Pos - index at which the element is to be added (default -1: end of array)
+i(k)OutArr[] - output array 
+****************************************************************************/
+/****************************************************************************
 iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 kAvrg ArrAvrg kArr[] [,iStart [,iEnd]]
 Calutates the average of the values in an array, 
@@ -201,6 +217,19 @@ iN - desired length of the output array (must not be longer than i(k)InArr), def
 i(k)OutArr[] - output array with kN randomly permuted indices of kInArr
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrPldrm iInArr[] [,iOpt]
+kOutArr[] ArrPldrm kInArr[] [,iOpt]
+Creates a palindrome of the input array, 
+with some options.
+written by joachim heintz
+
+i(k)InArr[] - input array
+iOpt - if 0 (default), the reverse of the array is appended except the last element
+       if 1, the reverse is appended except the last and the first element
+       if 2, the reverse is appended with both, the last and first element
+i(k)OutArry[] - output array
+****************************************************************************/
+/****************************************************************************
 iOutArr[] ArrRmDup iInArr[]
 kOutArr[] ArrRmDup kInArr[]
 Removes duplicates from an array and returns the result as new array.
@@ -208,6 +237,16 @@ Requires the UDO ArrElIn.
 written by joachim heintz
 
 i(k)InArr[] - input array (one dimension)
+i(k)OutArr[] - output array 
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrRmEl iInArr[], iEl
+kOutArr[] ArrRmEl kInArr[], kEl
+Removes an element from an array and returns the result as new array.
+written by joachim heintz
+
+i(k)InArr[] - input array (one dimension)
+i(k)El - element to be removed
 i(k)OutArr[] - output array 
 ****************************************************************************/
 /****************************************************************************
@@ -233,6 +272,26 @@ i(k)Start - first index in i(kS)InArr to use (default = 0)
 iEnd - last index in i(S)InArr to use (default = -1: whole length)
 kEnd - last index in kInArr to use (default = 0.5: whole length)
 i(kS)El - random element of array
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrRtt iInArr[] [,iRot]
+kOutArr[] ArrRtt kInArr[] [,kRot]
+Rotates an array for N positions (positive = right, negative = left)
+and returns the result as new array.
+written by joachim heintz
+
+i(k)InArr[] - input array
+iRot - positions to rotate right or left (default=1)
+i(k)OutArr[] - output array
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrRvrs iInArr[]
+kOutArr[] ArrRvrs kInArr[]
+Returns the reverse of an array.
+written by joachim heintz
+
+i(k)InArr[] - input array
+i(k)OutArr[] - output array
 ****************************************************************************/
 /****************************************************************************
 kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
@@ -1503,6 +1562,47 @@ iend - last point to write in the function table in seconds (default=-1: until t
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
 
+opcode ArrAddEl, i[], i[]ij
+
+ iInArr[], iEl, iPos xin
+ iOutArr[] init lenarray:i(iInArr)+1
+ iPos = (iPos == -1) ? lenarray:i(iInArr) : iPos
+ iWriteIndx = 0
+ iIndxDiff = 0
+ while iWriteIndx < lenarray:i(iOutArr) do
+  iReadIndx = iWriteIndx - iIndxDiff
+  if iWriteIndx == iPos then
+   iOutArr[iWriteIndx] = iEl
+   iIndxDiff = 1
+  else
+   iOutArr[iWriteIndx] = iInArr[iReadIndx]
+  endif
+  iWriteIndx += 1
+ od
+ xout iOutArr
+
+endop
+opcode ArrAddEl, k[], k[]kJ
+
+ kInArr[], kEl, kPos xin
+ kOutArr[] init lenarray:i(kInArr)+1
+ kPos = (kPos == -1) ? lenarray:i(kInArr) : kPos
+ kWriteIndx = 0
+ kIndxDiff = 0
+ while kWriteIndx < lenarray:k(kOutArr) do
+  kReadIndx = kWriteIndx - kIndxDiff
+  if kWriteIndx == kPos then
+   kOutArr[kWriteIndx] = kEl
+   kIndxDiff = 1
+  else
+   kOutArr[kWriteIndx] = kInArr[kReadIndx]
+  endif
+  kWriteIndx += 1
+ od
+ xout kOutArr
+
+endop
+
 opcode ArrAvrg, i, i[]oj
 
  iArr[], iStart, iEnd xin
@@ -1801,6 +1901,67 @@ od
            xout       kOutArr
   endop
 
+opcode ArrPldrm, i[], i[]o
+
+ iInArr[], iOpt xin
+ iReadIndx = 0
+ iWriteIndx = 0
+ if iOpt == 0 then
+  iOutArr[] init lenarray:i(iInArr) * 2 - 1
+  while iWriteIndx < lenarray:i(iOutArr) do
+   iOutArr[iWriteIndx] = iInArr[iReadIndx]
+   iWriteIndx += 1
+   iReadIndx = (iWriteIndx < lenarray:i(iInArr)) ? iReadIndx+1 : iReadIndx-1
+  od
+ elseif iOpt == 1 then
+  iOutArr[] init lenarray:i(iInArr) * 2 - 2
+  while iWriteIndx < lenarray:i(iOutArr) do
+   iOutArr[iWriteIndx] = iInArr[iReadIndx]
+   iWriteIndx += 1
+   iReadIndx = (iWriteIndx < lenarray:i(iInArr)) ? iReadIndx+1 : iReadIndx-1
+  od
+ elseif iOpt == 2 then
+  iOutArr[] init lenarray:i(iInArr) * 2
+  while iWriteIndx < lenarray:i(iOutArr) do
+   iOutArr[iWriteIndx] = iInArr[iReadIndx]
+   iWriteIndx += 1
+   iReadIndx = (iWriteIndx < lenarray:i(iInArr)) ? iReadIndx+1 : ((iWriteIndx > lenarray:i(iInArr)) ? iReadIndx-1 : iReadIndx)
+  od
+ endif
+ xout iOutArr
+
+endop
+opcode ArrPldrm, k[], k[]o
+
+ kInArr[], iOpt xin
+ kReadIndx = 0
+ kWriteIndx = 0
+ if iOpt == 0 then
+  kOutArr[] init lenarray:i(kInArr) * 2 - 1
+  while kWriteIndx < lenarray:i(kOutArr) do
+   kOutArr[kWriteIndx] = kInArr[kReadIndx]
+   kWriteIndx += 1
+   kReadIndx = (kWriteIndx < lenarray:i(kInArr)) ? kReadIndx+1 : kReadIndx-1
+  od
+ elseif iOpt == 1 then
+  kOutArr[] init lenarray:i(kInArr) * 2 - 2
+  while kWriteIndx < lenarray:i(kOutArr) do
+   kOutArr[kWriteIndx] = kInArr[kReadIndx]
+   kWriteIndx += 1
+   kReadIndx = (kWriteIndx < lenarray:i(kInArr)) ? kReadIndx+1 : kReadIndx-1
+  od
+ elseif iOpt == 2 then
+  kOutArr[] init lenarray:i(kInArr) * 2
+  while kWriteIndx < lenarray:i(kOutArr) do
+   kOutArr[kWriteIndx] = kInArr[kReadIndx]
+   kWriteIndx += 1
+   kReadIndx = (kWriteIndx < lenarray:i(kInArr)) ? kReadIndx+1 : ((kWriteIndx > lenarray:i(kInArr)) ? kReadIndx-1 : kReadIndx)
+  od
+ endif
+ xout kOutArr
+
+endop
+
 opcode ArrRmDup, i[], i[]
 
  iInArr[] xin
@@ -1836,6 +1997,41 @@ opcode ArrRmDup, k[], k[]
   kReadIndx += 1
  od
  trim kOutArr, kCnt
+ xout kOutArr
+
+endop
+
+opcode ArrRmEl, i[], i[]i
+
+ iInArr[], iEl xin
+ iOutArr[] init lenarray:i(iInArr)
+ iReadIndx = 0
+ iWriteIndx = 0
+ while iReadIndx < lenarray:i(iInArr) do
+  if iInArr[iReadIndx] != iEl then
+   iOutArr[iWriteIndx] = iInArr[iReadIndx]
+   iWriteIndx += 1
+  endif
+  iReadIndx += 1
+ od
+ trim_i iOutArr, iWriteIndx
+ xout iOutArr
+
+endop
+opcode ArrRmEl, k[], k[]k
+
+ kInArr[], kEl xin
+ kOutArr[] init lenarray:i(kInArr)
+ kReadIndx = 0
+ kWriteIndx = 0
+ while kReadIndx < lenarray(kInArr) do
+  if kInArr[kReadIndx] != kEl then
+   kOutArr[kWriteIndx] = kInArr[kReadIndx]
+   kWriteIndx += 1
+  endif
+  kReadIndx += 1
+ od
+ trim kOutArr, kWriteIndx
  xout kOutArr
 
 endop
@@ -1894,6 +2090,60 @@ opcode ArrRndEl, S, S[]oj
  iElIndx random iStart, iEnd+0.999
  SEl = SInArr[int(iElIndx)]
  xout SEl
+endop
+
+opcode ArrRtt, i[], i[]p
+
+ iInArr[], iPos xin
+ iLen lenarray iInArr
+ iOutArr[] init iLen
+ iPos = (iPos < 0) ? iLen-(abs(iPos%iLen)) : iPos
+ indx = 0
+ while indx < iLen do
+  iOutArr[indx] = iInArr[(iPos+indx)%iLen]
+  indx += 1
+ od
+ xout iOutArr
+
+endop
+opcode ArrRtt, k[], k[]P
+
+ kInArr[], kPos xin
+ iLen lenarray kInArr
+ kOutArr[] init iLen
+ kPos = (kPos < 0) ? iLen-(abs(kPos%iLen)) : kPos
+ kndx = 0
+ while kndx < iLen do
+  kOutArr[kndx] = kInArr[(kPos+kndx)%iLen]
+  kndx += 1
+ od
+ xout kOutArr
+
+endop
+
+opcode ArrRvrs, i[], i[]
+
+ iInArr[] xin
+ iOutArr[] init lenarray:i(iInArr)
+ indx = 0
+ while indx < lenarray:i(iInArr) do
+  iOutArr[lenarray:i(iInArr)-indx-1] = iInArr[indx]
+  indx += 1
+ od
+ xout iOutArr
+
+endop
+opcode ArrRvrs, k[], k[]
+
+ kInArr[] xin
+ kOutArr[] init lenarray:i(kInArr)
+ kndx = 0
+ while kndx < lenarray(kInArr) do
+  kOutArr[lenarray(kInArr)-kndx-1] = kInArr[kndx]
+  kndx += 1
+ od
+ xout kOutArr
+
 endop
 
   opcode ArrSrt, k[], k[]jOOOP
