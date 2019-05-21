@@ -18,6 +18,7 @@ ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
 ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
 ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+array_udo_examples: ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
 *****************************************************************************
 ****************************************************************************/
 
@@ -205,6 +206,52 @@ kEnd - end at this element (exclusive) (default = 0 means length of array)
 kHop - distance from element to element you are regarding (default = 1)
 kOutArr[] - sorted array
 ****************************************************************************/
+/*
+ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
+ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
+ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
+ArrElCnt   : iFound ArrElCnt iNeedle, iInArr[]
+ArrElIn    : iRes ArrElIn iEl, iArr[]
+ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
+ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
+ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
+ArrPldrm   : iOutArr[] ArrPldrm iInArr[] [,iOpt]
+ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
+ArrRmEl    : iOutArr[] ArrRmEl iInArr[], iEl
+ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
+ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
+ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
+ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
+ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+*/
+/* prints:
+ArrAddEl:
+ 1 2 3 4 5 6 7 8 9 10 
+Average: 5
+ArrCat:
+ 1 2 3 4 5 6 7 8 9 -1 -2 -3 -2 
+ArrElCnt: 1 (for element=5)
+ArrElIn: 0 (yes/no) for element=-1
+ArrPermRnd:
+ 4 3 7 5 9 6 8 1 2 
+ArrPermRnd2:
+ 1 2 3 4 7 5 6 8 9 
+ArrPermRndIndx:
+ 0 3 8 4 1 6 5 7 2 
+ArrPldrm:
+ 1 2 3 4 5 6 7 8 9 8 7 6 5 4 3 2 1 
+ArrRmDup:
+ -1 -2 -3 
+ArrRmEl:
+ -1 -3 
+ArrRmIndx:
+ -2 -3 -2 
+ArrRndEl: 7
+ArrRtt:
+ 2 3 4 5 6 7 8 9 1 
+ArrRvrs:
+ 9 8 7 6 5 4 3 2 1 
+*/
 
 opcode ArrAddEl, i[], i[]ij
 
@@ -288,6 +335,7 @@ opcode ArrAvrg, k, k[]oj
  xout kAvrg
 
 endop
+
 
 opcode ArrCat, i[], i[]i[]
 
