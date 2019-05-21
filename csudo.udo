@@ -34,6 +34,7 @@ BufPlay1   : aout, kfin BufPlay1 ift, kplay, kspeed, kvol, kstart, kend, kwrap
 BufPlay2   : aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 BufRec1    : kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 BufRec2    : kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
+CsQtArwKeys: kOut CsQtArwKeys kKey
 CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 EvtLvLp    : EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
 EvtPtrnz   : kTrig, kOffTrig, kIndx EvtPtrnz kTime, kBPM, SPat
@@ -108,6 +109,7 @@ TbScala    : ifno TbScala Sfil [, ibasefreq [, ibasekey [, ifn]]]
 TbSinc     : iFt TbSinc iStart, iEnd [,iSize [,iFtNo]]
 TbToLin    : kLin TbToLin iFt
 TbToSF     : TbToSF ift, Soutname, ktrig [,iformat [,istart [,iend]]]
+array_udo_examples: ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
 *****************************************************************************
 ****************************************************************************/
 
@@ -566,6 +568,17 @@ kstart - begin of recording into the function table in seconds
 kend - end of recording into the function table in seconds
 kwrap - if 1, recording wraps between kend and the beginning of the buffer (see th examples below for instr 4); if 0 (or any other number), record stops at kend
 kfin - 1 if record has finished
+****************************************************************************/
+/****************************************************************************
+kOut CsQtArwKeys kKey
+Returns -65 for up, -66 for down, -67 for right, -68 for left arrow key (linux)
+
+Makes it possible to use the arrow keys, although they come into CsoundQt as sequence of three numbers.
+It should be easy to modify the code for OSX and Windows. Requires CsoundQt 0.9.6
+written by joachim heintz
+
+kKey - ASCII keyboard number as output from sensekey opcode 
+kOut - output (see above)
 ****************************************************************************/
 /****************************************************************************
 CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
@@ -1544,6 +1557,52 @@ istart - start in seconds in the function table to write (default=0)
 iend - last point to write in the function table in seconds (default=-1: until the end)
 ktrig - if 1, the file is being written in one control-cycle. Make sure the trigger is 1 just for one k-cycle; otherwise the writing operation will be repeated again and again in each control cycle
 ****************************************************************************/
+/*
+ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
+ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
+ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
+ArrElCnt   : iFound ArrElCnt iNeedle, iInArr[]
+ArrElIn    : iRes ArrElIn iEl, iArr[]
+ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
+ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
+ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
+ArrPldrm   : iOutArr[] ArrPldrm iInArr[] [,iOpt]
+ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
+ArrRmEl    : iOutArr[] ArrRmEl iInArr[], iEl
+ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
+ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
+ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
+ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
+ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+*/
+/* prints:
+ArrAddEl:
+ 1 2 3 4 5 6 7 8 9 10 
+Average: 5
+ArrCat:
+ 1 2 3 4 5 6 7 8 9 -1 -2 -3 -2 
+ArrElCnt: 1 (for element=5)
+ArrElIn: 0 (yes/no) for element=-1
+ArrPermRnd:
+ 4 3 7 5 9 6 8 1 2 
+ArrPermRnd2:
+ 1 2 3 4 7 5 6 8 9 
+ArrPermRndIndx:
+ 0 3 8 4 1 6 5 7 2 
+ArrPldrm:
+ 1 2 3 4 5 6 7 8 9 8 7 6 5 4 3 2 1 
+ArrRmDup:
+ -1 -2 -3 
+ArrRmEl:
+ -1 -3 
+ArrRmIndx:
+ -2 -3 -2 
+ArrRndEl: 7
+ArrRtt:
+ 2 3 4 5 6 7 8 9 1 
+ArrRvrs:
+ 9 8 7 6 5 4 3 2 1 
+*/
 
 opcode ArrAddEl, i[], i[]ij
 
@@ -1627,6 +1686,7 @@ opcode ArrAvrg, k, k[]oj
  xout kAvrg
 
 endop
+
 
 opcode ArrCat, i[], i[]i[]
 
@@ -2445,6 +2505,26 @@ kfinished	BufRec1	ainL, iftL, krec, kstart, kend, kwrap
 kfinished	BufRec1	ainR, iftR, krec, kstart, kend, kwrap
  		xout		kfinished
   endop
+
+opcode CsQtArwKeys, k, k
+ //
+ kKey xin ;from sensekey opcode WITHOUT using kkeydown
+ kKeys[] init 3
+ kIndex init 0
+ if changed:k(kKey)==1 && kKey!=-1 then  
+  if kKey == 27 then
+   kIndex = 0
+  else 
+   kIndex += 1
+   kIndex = kIndex%3
+  endif    	
+  kKeys[kIndex] = kKey      	
+  if kIndex == 2 && kKeys[0] == 27 && kKeys[1] == 91 then
+   kOut = -kKey
+  endif
+ endif
+ xout kOut
+endop
 
 opcode CsQtMeter, 0, SSak
  S_chan_sig, S_chan_over, aSig, kTrig	xin
