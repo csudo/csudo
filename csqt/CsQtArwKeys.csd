@@ -15,15 +15,13 @@ kOut - output (see above)
 </CsOptions>
 <CsInstruments>
 
-sr = 44100
 ksmps = 32
-nchnls = 1
 
 opcode CsQtArwKeys, k, k
- //
- kKey xin ;from sensekey opcode WITHOUT using kkeydown
+ kKey xin 
  kKeys[] init 3
  kIndex init 0
+ kOut init 0
  if changed:k(kKey)==1 && kKey!=-1 then  
   if kKey == 27 then
    kIndex = 0
@@ -52,20 +50,4 @@ schedule(1,0,100)
 <CsScore>
 </CsScore>
 </CsoundSynthesizer>
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>0</x>
- <y>0</y>
- <width>0</width>
- <height>0</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
+

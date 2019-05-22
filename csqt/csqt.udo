@@ -33,10 +33,10 @@ kTrig - trigger signal for refreshing the display
 ****************************************************************************/
 
 opcode CsQtArwKeys, k, k
- //
- kKey xin ;from sensekey opcode WITHOUT using kkeydown
+ kKey xin 
  kKeys[] init 3
  kIndex init 0
+ kOut init 0
  if changed:k(kKey)==1 && kKey!=-1 then  
   if kKey == 27 then
    kIndex = 0
