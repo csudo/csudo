@@ -3,6 +3,7 @@
 UDO DEFINITIONS IN misc:
 *****************************************************************************
 ExtrOrc    : Sorc ExtrOrc Sfil
+OnDtct     : kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
 *****************************************************************************
 ****************************************************************************/
 
@@ -16,6 +17,25 @@ written by joachim heintz
 
 Sfil - csd file (either full path or name if in the same directory)
 Sorc - orc part of Sfil as string
+****************************************************************************/
+/****************************************************************************
+kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
+Detects onsets (attacks). Returns also the dB of the rms at this time.
+
+Onset detection is done via the comparision of the current rms value with the
+rms value kDelTim seconds before. If the current rms is lager than kDbDiff decibel
+compared to the one kDelTim seconds before, an onset is detected. Further conditions
+are that kMinTime has passed since the last detection, and the rms value for the 
+onset is larger that kMinDb. The velocity of the rms measurement can be adjusted 
+with the iRmsFreq parameter.
+written by joachim heintz
+
+aIn - audio input signal
+kDbDiff - dB difference to signify an offset (default = 10)
+kMinTim - minimum time in seconds between two onsets (default = 0.1)
+kMinDb - minimum dB to detect an offset (default = -50)
+kDelTim - time in seconds which is compared to the current rms (default = 0.025)
+iRmsFreq - approximate frequency for rms measurements (default = 50)
 ****************************************************************************/
 
   opcode StripL, S, S
@@ -62,5 +82,37 @@ endif
 if iLineNum != -1 && iIsEnd != 0 igoto read
            xout       Sorc
   endop
+
+opcode OnDtct, kk, aOOOOo
+
+ aIn, kDbDiff, kMinTim, kMinDb, kDelTim, iRmsFreq xin
+ 
+ //resolving defaults
+ kDbDiff = (kDbDiff==0) ? 10 : kDbDiff
+ kMinTim = (kMinTim==0) ? 0.1 : kMinTim
+ kMinDb = (kMinDb==0) ? -50 : kMinDb
+ kDelTim = (kDelTim==0) ? 0.025 : kDelTim
+ iRmsFreq = (iRmsFreq==0) ? 50 : iRmsFreq
+ 
+ kPrevDetect init 0.1
+ iMaxDelTim init 0.5
+ kOnset init 0
+
+ kRms rms aIn,iRmsFreq
+ kDb = dbamp(kRms)
+ kDelRms vdelayk kDb, kDelTim, iMaxDelTim
+ 
+ if (kDb>kDelRms+kDbDiff) && (kDb>kMinDb) && (kPrevDetect>kMinTim) then
+  kOnset = 1
+  kPrevDetect = 0
+ else
+  kOnset = 0
+ endif
+
+ kPrevDetect += 1/kr
+ 
+ xout kOnset, kDb
+
+endop
 
 
