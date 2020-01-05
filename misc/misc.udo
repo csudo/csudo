@@ -28,6 +28,8 @@ compared to the one kDelTim seconds before, an onset is detected. Further condit
 are that kMinTime has passed since the last detection, and the rms value for the 
 onset is larger that kMinDb. The velocity of the rms measurement can be adjusted 
 with the iRmsFreq parameter.
+Note that the kDb output is "too early" for a good estimation of the onset's 
+intensity. As the example below shows, it can be taken a short time later.
 written by joachim heintz
 
 aIn - audio input signal
@@ -36,6 +38,9 @@ kMinTim - minimum time in seconds between two onsets (default = 0.1)
 kMinDb - minimum dB to detect an offset (default = -50)
 kDelTim - time in seconds which is compared to the current rms (default = 0.025)
 iRmsFreq - approximate frequency for rms measurements (default = 50)
+kOnset - 1 if onset is detected, otherwise 0
+kDb - dB value in the moment of onset detection. Note that this is not the 
+      perceived intensity of the beat. About 20 ms later should give a fair result.
 ****************************************************************************/
 
   opcode StripL, S, S

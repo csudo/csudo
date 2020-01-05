@@ -69,7 +69,7 @@ StrDirUp   : SUpDir StrDirUp SCurDir
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
 StrExpr1   : iNum StrExpr1 Str, iStrt, iEnd
 StrExpr2   : iNum StrExpr2 iNum1, iNum2, iOp
-StrFiln    : Snam StrFiln Spath
+StrFiln    : Snam StrFiln Spath [,iRm]
 StrIsEmpty : iTrue StrIsEmpty Str, iStrt, iEnd
 StrIsOp    : iOp StrIsOp Str, iPos
 StrLNoth   : iTrue StrLNoth Str, iMin, iPos
@@ -823,6 +823,8 @@ compared to the one kDelTim seconds before, an onset is detected. Further condit
 are that kMinTime has passed since the last detection, and the rms value for the 
 onset is larger that kMinDb. The velocity of the rms measurement can be adjusted 
 with the iRmsFreq parameter.
+Note that the kDb output is "too early" for a good estimation of the onset's 
+intensity. As the example below shows, it can be taken a short time later.
 written by joachim heintz
 
 aIn - audio input signal
@@ -831,6 +833,9 @@ kMinTim - minimum time in seconds between two onsets (default = 0.1)
 kMinDb - minimum dB to detect an offset (default = -50)
 kDelTim - time in seconds which is compared to the current rms (default = 0.025)
 iRmsFreq - approximate frequency for rms measurements (default = 50)
+kOnset - 1 if onset is detected, otherwise 0
+kDb - dB value in the moment of onset detection. Note that this is not the 
+      perceived intensity of the beat. About 20 ms later should give a fair result.
 ****************************************************************************/
 /****************************************************************************
 atimpt PhsTmPnt kloopstart, kloopend, kspeed, kdir, irefdur
@@ -1061,14 +1066,16 @@ iOp - 1 -> +, 2 -> -, 3 -> *, 4 -> /, 5 -> %, 6 -> ^
 iNum - Result as number
 ****************************************************************************/
 /****************************************************************************
-Snam StrFiln Spath
-Returns the file name in a given path
+Snam StrFiln Spath [,iRm]
+Returns the file name in a given path, toptionally without suffix.
 
 Returns the file name (= everything after the last slash) in a given path.
+If iRm is not zero, the suffix is removed.
 Requires Csound 5.15 or higher.
 written by joachim heintz
 
 Spath - full path name as string
+iRm - if zero (default) file name is returned as it is, otherwise without suffix
 Snam - name part
 ****************************************************************************/
 /****************************************************************************
@@ -4546,13 +4553,16 @@ SUpDir     strsub     Sok, 0, ipos
            xout       SUpDir
   endop
 
-  opcode StrFiln, S, S
-;returns the name of a file path
-Spath      xin
-ipos      strrindex Spath, "/"
-Snam      strsub    Spath, ipos+1
-          xout      Snam
-  endop
+opcode StrFiln, S, So
+ Spath, iRm xin
+ ipos strrindex Spath, "/"
+ Snam strsub Spath, ipos+1
+ if iRm != 0 then
+  ipos strindex Snam, "."
+  Snam strsub Snam, 0, ipos
+ endif
+ xout Snam
+endop
 
   opcode StrSuf, S, So
   ;returns the suffix of a filename or path, optional in lower case 
