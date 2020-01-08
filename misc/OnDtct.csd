@@ -75,7 +75,7 @@ instr Detect
  
  //trigger instrument on onset
  if kOnset == 1 then
-  schedulek("Play",0,1/10)
+  event("i","Play",0,1/10)
  endif
  
  //show db value 1/20 sec later for intensity estimation
