@@ -126,7 +126,7 @@ def extractTCU(fileobj, filename):
         elif readUdoDef:
             udodef = '%s%s' % (udodef, line)
     if hasBeenNone:
-        print('*WARNING: There is no UDO named %s in file %s.' % (filename[:-4], filename))
+        print '*WARNING: There is no UDO named %s in file %s.' % (filename[:-4], filename)
     return (title, comment, udodef)
 
 def listTCU(resList, dir):
@@ -179,7 +179,7 @@ def formatCollect2(drct, lists, allUdoList, deplis):
                 udoNamenExtended.extend(add)
             if len(addnamen[0][1:][0]) > 1: dependence = "dependencies" 
             else: dependence =  "dependency"
-            print("      *including %s as %s for '%s' in %s" % (addnamen[0][1:][0], dependence, udonamen[i], drct))
+            print "      *including %s as %s for '%s' in %s" % (addnamen[0][1:][0], dependence, udonamen[i], drct)
             udoNamenExtended.append(udonamen[i])
             del addnamen[0]
         else: 
@@ -201,7 +201,7 @@ def formatCollect2(drct, lists, allUdoList, deplis):
     name = dirAfterCsudo(drct)
     if name is '': name = 'csudo'
     pfad = '%s/%s.udo' % (drct, slashToUnder(name))
-    print('*writing udo file %s' % pfad)
+    print '*writing udo file %s' % pfad
     outfil = open(pfad, 'w')
     # title
     outfil.write('/%s\n%s\nUDO DEFINITIONS IN %s:\n%s\n' % ('*'*76, '*'*77, name, '*'*77))
@@ -287,7 +287,7 @@ def writeDepFile(liste):
     """writes a file with udo dependencies. the inputlist has structure [target path, [udo dep]*]"""
     dir = liste[0].rpartition('/')[2]
     path = '%s/%s.dep' % (liste[0], dir)
-    print("*writing dep file %s" % path)
+    print "*writing dep file %s" % path
     f = open(path, 'w')
     f.write('# internal dependencies in %s.udo\n# UDO: dependency [, dependency2 [, ...]]\n\n' % dir)
     for i in range(1, len(liste)):
@@ -314,7 +314,7 @@ def collectDeps(wd):
         for fil in files:
             path = '%s/%s' % (d, fil)
             if isSetDepFile(path):
-                print('   *reading dep file %s' % path)
+                print '   *reading dep file %s' % path
                 fileobj = open(path, 'r')
                 newdeps = readDepFil(fileobj)
                 deplis.extend(newdeps)
@@ -346,7 +346,7 @@ def collectDeps(wd):
         for fil in files:
             path = '%s/%s' % (d, fil)
             if isDepFile(path) or isSetDepFile(path):
-                print('   *reading dep file %s' % path)
+                print '   *reading dep file %s' % path
                 fileobj = open(path, 'r')
                 newdeps = readDepFil(fileobj)
                 wlis.extend(newdeps)
@@ -361,13 +361,13 @@ def remAllDepFiles(d):
         path = '%s/%s' % (d, s)
         if isdir(path): remAllDepFiles(path)
         elif isDepFile(path): 
-            print("*removing dep file %s" % path)
+            print "*removing dep file %s" % path
             remove(path)
 
 def testForDuplicates(lis):
     for i in range(len(lis)):
         if lis[i] in lis[i+1:]:
-            print("ERROR! UDO '%s' defined twice!\n" % lis[i])
+            print "ERROR! UDO '%s' defined twice!\n" % lis[i]
             exit()
 
 def makeAll(drct, allUdoList=[], isTopDir=1):
@@ -389,7 +389,7 @@ def makeAll(drct, allUdoList=[], isTopDir=1):
     for fil in files:
         path = '%s/%s' % (drct, fil)
         if isDepFile(path) or isSetDepFile(path):
-            print('   *reading dep file %s' % path)
+            print '   *reading dep file %s' % path
             fileobj = open(path, 'r')
             deps = readDepFil(fileobj)
             break
@@ -425,14 +425,14 @@ i 1 0 0
     outfil = open(csd, 'w')
     outfil.write(csdtext)
     outfil.close()
-    print("*Testing file %s ..." % udo)
+    print "*Testing file %s ..." % udo
     if system('%s %s 2> /dev/null' % (csound6, csd)) == 0:
-        print("... ok")
+        print "... ok"
         return 0
     else:
-        print("\n********\n... ERROR!!!\n********\n")
-        print("*This is Csound's output message:")
-        print("Return value = %d" % system('%s %s 2> /dev/null' % (csound6, csd)))
+        print "\n********\n... ERROR!!!\n********\n"
+        print "*This is Csound's output message:"
+        print "Return value = %d" % system('%s %s 2> /dev/null' % (csound6, csd))
         system('%s %s' % (csound6, csd))
         return 1
     
@@ -448,19 +448,19 @@ def testAll(d, sum=0):
 
 def goGo(csudoDir):
     """go go"""
-    print('\n%s\n*****WRITING UDO FILES*****\n%s\n' % ('*'*27, '*'*27))
+    print '\n%s\n*****WRITING UDO FILES*****\n%s\n' % ('*'*27, '*'*27)
     makeAll(csudoDir)
-    print('\n%s\n*****TESTING UDO FILES*****\n%s\n' % ('*'*27, '*'*27))
+    print '\n%s\n*****TESTING UDO FILES*****\n%s\n' % ('*'*27, '*'*27)
     errors = testAll(csudoDir)
-    print('\nTesting finished.\nFound %d errors in total.' % errors)
+    print '\nTesting finished.\nFound %d errors in total.' % errors
 
             
 # write udo files on all levels for all folders in the script dir
 csudoDir = getcwd() 
 if basename(csudoDir) != 'csudo':
-    print('Current directory "%s" does not end with "csudo".' % csudoDir)
-    print('Really containing the UDO definitions?')
-    go = eval(input('1 = go on, 0 = break\n'))
+    print 'Current directory "%s" does not end with "csudo".' % csudoDir
+    print 'Really containing the UDO definitions?'
+    go = input('1 = go on, 0 = break\n')
     if go == 1: goGo(csudoDir)
     else: exit()
 else: goGo(csudoDir)
