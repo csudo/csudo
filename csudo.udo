@@ -786,9 +786,8 @@ i(k)Rnd - result
 /****************************************************************************
 iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 kValOut NmScl kVal, kInMin, kInMax, kOutMin, kOutMax
-Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
 
-Scales the incoming value iVal in the range between iInMin and iInMax linear to the range between iOutMin and iOutMax.
+Scales the incoming value i(k)Val in the range between i(k)InMin and i(k)InMax linear to the range between i(k)OutMin and i(k)OutMax.
 written by joachim heintz
 
 i(k)Val - incoming number
@@ -796,7 +795,7 @@ i(k)InMin - minimum possible incoming number
 i(k)InMax - maximum possible incoming numer
 i(k)OutMin - minimum possible outgoing number
 i(k)OutMax - maximum possible outgoing number
-i(k)ValOut - iVal scaled
+i(k)ValOut - i(k)Val scaled
 ****************************************************************************/
 /****************************************************************************
 iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
