@@ -170,13 +170,14 @@ i(k)Res - 1 for yes, 0 for no
 /****************************************************************************
 iOutArr[] ArrPermRnd iInArr[] [, iN]
 kOutArr[] ArrPermRnd kInArr[] [, iN]
-Returns an array of i(k)N length which contains randomly permuted elements of i(k)InArr[]. 
+SoutArr[] ArrPermRnd SInArr[] [, iN]
+Returns an array of i/k/S N length which contains randomly permuted elements of i/k/S InArr[]. 
 As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
 written by joachim heintz
 
-i(k)InArr[] - input array
-iN - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
-i(k)OutArr[] - output array with iN randomly permuted elements of iInArr
+i/k/SInArr[] - input array
+iN - desired length of the output array (must not be longer than i/k/SInArr), default = -1 which means that the whole length of the input array is taken
+i/k/sOutArr[] - output array with iN randomly permuted elements of i/k/SInArr
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
@@ -1851,7 +1852,7 @@ kInArr[], iN xin
 iLen       =          lenarray(kInArr)
 iN = (iN == -1) ? iLen : iN
 kOutArr[]  init       iN
-kIndx      =          0
+kIndx = 0
 kLen = iLen
 ;for kN elements:
 until kIndx == iN do
@@ -1869,6 +1870,25 @@ kLen       -=         1
 kIndx      +=         1
 enduntil
            xout       kOutArr
+  endop
+  opcode ArrPermRnd, S[], S[]j
+SInArr[], iN xin
+iLen       =          lenarray(SInArr)
+iN = (iN == -1) ? iLen : iN
+SOutArr[]  init       iN
+indx      =          0
+while indx < iN do
+ iRndIndx   random     0, iLen-.0001
+ iRndIndx   =          int(iRndIndx)
+ SOutArr[indx] =      SInArr[iRndIndx]
+ while iRndIndx < iLen-1 do
+  SInArr[iRndIndx] = SInArr[iRndIndx+1]
+  iRndIndx   +=         1
+ od
+ iLen       -=         1
+ indx      +=         1
+od
+           xout       SOutArr
   endop
 
   opcode ArrPermRnd2, i[], i[]oj
