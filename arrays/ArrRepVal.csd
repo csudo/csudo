@@ -1,15 +1,15 @@
 
 
-/*-------------------------------------------------------------------------
+/**********************************************************************
 kOutArr[] ArrRepVal kInArr1[], iRepInx,iRep
 
 Repeats a value for (iRep)Times
 	iRepInx: number of index for Repeating value
 	iRep:		How many Times will be Repeated
+	written by Parham Izadyar
 	
 kOutArr[] - output array 
-		example by Parham Izadyar
--------------------------------------------------------------------------*/
+***********************************************************************/
 
 
 <CsoundSynthesizer>
