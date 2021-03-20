@@ -3,7 +3,7 @@
 /*-------------------------------------------------------------------------
 kOutArr[] ArrRepVal kInArr1[], iRepInx,iRep
 
-Repeated a value for (iRep)Times
+Repeats a value for (iRep)Times
 	iRepInx: number of index for Repeating value
 	iRep:		How many Times will be Repeated
 	
@@ -61,6 +61,7 @@ iRep     = 1
 kArrIn  [] fillarray 60,61,62,63,68,69
 kArrOut [] ArrRepVal kArrIn, iRepInx,iRep
 printarray kArrOut,1, "%.0f", "Array with Repeated value:"
+turnoff
 endin
 
 </CsInstruments>
