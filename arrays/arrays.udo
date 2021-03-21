@@ -11,13 +11,14 @@ ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
 ArrPldrm   : iOutArr[] ArrPldrm iInArr[] [,iOpt]
+ArrRepVal  : kOutArr[] ArrRepVal kInArr1[], iRepInx, iRep
 ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
 ArrRmEl    : iOutArr[] ArrRmEl iInArr[], iEl
 ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
 ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
 ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
-ArrSrt     : kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
+ArrSrt     : iOutArr[] ArrSrt iInArr[] [,iOutN [,iOutType ,[iStart [,iEnd [,iHop]]]]]
 array_udo_examples: ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
 *****************************************************************************
 ****************************************************************************/
@@ -124,6 +125,18 @@ iOpt - if 0 (default), the reverse of the array is appended except the last elem
        if 2, the reverse is appended with both, the last and first element
 i(k)OutArry[] - output array
 ****************************************************************************/
+/**********************************************************************
+kOutArr[] ArrRepVal kInArr1[], iRepInx, iRep
+iOutArr[] ArrRepVal iInArr1[], iRepInx, iRep
+
+Repeats a value in an array for iRep times.
+Written by Parham Izadyar and joachim heintz
+
+i|kInArr[] - input array
+iRepInx - index of value to be repeated
+iRep - number of repetitions
+i|kOutArr[] - output array 
+***********************************************************************/
 /****************************************************************************
 iOutArr[] ArrRmDup iInArr[]
 kOutArr[] ArrRmDup kInArr[]
@@ -189,23 +202,27 @@ i(k)InArr[] - input array
 i(k)OutArr[] - output array
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrSrt iInArr[] [,iOutN [,iOutType ,[iStart [,iEnd [,iHop]]]]]
 kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
-Sorts the content of kInArr[] in descending order and returns the sorted array 
-as kOutArr[] of length iOutN.
+
+Sorts the content of kInArr[] in descending order and returns 
+the sorted array as i|kOutArr[] of length iOutN.
+
 Depending on kOutType, the output array can either contain the values, or the
 indices of the values (thus pointing to kInArr). A section of kInArr can be
 specified by kStart and kEnd. Instead of sorting every element, looking only
-for the even or odd elements can be done via the kHop parameter.
+for the even or odd elements can be done via the kHop parameter. 
+
 For simple sorting (ascending or descending), use the Csound opcodes sorta and sortd.
 written by joachim heintz
 
-kInArr[] - array to sort
+i|kInArr[] - array to sort
 iOutN - length of the output array kOutArr (default = -1 means the whole length)
-kOutType - 0 (default) = output as sorted values, 1 = output as indices
-kStart - start from this element (inclusive) (default = 0)
-kEnd - end at this element (exclusive) (default = 0 means length of array)
-kHop - distance from element to element you are regarding (default = 1)
-kOutArr[] - sorted array
+i|kOutType - 0 (default) = output as sorted values, 1 = output as indices
+i|kStart - start from this element (inclusive) (default = 0)
+i|kEnd - end at this element (exclusive) (default = 0 means length of array)
+i|kHop - distance from element to element you are regarding (default = 1)
+i|kOutArr[] - sorted array (containing either values or indices)
 ****************************************************************************/
 /*
 ArrAddEl   : iOutArr[] ArrAddEl iInArr[], iEl [,iPos]
@@ -664,6 +681,54 @@ opcode ArrPldrm, k[], k[]o
  xout kOutArr
 endop
 
+opcode ArrRepVal, k[], k[]ii
+ kInArr[], iRepInx, iRep xin
+ kOutArr[] init lenarray:i(kInArr)+iRep
+ kRepNote = kInArr[iRepInx]
+ kStart = 0
+ kRepCount = iRepInx
+ kEnd = iRepInx
+ kRead = 0
+ while kRead < lenarray(kInArr) do
+	 kOutArr[kStart] = kInArr[kStart]
+	 kOutArr[kRepCount] = kRepNote
+	 kOutArr[kEnd+iRep] = kInArr[kEnd]
+	 kStart += 1
+		if kStart >=iRepInx then
+			kStart = iRepInx
+		endif
+ 	kRepCount += 1
+		if kRepCount >= (iRepInx+iRep) then
+			kRepCount = (iRepInx+iRep)
+		endif
+	 kEnd += 1
+		if kEnd >= lenarray(kInArr) then
+			kEnd = (lenarray(kInArr)-1)
+		endif
+	 kRead += 1
+ od
+ xout kOutArr
+endop
+opcode ArrRepVal, i[], i[]ii
+ iInArr[], iDupInx, iRep xin
+ iOutArr[] init lenarray(iInArr)+iRep
+ iIndex = 0
+ iWriteDups = 0
+ while iIndex < iDupInx do
+	 iOutArr[iIndex] = iInArr[iIndex]
+	 iIndex += 1
+ od
+ while iWriteDups < iRep do
+  iOutArr[iIndex+iWriteDups] = iInArr[iIndex]
+  iWriteDups += 1
+ od
+ while iIndex < lenarray(iInArr) do
+  iOutArr[iIndex+iWriteDups] = iInArr[iIndex]
+  iIndex += 1
+ od
+ xout iOutArr
+endop
+
 opcode ArrRmDup, i[], i[]
  iInArr[] xin
  iOutArr[] init lenarray:i(iInArr)
@@ -832,93 +897,118 @@ opcode ArrRvrs, k[], k[]
  xout kOutArr
 endop
 
-  opcode ArrSrt, k[], k[]jOOOP
-  
-kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
-
-;calculate some common values 
-kLen lenarray kArr
-kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
-
-;create the array for the result
-iOutN = (iOutN == -1) ? lenarray:i(kArr) : iOutN
-kRes[] init iOutN
-
-;fill this array with the smallest number minus 1 of kArr
-kIndx = 0
-kMin minarray kArr
-until kIndx == iOutN do
+opcode ArrSrt, k[], k[]jOOOP
+ kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
+ ;calculate some common values 
+ kLen lenarray kArr
+ kEnd = kEnd > kLen || kEnd == 0 ? kLen : kEnd
+ ;create the array for the result
+ iOutN = (iOutN == -1) ? lenarray:i(kArr) : iOutN
+ kRes[] init iOutN
+ ;fill this array with the smallest number minus 1 of kArr
+ kIndx = 0
+ kMin minarray kArr
+ while kIndx < iOutN do
   kRes[kIndx] = kMin-1
   kIndx += 1
-enduntil
-
-;if necessary, create index array
-if kOutType != 0 then
+ od
+ ;if necessary, create index array
+ if kOutType != 0 then
   kIndices[] init iOutN
-endif
-
-;initialize pointer
-kArrPnt = kStart
-
-;loop over the elements of the array
-until kArrPnt >= kEnd do
- 
+ endif
+ ;initialize pointer
+ kArrPnt = kStart 
+ ;loop over the elements of the array
+ while kArrPnt < kEnd do
   ;loop over kRes
   kResPnt = 0
-  until kResPnt == iOutN do
-  
-    ;if an el in kRes is smaller than the element we are comparing with
-    if kRes[kResPnt] < kArr[kArrPnt] then
-    
-      ;shift the elements right to kResPnt one position to the right
-      kShiftPnt = iOutN-1 
-      until kShiftPnt == kResPnt do
-        kRes[kShiftPnt] = kRes[kShiftPnt-1]
-        kShiftPnt -= 1 
-      enduntil
-      
-      ;then put the element we are comparing with at this position
-      kRes[kResPnt] = kArr[kArrPnt]
-
-      ;if indices array 
-      if kOutType != 0 then
-      
-        ;shift the elements in kIndices one position to the right
-        kShiftPnt = iOutN-1 
-        until kShiftPnt == kResPnt do
-          kIndices[kShiftPnt] = kIndices[kShiftPnt-1]
-          kShiftPnt -= 1
-        enduntil
-
-        ;then put in the index
-        kIndices[kResPnt] = kArrPnt
-      endif
-      
-      ;and leave the loop
-      kgoto Break
-      
+  while kResPnt < iOutN do
+   ;if an el in kRes is smaller than the element we are comparing with
+   if kRes[kResPnt] < kArr[kArrPnt] then
+    ;shift the elements right to kResPnt one position to the right
+    kShiftPnt = iOutN-1 
+    while kShiftPnt > kResPnt do
+     kRes[kShiftPnt] = kRes[kShiftPnt-1]
+     kShiftPnt -= 1 
+    od
+    ;then put the element we are comparing with at this position
+    kRes[kResPnt] = kArr[kArrPnt]
+    ;if indices array 
+    if kOutType != 0 then
+     ;shift the elements in kIndices one position to the right
+     kShiftPnt = iOutN-1 
+     while kShiftPnt > kResPnt do
+      kIndices[kShiftPnt] = kIndices[kShiftPnt-1]
+      kShiftPnt -= 1
+     od
+     ;then put in the index
+     kIndices[kResPnt] = kArrPnt
     endif
-    
-    ;increase res pointer
-    kResPnt += 1
-    
-  enduntil
-  
+    ;and leave the loop
+    kgoto Break 
+   endif
+   ;increase res pointer
+   kResPnt += 1
+  od  
   Break:
   ;increase array pointer
   kArrPnt += kHop
- 
-enduntil
-
-;copy array to final result
-if kOutType == 0 then
-kOut[] = kRes
-else
-kOut[] = kIndices
-endif
-
-xout kOut
-
- endop
+ od
+ ;copy array to final result
+ if kOutType == 0 then
+ kOut[] = kRes
+ else
+ kOut[] = kIndices
+ endif
+ xout kOut
+endop
+opcode ArrSrt, i[], i[]jooop
+ iArr[], iOutN, iOutType, iStart, iEnd, iHop xin
+ iLen lenarray iArr
+ iEnd = iEnd > iLen || iEnd == 0 ? iLen : iEnd
+ iOutN = (iOutN == -1) ? lenarray(iArr) : iOutN
+ iRes[] init iOutN
+ iIndx = 0
+ iMin minarray iArr
+ while iIndx < iOutN do
+  iRes[iIndx] = iMin-1
+  iIndx += 1
+ od
+ if iOutType != 0 then
+  iIndices[] init iOutN
+ endif
+ iArrPnt = iStart 
+ while iArrPnt < iEnd do
+  iResPnt = 0
+  while iResPnt < iOutN do
+   if iRes[iResPnt] < iArr[iArrPnt] then
+    iShiftPnt = iOutN-1 
+    while iShiftPnt > iResPnt do
+     iRes[iShiftPnt] = iRes[iShiftPnt-1]
+     iShiftPnt -= 1 
+    od
+    iRes[iResPnt] = iArr[iArrPnt]
+    if iOutType != 0 then
+     iShiftPnt = iOutN-1 
+     while iShiftPnt > iResPnt do
+      iIndices[iShiftPnt] = iIndices[iShiftPnt-1]
+      iShiftPnt -= 1
+     od
+     iIndices[iResPnt] = iArrPnt
+    endif
+    igoto Break 
+   endif
+   iResPnt += 1
+  od  
+  Break:
+  iArrPnt += iHop
+ od
+ if iOutType == 0 then
+ iOut[] = iRes
+ else
+ iOut[] = iIndices
+ endif
+ xout iOut
+endop
 
 
