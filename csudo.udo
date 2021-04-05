@@ -2060,37 +2060,28 @@ endop
 opcode ArrRepVal, k[], k[]ii
  kInArr[], iRepInx, iRep xin
  kOutArr[] init lenarray:i(kInArr)+iRep
- kRepNote = kInArr[iRepInx]
- kStart = 0
- kRepCount = iRepInx
- kEnd = iRepInx
- kRead = 0
- while kRead < lenarray(kInArr) do
-	 kOutArr[kStart] = kInArr[kStart]
-	 kOutArr[kRepCount] = kRepNote
-	 kOutArr[kEnd+iRep] = kInArr[kEnd]
-	 kStart += 1
-		if kStart >=iRepInx then
-			kStart = iRepInx
-		endif
- 	kRepCount += 1
-		if kRepCount >= (iRepInx+iRep) then
-			kRepCount = (iRepInx+iRep)
-		endif
-	 kEnd += 1
-		if kEnd >= lenarray(kInArr) then
-			kEnd = (lenarray(kInArr)-1)
-		endif
-	 kRead += 1
+ kIndex = 0
+ kWriteDups = 0
+ while kIndex < iRepInx do
+	 kOutArr[kIndex] = kInArr[kIndex]
+	 kIndex += 1
+ od
+ while kWriteDups < iRep do
+  kOutArr[kIndex+kWriteDups] = kInArr[kIndex]
+  kWriteDups += 1
+ od
+ while kIndex < lenarray(kInArr) do
+  kOutArr[kIndex+kWriteDups] = kInArr[kIndex]
+  kIndex += 1
  od
  xout kOutArr
 endop
 opcode ArrRepVal, i[], i[]ii
- iInArr[], iDupInx, iRep xin
+ iInArr[], iRepInx, iRep xin
  iOutArr[] init lenarray(iInArr)+iRep
  iIndex = 0
  iWriteDups = 0
- while iIndex < iDupInx do
+ while iIndex < iRepInx do
 	 iOutArr[iIndex] = iInArr[iIndex]
 	 iIndex += 1
  od

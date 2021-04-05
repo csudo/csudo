@@ -29,7 +29,7 @@ opcode ArrRepVal, k[], k[]ii
  kOutArr[] init lenarray:i(kInArr)+iRep
  kIndex = 0
  kWriteDups = 0
-while kIndex < iRepInx do
+ while kIndex < iRepInx do
 	 kOutArr[kIndex] = kInArr[kIndex]
 	 kIndex += 1
  od
@@ -108,3 +108,20 @@ Original array:
 Array with repeated value (index=3, rep=2):
  60 61 62 63 63 63 64 65 66 67 68 69 70 
  
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
