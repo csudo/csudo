@@ -590,7 +590,7 @@ kfin - 1 if record has finished
 ****************************************************************************/
 /****************************************************************************
 kOut CsQtArwKeys kKey
-Returns -65 for up, -66 for down, -67 for right, -68 for left arrow key (linux)
+Returns -65 for up, -66 for down, -67 for right, -68 for left arrow key (linux); otherwise 0.
 
 Makes it possible to use the arrow keys, although they come into CsoundQt as sequence of three numbers.
 It should be easy to modify the code for OSX and Windows. Requires CsoundQt 0.9.6
@@ -2647,6 +2647,8 @@ opcode CsQtArwKeys, k, k
   kKeys[kIndex] = kKey      	
   if kIndex == 2 && kKeys[0] == 27 && kKeys[1] == 91 then
    kOut = -kKey
+  else
+   kOut = 0
   endif
  endif
  xout kOut
