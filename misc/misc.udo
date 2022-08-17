@@ -2,11 +2,34 @@
 *****************************************************************************
 UDO DEFINITIONS IN misc:
 *****************************************************************************
+DelTp      : aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
 ExtrOrc    : Sorc ExtrOrc Sfil
 OnDtct     : kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
+Delay line based pitch shift; optimized for very small latencies.
+
+This is a version of the well-known strategy to use a variable delay line for
+pitch shifting. It is based on the version by Victor Lazzarini in the Csound
+Book (Springer 2017) in Listing 13.12 (online also here: 
+https://github.com/csound/book/blob/master/part4/chapter13/13.12.orc).
+The differences here are:
+1. Use half sine rather than triangle as cross envelopes.
+2. Use only one phasor and get the second one from it.
+3. Use a small and always changing delay line which aims to allow very small
+   latencies (< 1/100 sec) by avoiding amplitude modulating artefacts as much
+   as possible.
+written by joachim heintz
+
+aSnd - audio input signal
+kPitch - transposition as ratio (.5 = octave lower, 1.5 fifth higher etc)
+kDelTim - the moving delay time signal (see below for an example)
+iMaxDel - maximum possible delay time (sec)
+aPitchShift - transposed (pitch shifted) sound
+****************************************************************************/
 /****************************************************************************
 Sorc ExtrOrc Sfil
 Extracts the orc part of a csd file.
@@ -42,6 +65,19 @@ kOnset - 1 if onset is detected, otherwise 0
 kDb - dB value in the moment of onset detection. Note that this is not the 
       perceived intensity of the beat. About 20 ms later should give a fair result.
 ****************************************************************************/
+
+opcode DelTp,a,akkp
+ aSnd, kPitch, kDelTim, iMaxDel xin
+ iEnvTable = ftgen(0,0,4096,9,.5,1,0)
+ kPhasorFreq = -(kPitch-1) / kDelTim
+ aPhasor_1 = phasor:a(kPhasorFreq)
+ aPhasor_2 = (aPhasor_1+0.5) % 1
+ aDelay_1 = vdelayx(aSnd,aPhasor_1*kDelTim,iMaxDel,4)
+ aDelay_2 = vdelayx(aSnd,aPhasor_2*kDelTim,iMaxDel,4)
+ aDelay_1 *= tablei:a(aPhasor_1,iEnvTable,1)
+ aDelay_2 *= tablei:a(aPhasor_2,iEnvTable,1)
+ xout aDelay_1+aDelay_2
+endop
 
   opcode StripL, S, S
   ;strips all tabs or spaces at the left from an input string
