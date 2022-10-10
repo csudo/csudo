@@ -3,7 +3,7 @@
 UDO DEFINITIONS IN strings:
 *****************************************************************************
 StrAgrm    : Sout StrAgrm Sin [,iLen]
-StrAgrmk   : Sout StrAgrm Sin [,iLen]
+StrAgrmk   : Sout StrAgrmk Sin [,iLen]
 StrDir     : Sdir StrDir Spath
 StrDirUp   : SUpDir StrDirUp SCurDir
 StrExpr    : iNum StrExpr Str [, iStrt [, iEnd]]
@@ -41,13 +41,12 @@ iLen - length of Sin. If -1 (default), the length is calculated internally.
 Sout - output string
 ****************************************************************************/
 /****************************************************************************
-Sout StrAgrm Sin [,iLen]
+Sout StrAgrmk Sin [,iLen]
 Changes the order of the characters in Sin randomly, like in an anagram.
 
 Changes the order of the characters in Sin randomly, like in an anagram, and returns the result as new string.
 
-Sin - input string 
-iLen - length of Sin. If -1 (default), the length is calculated internally. 
+Sin - input string  
 Sout - output string
 ****************************************************************************/
 /****************************************************************************
