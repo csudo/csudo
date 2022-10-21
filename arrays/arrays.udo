@@ -10,6 +10,7 @@ ArrElIn    : iRes ArrElIn iEl, iArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
+ArrPermRndK: kOutArr[] ArrPermRnd kInArr[]
 ArrPldrm   : iOutArr[] ArrPldrm iInArr[] [,iOpt]
 ArrRepVal  : kOutArr[] ArrRepVal kInArr1[], iRepInx, iRep
 ArrRmDup   : iOutArr[] ArrRmDup iInArr[]
@@ -111,6 +112,16 @@ written by joachim heintz
 i(k)InArr[] - input array
 iN - desired length of the output array (must not be longer than i(k)InArr), default = -1 which means that the whole length of the input array is taken
 i(k)OutArr[] - output array with kN randomly permuted indices of kInArr
+****************************************************************************/
+/****************************************************************************
+kOutArr[] ArrPermRnd kInArr[]
+Returns an array which contains randomly permuted elements the input array. In contrary 
+to ArrPermRnd there is no i-time operation — all is done at performance.
+As the random opcode is used, make sure to have set the global seed to zero to get always changing results.
+written by joachim heintz
+
+kInArr[] - input array
+kOutArr[] - output array with randomly permuted elements of kInArr
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPldrm iInArr[] [,iOpt]
@@ -622,6 +633,25 @@ opcode ArrPermRndIndx, k[], k[]j
   kIndx      +=         1
  od
            xout       kOutArr
+endop
+
+opcode ArrPermRndK, k[], k[]
+ kInArr[] xin
+ kOutArr[] = kInArr
+ kIndx = 0
+ kOutLen = lenarray:k(kOutArr)
+ kReadLen = kOutLen
+ while kIndx < kOutLen do
+  kRndIndx = int(random:k(0,kReadLen-.0001))
+  kOutArr[kIndx] = kInArr[kRndIndx]
+  while kRndIndx < kReadLen-1 do
+   kInArr[kRndIndx] = kInArr[kRndIndx+1]
+   kRndIndx += 1
+  od
+ kReadLen -= 1
+ kIndx += 1
+ od
+ xout kOutArr
 endop
 
 opcode ArrPldrm, i[], i[]o
