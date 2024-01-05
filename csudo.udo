@@ -36,6 +36,7 @@ BufPlay1   : aout, kfin BufPlay1 ift, kplay, kspeed, kvol, kstart, kend, kwrap
 BufPlay2   : aL, aR, kfin BufPlay2 iftL, iftR, kplay, kspeed, kvol, kstart, kend, kwrap
 BufRec1    : kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 BufRec2    : kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
+CmbRsn     : aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
 CsQtArwKeys: kOut CsQtArwKeys kKey
 CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 DelTp      : aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
@@ -47,6 +48,7 @@ F2M        : iNotNum F2M iFreq [,iRound]
 GrPtkSmpA  : aout GrPtkSmpA ifiltab, iskip, kspeed, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 GrPtkSmpB  : apartikkel GrPtkSmpB ifiltab, apnter, kgrainamp, kgrainrate, kgrainsize, kcent, kposrand, kcentrand, icosintab, idisttab, iwin
 GrPtkWrp   : aWrp GrPtkWrp aPos, iFilTab [,kAmp [,kCent [,kPosRnd [,kGrainRate [,kGrainSize [,kDistribution]]]]]]
+LinTrs     : iVal LinTrs iStart, iEnd, iNumSteps, iType, iStep
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
 NmFrcLen   : iFracs NmFrcLen iNum
@@ -601,6 +603,18 @@ kwrap - if 1, recording wraps between kend and the beginning of the buffer (see 
 kfin - 1 if record has finished
 ****************************************************************************/
 /****************************************************************************
+aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
+A resonator from an array of comb filters.
+
+written by joachim heintz
+
+aIn - audio input signal
+iFreqs[] - array with frequencies of the single resonator partials
+iRvrbtm - reverb time as defined in the comb opcode
+kAmp - amplitude
+indx - first index in iFreqs[] (default=0)
+****************************************************************************/
+/****************************************************************************
 kOut CsQtArwKeys kKey
 Returns -65 for up, -66 for down, -67 for right, -68 for left arrow key (linux); otherwise 0.
 
@@ -784,6 +798,19 @@ kGrainRate - grains per second (default = 200)
 kGrainSize - grain size in milliseconds (default = 100)
 kDistribution - distribution of the grains in time. 0 means periodic, 1 means scattered (which is the dafault), with any value in between possible
 see the Csound Manual for partikkel for more information about the input parameters
+****************************************************************************/
+/****************************************************************************
+iVal LinTrs iStart, iEnd, iNumSteps, iType, iStep
+same as the transeg opcode in Csound
+
+wraps the transeg opcode (with only one segment) as UDO to get only one value
+written by joachim heintz
+
+iStart - starting value 
+iEnd - target value
+iNumSteps - how many steps in total
+iType - see the transeg manual page in Csound
+iStep - this step (starting from 0 as first step)
 ****************************************************************************/
 /****************************************************************************
 kval, kfin Linek kthis, knext, ktim, ktrig
@@ -3328,12 +3355,31 @@ kfin      =         0
           xout      kval, kfin ;value and 1 if target reached
   endop
 
+opcode LinTrs, i, iiiii
+ iStart, iEnd, iNumSteps, iType, iStep xin
+ if iType != 0 then
+  iVal = iStart + (iEnd - iStart) * (1 - exp(iStep*iType / (iNumSteps-1))) / (1 - exp(iType))
+ else
+  iVal = iStart + (iEnd - iStart) * (iStep / (iNumSteps-1))
+ endif
+ xout iVal
+endop
+
   opcode F2M, i, io
 iFq, iRnd xin
 iNotNum = 12 * (log(iFq/220)/log(2)) + 57
 iNotNum = (iRnd == 1 ? round(iNotNum) : iNotNum)
 xout iNotNum
   endop
+
+opcode CmbRsn,a,ai[]iko
+  aIn,iFreqs[],iRvrbtm,kAmp,indx xin
+  aComb = comb(aIn*kAmp,iRvrbtm,1/iFreqs[indx])
+  if (indx+1 < lenarray(iFreqs)) then
+    aComb += CmbRsn(aIn,iFreqs,iRvrbtm,kAmp,indx+1)
+  endif
+  xout aComb
+endop
 
 opcode DelTp,a,akkp
  aSnd, kPitch, kDelTim, iMaxDel xin

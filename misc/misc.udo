@@ -2,12 +2,25 @@
 *****************************************************************************
 UDO DEFINITIONS IN misc:
 *****************************************************************************
+CmbRsn     : aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
 DelTp      : aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
 ExtrOrc    : Sorc ExtrOrc Sfil
 OnDtct     : kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
+A resonator from an array of comb filters.
+
+written by joachim heintz
+
+aIn - audio input signal
+iFreqs[] - array with frequencies of the single resonator partials
+iRvrbtm - reverb time as defined in the comb opcode
+kAmp - amplitude
+indx - first index in iFreqs[] (default=0)
+****************************************************************************/
 /****************************************************************************
 aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
 Delay line based pitch shift; optimized for very small latencies.
@@ -65,6 +78,15 @@ kOnset - 1 if onset is detected, otherwise 0
 kDb - dB value in the moment of onset detection. Note that this is not the 
       perceived intensity of the beat. About 20 ms later should give a fair result.
 ****************************************************************************/
+
+opcode CmbRsn,a,ai[]iko
+  aIn,iFreqs[],iRvrbtm,kAmp,indx xin
+  aComb = comb(aIn*kAmp,iRvrbtm,1/iFreqs[indx])
+  if (indx+1 < lenarray(iFreqs)) then
+    aComb += CmbRsn(aIn,iFreqs,iRvrbtm,kAmp,indx+1)
+  endif
+  xout aComb
+endop
 
 opcode DelTp,a,akkp
  aSnd, kPitch, kDelTim, iMaxDel xin
