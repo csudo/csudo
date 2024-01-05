@@ -2,10 +2,24 @@
 *****************************************************************************
 UDO DEFINITIONS IN lines:
 *****************************************************************************
+LinTrs     : iVal LinTrs iStart, iEnd, iNumSteps, iType, iStep
 Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 *****************************************************************************
 ****************************************************************************/
 
+/****************************************************************************
+iVal LinTrs iStart, iEnd, iNumSteps, iType, iStep
+same as the transeg opcode in Csound
+
+wraps the transeg opcode (with only one segment) as UDO to get only one value
+written by joachim heintz
+
+iStart - starting value 
+iEnd - target value
+iNumSteps - how many steps in total
+iType - see the transeg manual page in Csound
+iStep - this step (starting from 0 as first step)
+****************************************************************************/
 /****************************************************************************
 kval, kfin Linek kthis, knext, ktim, ktrig
 performs a linear interpolation from one value to another value in a certain time whenever a trigger is received
@@ -52,5 +66,15 @@ kfin      =         0
  endif
           xout      kval, kfin ;value and 1 if target reached
   endop
+
+opcode LinTrs, i, iiiii
+ iStart, iEnd, iNumSteps, iType, iStep xin
+ if iType != 0 then
+  iVal = iStart + (iEnd - iStart) * (1 - exp(iStep*iType / (iNumSteps-1))) / (1 - exp(iType))
+ else
+  iVal = iStart + (iEnd - iStart) * (iStep / (iNumSteps-1))
+ endif
+ xout iVal
+endop
 
 
