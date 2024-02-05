@@ -203,3 +203,20 @@ kPrmRnd4 (Start=0, End=4) = [11, 15, 13, 12, 14]
 kPrmRnd5 (default) = [13, 11, 14, 12, 15]
 gkArr[] = [11, 12, 13, 14, 15]
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>240</r>
+  <g>240</g>
+  <b>240</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>

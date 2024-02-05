@@ -6,6 +6,7 @@ CmbRsn     : aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
 DelTp      : aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
 ExtrOrc    : Sorc ExtrOrc Sfil
 OnDtct     : kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
+RsdNz      : aNoise RsdNz iBandDbs[][,indx]
 *****************************************************************************
 ****************************************************************************/
 
@@ -77,6 +78,25 @@ iRmsFreq - approximate frequency for rms measurements (default = 50)
 kOnset - 1 if onset is detected, otherwise 0
 kDb - dB value in the moment of onset detection. Note that this is not the 
       perceived intensity of the beat. About 20 ms later should give a fair result.
+****************************************************************************/
+/****************************************************************************
+aNoise RsdNz iBandDbs[][,indx]
+aL,aR RsdNz iBandDbs[][,indx]
+Generates residuals noise in the 24 bands of the Bark scale.
+
+This UDO follows the ATSreadnz opcode in Csound, and in particular the
+examples from Oscar Pablo di Liscia in the Csound FLOSS Manual.
+A random movement with maximum +- 6 dB is applied to the values in the 
+iBandDbs array, to achieve a more lively and moving sound.
+The gauss opcode sounds better than white or pink noise, I think, but
+is quite cpu expensive. In case cpu optimization is needed, you may use
+aNoise = reson(rand:a(ampdb(kDb),2,1),iCf,iCf/50,1) instead.
+written by joachim heintz
+
+iBandDbs[] - array with 24 dB values for the Bark center frequencies
+index - defaults to 0 for the recursion
+aNoise - sum of the noise bands
+aL,aR - stereo version with random panning distribution of the single bands
 ****************************************************************************/
 
 opcode CmbRsn,a,ai[]iko
@@ -176,6 +196,41 @@ opcode OnDtct, kk, aOOOOo
  
  xout kOnset, kDb
 
+endop
+
+opcode RsdNz,a,i[]o
+  iBandDbs[],indx xin
+  // center frequencies of 24 critical bands (bark scale)
+  iCfs[] = fillarray(50,150,250,350,450,570,700,840,1000,1170,1370,1600,1850,
+                     2150,2500,2900,3400,4000,4800,5800,7000,8500,10500,13500)
+  // resynthesize noise bands with +-3dB movement
+  iCf = iCfs[indx]
+  iDb = iBandDbs[indx]
+  kDb = randomi:k(iDb-6,iDb+6,2,3)
+  ;aNoise = reson(rand:a(ampdb(kDb),2,1),iCf,iCf/50,1)
+  aNoise = reson(gauss:a(ampdb(kDb)),iCf,iCf/20,1)
+  if (indx+1 < lenarray(iCfs)) then
+    aNoise += RsdNz(iBandDbs,indx+1)
+  endif 
+  xout(aNoise)
+endop
+opcode RsdNz,aa,i[]o
+  iBandDbs[],indx xin
+  // center frequencies of 24 critical bands (bark scale)
+  iCfs[] = fillarray(50,150,250,350,450,570,700,840,1000,1170,1370,1600,1850,
+                     2150,2500,2900,3400,4000,4800,5800,7000,8500,10500,13500)
+  // resynthesize noise bands with +-3dB movement
+  iCf = iCfs[indx]
+  iDb = iBandDbs[indx]
+  kDb = randomi:k(iDb-6,iDb+6,2,3)
+  aNoise = reson(gauss:a(ampdb(kDb)),iCf,iCf/20,1)
+  aL,aR pan2 aNoise,random:i(0,1)
+  if (indx+1 < lenarray(iCfs)) then
+    aL1,aR1 RsdNz iBandDbs,indx+1
+    aL += aL1
+    aR += aR1
+  endif 
+  xout(aL,aR)
 endop
 
 
