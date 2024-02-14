@@ -20,6 +20,7 @@ ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
 ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
 ArrSrt     : iOutArr[] ArrSrt iInArr[] [,iOutN [,iOutType ,[iStart [,iEnd [,iHop]]]]]
+ArrSwpPos  : iOutArr[] ArrRtt iInArr[], iSwapPos[]
 BufCt1     : ift BufCt1 ilen [, inum]
 BufCt2     : iftL, iftR BufCt2 ilen [, inumL [, inumR]]
 BufFiCt1   : ift BufFiCt1 Sfilenam [, iftnum [, inorm]]
@@ -330,6 +331,17 @@ i|kStart - start from this element (inclusive) (default = 0)
 i|kEnd - end at this element (exclusive) (default = 0 means length of array)
 i|kHop - distance from element to element you are regarding (default = 1)
 i|kOutArr[] - sorted array (containing either values or indices)
+****************************************************************************/
+/****************************************************************************
+iOutArr[] ArrRtt iInArr[], iSwapPos[]
+kOutArr[] ArrRtt kInArr[], kSwapPos[]
+Swaps values pairwise in an array. The i/kSwapPos array contains pairs of position,
+so must be of even length. 
+written by joachim heintz
+
+i(k)InArr[] - input array
+i(k)SwapPos[] - array with pairs of indices to be swapped, like [0,2,3,5]
+i(k)OutArr[] - output array
 ****************************************************************************/
 /****************************************************************************
 ift BufCt1 ilen [, inum]
@@ -2475,6 +2487,31 @@ opcode ArrSrt, i[], i[]jooop
  iOut[] = iIndices
  endif
  xout iOut
+endop
+
+opcode ArrSwpPos, i[], i[]i[]
+  iInArr[], iSwapPos[] xin
+  iOutArr[] = iInArr
+  indx = 0
+  while (indx < lenarray(iSwapPos)) do
+    indx_1,indx_2 = iSwapPos[indx],iSwapPos[indx+1]
+    iVal_1,iVal_2 = iInArr[indx_1],iInArr[indx_2]
+    iOutArr[indx_1],iOutArr[indx_2] = iVal_2,iVal_1
+    indx += 2
+  od
+  xout(iOutArr)
+endop
+opcode ArrSwpPos, k[], k[]k[]
+  kInArr[], kSwapPos[] xin
+  kOutArr[] = kInArr
+  kndx = 0
+  while (kndx < lenarray(kSwapPos)) do
+    kndx_1,kndx_2 = kSwapPos[kndx],kSwapPos[kndx+1]
+    kVal_1,kVal_2 = kInArr[kndx_1],kInArr[kndx_2]
+    kOutArr[kndx_1],kOutArr[kndx_2] = kVal_2,kVal_1
+    kndx += 2
+  od
+  xout(kOutArr)
 endop
 
   opcode BufFiCt1, i, Soo
