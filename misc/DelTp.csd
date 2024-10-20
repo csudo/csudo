@@ -7,17 +7,17 @@ pitch shifting. It is based on the version by Victor Lazzarini in the Csound
 Book (Springer 2017) in Listing 13.12 (online also here: 
 https://github.com/csound/book/blob/master/part4/chapter13/13.12.orc).
 The differences here are:
-1. Use half sine rather than triangle as cross envelopes.
+1. Use hamming window rather than triangle as cross envelopes.
 2. Use only one phasor and get the second one from it.
-3. Use a small and always changing delay line which aims to allow very small
-   latencies (< 1/100 sec) by avoiding amplitude modulating artefacts as much
-   as possible.
+The use of Hamming window seems to minimize the AM artifacts.
+You may want to compare a sine as input (see below) with the 'transpose' object in Max.
+Note that the kDelTim can be moved but needs to be fixed for a precise transposition interval.
 written by joachim heintz
 
 aSnd - audio input signal
 kPitch - transposition as ratio (.5 = octave lower, 1.5 fifth higher etc)
-kDelTim - the moving delay time signal (see below for an example)
-iMaxDel - maximum possible delay time (sec)
+kDelTim - delay time in seconds (very small values like 1/100 should be possible in many cases)
+iMaxDel - maximum possible delay time (sec) (default = 1)
 aPitchShift - transposed (pitch shifted) sound
 ****************************************************************************/
 
@@ -35,7 +35,7 @@ seed 0
 
 opcode DelTp,a,akkp
  aSnd, kPitch, kDelTim, iMaxDel xin
- iEnvTable = ftgen(0,0,4096,9,.5,1,0)
+ iEnvTable = ftgen(0,0,4096,20,1,1)
  kPhasorFreq = -(kPitch-1) / kDelTim
  aPhasor_1 = phasor:a(kPhasorFreq)
  aPhasor_2 = (aPhasor_1+0.5) % 1
@@ -46,24 +46,45 @@ opcode DelTp,a,akkp
  xout aDelay_1+aDelay_2
 endop
 
+instr ProofOfConcept //smooth reproduction of input and short latency
+  aSine = poscil:a(.2,400)
+  aPitchShift = DelTp(aSine,linseg:k(1,1,1,4,1.5,1,1.5,4,1),0.01)
+  out(aSine,aPitchShift)
+endin
 
-instr PitchShift
+instr RealSound
  //sound file to mimic live input 
  aSnd diskin "fox.wav",1,0,1
- //uncomment the following line for sine test tone instead
- ;aSnd = poscil:a(.2,400)
  //randomly moving pitch shift
- kPitchShift = randomi:k(.5,1.5,1,3)
- //very short and always moving delay line
- kDelTim = randomi:k(.003,.01,10,3)
+ kPitchShift1 = randomi:k(cent(-200),cent(200),1,3)
+ kPitchShift2 = kPitchShift1 * 5/4
  //apply transposition (pitch shift)
- aPitchShift = DelTp(aSnd,kPitchShift,kDelTim)
+ aPitchShift1 = DelTp(aSnd,kPitchShift1,.01)
+ aPitchShift2 = DelTp(aSnd,kPitchShift2,.01)
  //output both to control sound and latency
- out(aSnd/3,aPitchShift)
+ out(aPitchShift1,aPitchShift2)
 endin
 
 </CsInstruments>
 <CsScore>
-i "PitchShift" 0 5.5
+i "ProofOfConcept" 0 12
+i "RealSound" 13 10
 </CsScore>
 </CsoundSynthesizer>
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>100</x>
+ <y>100</y>
+ <width>320</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="background">
+  <r>240</r>
+  <g>240</g>
+  <b>240</b>
+ </bgcolor>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
