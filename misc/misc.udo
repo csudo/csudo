@@ -31,17 +31,17 @@ pitch shifting. It is based on the version by Victor Lazzarini in the Csound
 Book (Springer 2017) in Listing 13.12 (online also here: 
 https://github.com/csound/book/blob/master/part4/chapter13/13.12.orc).
 The differences here are:
-1. Use half sine rather than triangle as cross envelopes.
+1. Use hamming window rather than triangle as cross envelopes.
 2. Use only one phasor and get the second one from it.
-3. Use a small and always changing delay line which aims to allow very small
-   latencies (< 1/100 sec) by avoiding amplitude modulating artefacts as much
-   as possible.
+The use of Hamming window seems to minimize the AM artifacts.
+You may want to compare a sine as input (see below) with the 'transpose' object in Max.
+Note that the kDelTim can be moved but needs to be fixed for a precise transposition interval.
 written by joachim heintz
 
 aSnd - audio input signal
 kPitch - transposition as ratio (.5 = octave lower, 1.5 fifth higher etc)
-kDelTim - the moving delay time signal (see below for an example)
-iMaxDel - maximum possible delay time (sec)
+kDelTim - delay time in seconds (very small values like 1/100 should be possible in many cases)
+iMaxDel - maximum possible delay time (sec) (default = 1)
 aPitchShift - transposed (pitch shifted) sound
 ****************************************************************************/
 /****************************************************************************
@@ -110,7 +110,7 @@ endop
 
 opcode DelTp,a,akkp
  aSnd, kPitch, kDelTim, iMaxDel xin
- iEnvTable = ftgen(0,0,4096,9,.5,1,0)
+ iEnvTable = ftgen(0,0,4096,20,1,1)
  kPhasorFreq = -(kPitch-1) / kDelTim
  aPhasor_1 = phasor:a(kPhasorFreq)
  aPhasor_2 = (aPhasor_1+0.5) % 1

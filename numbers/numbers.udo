@@ -102,16 +102,16 @@ endif
 end:      xout      ifracs
   endop
 
-  opcode NmRndInt, i, ii
-iMin, iMax xin
-iRnd random iMin, iMax+.999999
-xout int(iRnd)
-  endop
-  opcode NmRndInt, k, kk
-kMin, kMax xin
-kRnd random kMin, kMax+.999999
-xout int(kRnd)
-  endop
+opcode NmRndInt, i, ii
+  iMin, iMax xin
+  iRnd random iMin, iMax+.999999
+  xout int(iRnd)
+endop
+opcode NmRndInt, k, kk
+  kMin, kMax xin
+  kRnd random kMin, kMax+.999999
+  xout int(kRnd)
+endop
 
   opcode NmScl, i, iiiii
 iVal, iInMin, iInMax, iOutMin, iOutMax xin

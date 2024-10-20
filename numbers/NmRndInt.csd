@@ -20,17 +20,17 @@ i(k)Rnd - result
 <CsInstruments>
 ksmps = 32
 
-  opcode NmRndInt, i, ii
-iMin, iMax xin
-iRnd random iMin, iMax+.999999
-xout int(iRnd)
-  endop
+opcode NmRndInt, i, ii
+  iMin, iMax xin
+  iRnd random iMin, iMax+.999999
+  xout int(iRnd)
+endop
 
-  opcode NmRndInt, k, kk
-kMin, kMax xin
-kRnd random kMin, kMax+.999999
-xout int(kRnd)
-  endop
+opcode NmRndInt, k, kk
+  kMin, kMax xin
+  kRnd random kMin, kMax+.999999
+  xout int(kRnd)
+endop
 
 instr nix
 puts "i-rate version:", 1

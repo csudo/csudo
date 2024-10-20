@@ -660,17 +660,17 @@ pitch shifting. It is based on the version by Victor Lazzarini in the Csound
 Book (Springer 2017) in Listing 13.12 (online also here: 
 https://github.com/csound/book/blob/master/part4/chapter13/13.12.orc).
 The differences here are:
-1. Use half sine rather than triangle as cross envelopes.
+1. Use hamming window rather than triangle as cross envelopes.
 2. Use only one phasor and get the second one from it.
-3. Use a small and always changing delay line which aims to allow very small
-   latencies (< 1/100 sec) by avoiding amplitude modulating artefacts as much
-   as possible.
+The use of Hamming window seems to minimize the AM artifacts.
+You may want to compare a sine as input (see below) with the 'transpose' object in Max.
+Note that the kDelTim can be moved but needs to be fixed for a precise transposition interval.
 written by joachim heintz
 
 aSnd - audio input signal
 kPitch - transposition as ratio (.5 = octave lower, 1.5 fifth higher etc)
-kDelTim - the moving delay time signal (see below for an example)
-iMaxDel - maximum possible delay time (sec)
+kDelTim - delay time in seconds (very small values like 1/100 should be possible in many cases)
+iMaxDel - maximum possible delay time (sec) (default = 1)
 aPitchShift - transposed (pitch shifted) sound
 ****************************************************************************/
 /**********
@@ -2791,28 +2791,25 @@ opcode CsQtArwKeys, k, k
 endop
 
 opcode CsQtMeter, 0, SSak
- S_chan_sig, S_chan_over, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_over
-   kOn = 1
+  S_chan_sig, S_chan_clip, aSig, kTrig	xin
+  iDbRange = 60 ;shows 60 dB
+  iHoldTim = 1 ;seconds to "hold the red light"
+  kOn,kTim,kStart,kEnd init 0
+  kMax = max_k(aSig,kTrig,1)
+  if kTrig == 1 then
+    chnset((iDbRange+dbfsamp(kMax)) / iDbRange, S_chan_sig)
+    if (kOn == 0 && kMax > 1) then
+      kTim = 0
+      kEnd = iHoldTim
+      kOn = 1
+      chnset(kOn, S_chan_clip)
+    endif
+    if (kOn == 1 && kTim > kEnd) then
+      kOn =	0
+      chnset(kOn, S_chan_clip)
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim += ksmps/sr
 endop
 
   opcode StrSum, i, S
@@ -3440,7 +3437,7 @@ endop
 
 opcode DelTp,a,akkp
  aSnd, kPitch, kDelTim, iMaxDel xin
- iEnvTable = ftgen(0,0,4096,9,.5,1,0)
+ iEnvTable = ftgen(0,0,4096,20,1,1)
  kPhasorFreq = -(kPitch-1) / kDelTim
  aPhasor_1 = phasor:a(kPhasorFreq)
  aPhasor_2 = (aPhasor_1+0.5) % 1
@@ -3589,16 +3586,16 @@ endif
 end:      xout      ifracs
   endop
 
-  opcode NmRndInt, i, ii
-iMin, iMax xin
-iRnd random iMin, iMax+.999999
-xout int(iRnd)
-  endop
-  opcode NmRndInt, k, kk
-kMin, kMax xin
-kRnd random kMin, kMax+.999999
-xout int(kRnd)
-  endop
+opcode NmRndInt, i, ii
+  iMin, iMax xin
+  iRnd random iMin, iMax+.999999
+  xout int(iRnd)
+endop
+opcode NmRndInt, k, kk
+  kMin, kMax xin
+  kRnd random kMin, kMax+.999999
+  xout int(kRnd)
+endop
 
   opcode NmScl, i, iiiii
 iVal, iInMin, iInMax, iOutMin, iOutMax xin

@@ -55,28 +55,25 @@ opcode CsQtArwKeys, k, k
 endop
 
 opcode CsQtMeter, 0, SSak
- S_chan_sig, S_chan_over, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_over
-   kOn = 1
+  S_chan_sig, S_chan_clip, aSig, kTrig	xin
+  iDbRange = 60 ;shows 60 dB
+  iHoldTim = 1 ;seconds to "hold the red light"
+  kOn,kTim,kStart,kEnd init 0
+  kMax = max_k(aSig,kTrig,1)
+  if kTrig == 1 then
+    chnset((iDbRange+dbfsamp(kMax)) / iDbRange, S_chan_sig)
+    if (kOn == 0 && kMax > 1) then
+      kTim = 0
+      kEnd = iHoldTim
+      kOn = 1
+      chnset(kOn, S_chan_clip)
+    endif
+    if (kOn == 1 && kTim > kEnd) then
+      kOn =	0
+      chnset(kOn, S_chan_clip)
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim += ksmps/sr
 endop
 
 
