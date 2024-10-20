@@ -22,47 +22,45 @@ nchnls = 2
 0dbfs = 1
 
 opcode CsQtMeter, 0, SSak
- S_chan_sig, S_chan_over, aSig, kTrig	xin
- iDbRange = 60 ;shows 60 dB
- iHoldTim = 1 ;seconds to "hold the red light"
- kOn init 0
- kTim init 0
- kStart init 0
- kEnd init 0
- kMax max_k aSig, kTrig, 1
- if kTrig == 1 then
-  chnset (iDbRange + dbfsamp(kMax)) / iDbRange, S_chan_sig
-  if kOn == 0 && kMax > 1 then
-   kTim = 0
-   kEnd = iHoldTim
-   chnset k(1), S_chan_over
-   kOn = 1
+  S_chan_sig, S_chan_clip, aSig, kTrig	xin
+  iDbRange = 60 ;shows 60 dB
+  iHoldTim = 1 ;seconds to "hold the red light"
+  kOn,kTim,kStart,kEnd init 0
+  kMax = max_k(aSig,kTrig,1)
+  if kTrig == 1 then
+    chnset((iDbRange+dbfsamp(kMax)) / iDbRange, S_chan_sig)
+    if (kOn == 0 && kMax > 1) then
+      kTim = 0
+      kEnd = iHoldTim
+      kOn = 1
+      chnset(kOn, S_chan_clip)
+    endif
+    if (kOn == 1 && kTim > kEnd) then
+      kOn =	0
+      chnset(kOn, S_chan_clip)
+    endif
   endif
-  if kOn == 1 && kTim > kEnd then
-   chnset k(0), S_chan_over
-   kOn =	0
-  endif
- endif
- kTim += ksmps/sr
+  kTim += ksmps/sr
 endop
 
 ;declare software channels
 chn_k "outL", 2
-chn_k "outL_over", 2
+chn_k "outL_clip", 2
 chn_k "outR", 2
-chn_k "outR_over", 2
+chn_k "outR_clip", 2
 
 instr Caution_LOUD
- iDb = p4
- aOut poscil ampdb(iDb), 100
- out aOut, aOut
+  iDb = p4
+  aOut = poscil:a(ampdb(iDb),100)
+  aL,aR pan2 aOut,randomi:k(0,1,5,3)
+  out(aL,aR)
 endin 
 
 instr GUI
- aL, aR monitor
- kTrigDisp metro 10
- CsQtMeter "outL", "outL_over", aL, kTrigDisp
- CsQtMeter "outR", "outR_over", aR, kTrigDisp
+  aL,aR monitor
+  kTrigDisp = metro(10)
+  CsQtMeter("outL", "outL_clip", aL, kTrigDisp)
+  CsQtMeter("outR", "outR_clip", aR, kTrigDisp)
 endin
 
 </CsInstruments>
@@ -78,10 +76,10 @@ i "Caution_LOUD" 13 1 -10
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>484</x>
- <y>234</y>
+ <x>806</x>
+ <y>203</y>
  <width>361</width>
- <height>140</height>
+ <height>159</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
@@ -99,6 +97,7 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outL</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -110,20 +109,23 @@ i "Caution_LOUD" 13 1 -10
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
-  <objectName>outL_over</objectName>
+  <objectName>outL_clip</objectName>
   <x>302</x>
   <y>25</y>
   <width>21</width>
@@ -132,7 +134,8 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <objectName2>outL_over</objectName2>
+  <description/>
+  <objectName2>outL_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -143,17 +146,20 @@ i "Caution_LOUD" 13 1 -10
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -165,8 +171,10 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>L</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -182,7 +190,7 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
@@ -194,6 +202,7 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <objectName2>outR</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
@@ -205,20 +214,23 @@ i "Caution_LOUD" 13 1 -10
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00FF00</borderColor>
   <color>
    <r>0</r>
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBController" version="2">
-  <objectName>outR_over</objectName>
+  <objectName>outR_clip</objectName>
   <x>302</x>
   <y>48</y>
   <width>21</width>
@@ -227,7 +239,8 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
-  <objectName2>outR_over</objectName2>
+  <description/>
+  <objectName2>outR_clip</objectName2>
   <xMin>0.00000000</xMin>
   <xMax>1.00000000</xMax>
   <yMin>0.00000000</yMin>
@@ -238,17 +251,20 @@ i "Caution_LOUD" 13 1 -10
   <pointsize>1</pointsize>
   <fadeSpeed>0.00000000</fadeSpeed>
   <mouseControl act="press">jump</mouseControl>
+  <bordermode>noborder</bordermode>
+  <borderColor>#00ff00</borderColor>
   <color>
    <r>196</r>
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
    <b>0</b>
   </bgcolor>
+  <bgcolormode>true</bgcolormode>
  </bsbObject>
  <bsbObject type="BSBLabel" version="2">
   <objectName/>
@@ -260,8 +276,10 @@ i "Caution_LOUD" 13 1 -10
   <visible>true</visible>
   <midichan>0</midichan>
   <midicc>0</midicc>
+  <description/>
   <label>R</label>
   <alignment>right</alignment>
+  <valignment>top</valignment>
   <font>sans</font>
   <fontsize>14</fontsize>
   <precision>3</precision>
@@ -277,7 +295,38 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bordermode>noborder</bordermode>
   <borderradius>1</borderradius>
-  <borderwidth>1</borderwidth>
+  <borderwidth>0</borderwidth>
+ </bsbObject>
+ <bsbObject type="BSBLabel" version="2">
+  <objectName/>
+  <x>8</x>
+  <y>70</y>
+  <width>350</width>
+  <height>40</height>
+  <uuid>{57b0d6eb-fc8f-425d-90b5-d7fe4fba13ae}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>-3</midicc>
+  <description/>
+  <label>caution LOUD! (100 Hz)</label>
+  <alignment>center</alignment>
+  <valignment>top</valignment>
+  <font>Liberation Sans</font>
+  <fontsize>30</fontsize>
+  <precision>3</precision>
+  <color>
+   <r>0</r>
+   <g>0</g>
+   <b>0</b>
+  </color>
+  <bgcolor mode="nobackground">
+   <r>255</r>
+   <g>255</g>
+   <b>255</b>
+  </bgcolor>
+  <bordermode>false</bordermode>
+  <borderradius>1</borderradius>
+  <borderwidth>0</borderwidth>
  </bsbObject>
 </bsbPanel>
 <bsbPresets>
