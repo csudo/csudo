@@ -7,6 +7,7 @@ ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
 ArrElCnt   : iFound ArrElCnt iNeedle, iInArr[]
 ArrElIn    : iRes ArrElIn iEl, iArr[]
+ArrElIn2   : iRes ArrElIn2 iEl, iArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
@@ -39,6 +40,7 @@ BufRec1    : kfin BufRec1 ain, ift, krec, kstart, kend, kwrap
 BufRec2    : kfin BufRec2 ainL, ainR, iftL, iftR, krec, kstart, kend, kwrap
 CmbRsn     : aRes CmbRsn aIn, iFreqs[], iRvrbtm, kAmp[, indx]
 CsQtArwKeys: kOut CsQtArwKeys kKey
+CsQtMbrowse2Array: Sout[] CsQtMbrowse2Array Str
 CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 DelTp      : aPitchShift DelTp aSnd, kPitch, kDelTim, iMaxDel
 EvtLvLp    : EvtLvLp SPatternName, Schedule, SParameters, iTrackStates[][] [iMeter, iBPM]
@@ -173,6 +175,17 @@ written by joachim heintz
 i(k)El - element to test
 i(k)Arr[] - array in which to look for i(k)El
 i(k)Res - 1 for yes, 0 for no
+****************************************************************************/
+/****************************************************************************
+iRes ArrElIn2 iEl, iArr[]
+kRes ArrElIn2 kEl, kArr[]
+Looks whether i(k)El is in i(k)Arr or not. 
+Returns index of the element if found, otherwise -1.
+written by joachim heintz
+
+i(k)El - element to test
+i(k)Arr[] - array in which to look for i(k)El
+i(k)Res - first element index for yes, -1 for no
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPermRnd iInArr[] [, iN]
@@ -637,6 +650,17 @@ written by joachim heintz
 
 kKey - ASCII keyboard number as output from sensekey opcode 
 kOut - output (see above)
+****************************************************************************/
+/****************************************************************************
+Sout[] CsQtMbrowse2Array Str
+Converts a _MBrowse string of CsoundQt to an array of strings.
+
+Converts a string in which file names are separated by '|' to 
+an array of strings.
+written by joachim heintz
+
+Str - Input string as output of the _MBrowse channel in CsoundQt
+Sout[] - Array with the file names
 ****************************************************************************/
 /****************************************************************************
 CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
@@ -1931,6 +1955,39 @@ opcode ArrElIn, k, kk[]
 
 endop
 
+opcode ArrElIn2, i, ii[]
+
+ iEl, iArr[] xin
+ iRes = -1
+ indx = 0
+ while indx < lenarray:i(iArr) do
+  if iEl == iArr[indx] then
+   iRes = indx
+   igoto end
+  endif
+  indx += 1
+ od
+ end:
+ xout iRes
+
+endop
+opcode ArrElIn2, k, kk[]
+
+ kEl, kArr[] xin
+ kRes = -1
+ kndx = 0
+ while kndx < lenarray:k(kArr) do
+  if kEl == kArr[kndx] then
+   kRes = kndx
+   kgoto end
+  endif
+  kndx += 1
+ od
+ end:
+ xout kRes
+
+endop
+
   opcode ArrPermRnd, i[], i[]j
 iInArr[], iN xin
 iLen       =          lenarray(iInArr)
@@ -2788,6 +2845,46 @@ opcode CsQtArwKeys, k, k
   endif
  endif
  xout kOut
+endop
+
+  opcode StrMems, i, SS
+Str, Sel   xin
+iSumEls    =          0
+iLen       strlen     Str
+iIndx      =          0
+Sub        strcpy     Str
+  until iIndx == iLen do
+iPos       strindex   Sub, Sel
+   if iPos > -1 then
+iSumEls    =          iSumEls+1
+Sub        strsub     Sub, iPos+1
+iIndx      =          iPos+1
+   else
+iIndx      =          iLen
+   endif
+  od
+           xout       iSumEls
+  endop
+
+opcode CsQtMbrowse2Array,S[],S
+  String xin
+  // how many occurrences of | in String
+  iNum = StrMems(String,"|")
+  // create array for substrings
+  Sout[] init iNum+1
+  // go through
+  istart = 0
+  ipos = 0
+  indx = 0
+  while (ipos >= 0) do
+    Substring = strsub(String,istart)
+    ipos = strindex(Substring,"|")
+    Sname = strsub(Substring,0,ipos)
+    Sout[indx] = Sname
+    istart += ipos+1
+    indx += 1
+  od
+  xout Sout
 endop
 
 opcode CsQtMeter, 0, SSak
@@ -4677,25 +4774,6 @@ enduntil
 xout iTrue
   endop
 
-  opcode StrMems, i, SS
-Str, Sel   xin
-iSumEls    =          0
-iLen       strlen     Str
-iIndx      =          0
-Sub        strcpy     Str
-  until iIndx == iLen do
-iPos       strindex   Sub, Sel
-   if iPos > -1 then
-iSumEls    =          iSumEls+1
-Sub        strsub     Sub, iPos+1
-iIndx      =          iPos+1
-   else
-iIndx      =          iLen
-   endif
-  od
-           xout       iSumEls
-  endop
-
   opcode StrTrmPos, ii, Soj
 Str, istrt, iend xin
 iend = iend == -1 ? strlen(Str) - 1 : iend
@@ -5098,9 +5176,9 @@ if indx3 >= iftlen igoto end
 iStart     table      indx1, ift
 iDur       table      indx2, ift
 iTarget    table      indx3, ift
-           timout     0, iDur, do
+           timout     0, iDur, go
            reinit     segment
-do:
+go:
 kOut       linseg     iStart, iDur, iTarget
 indx1      =          indx1+2
 indx2      =          indx2+2

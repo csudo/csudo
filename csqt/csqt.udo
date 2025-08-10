@@ -3,6 +3,7 @@
 UDO DEFINITIONS IN csqt:
 *****************************************************************************
 CsQtArwKeys: kOut CsQtArwKeys kKey
+CsQtMbrowse2Array: Sout[] CsQtMbrowse2Array Str
 CsQtMeter  : CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
 *****************************************************************************
 ****************************************************************************/
@@ -17,6 +18,17 @@ written by joachim heintz
 
 kKey - ASCII keyboard number as output from sensekey opcode 
 kOut - output (see above)
+****************************************************************************/
+/****************************************************************************
+Sout[] CsQtMbrowse2Array Str
+Converts a _MBrowse string of CsoundQt to an array of strings.
+
+Converts a string in which file names are separated by '|' to 
+an array of strings.
+written by joachim heintz
+
+Str - Input string as output of the _MBrowse channel in CsoundQt
+Sout[] - Array with the file names
 ****************************************************************************/
 /****************************************************************************
 CsQtMeter S_chan_sig, S_chan_over, aSig, kTrig
@@ -52,6 +64,46 @@ opcode CsQtArwKeys, k, k
   endif
  endif
  xout kOut
+endop
+
+  opcode StrMems, i, SS
+Str, Sel   xin
+iSumEls    =          0
+iLen       strlen     Str
+iIndx      =          0
+Sub        strcpy     Str
+  until iIndx == iLen do
+iPos       strindex   Sub, Sel
+   if iPos > -1 then
+iSumEls    =          iSumEls+1
+Sub        strsub     Sub, iPos+1
+iIndx      =          iPos+1
+   else
+iIndx      =          iLen
+   endif
+  od
+           xout       iSumEls
+  endop
+
+opcode CsQtMbrowse2Array,S[],S
+  String xin
+  // how many occurrences of | in String
+  iNum = StrMems(String,"|")
+  // create array for substrings
+  Sout[] init iNum+1
+  // go through
+  istart = 0
+  ipos = 0
+  indx = 0
+  while (ipos >= 0) do
+    Substring = strsub(String,istart)
+    ipos = strindex(Substring,"|")
+    Sname = strsub(Substring,0,ipos)
+    Sout[indx] = Sname
+    istart += ipos+1
+    indx += 1
+  od
+  xout Sout
 endop
 
 opcode CsQtMeter, 0, SSak

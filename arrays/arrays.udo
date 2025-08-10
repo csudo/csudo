@@ -7,6 +7,7 @@ ArrAvrg    : iAvrg ArrAvrg iArr[] [,iStart [,iEnd]]
 ArrCat     : iOutArr[] ArrCat iArr1[], iArr2[]
 ArrElCnt   : iFound ArrElCnt iNeedle, iInArr[]
 ArrElIn    : iRes ArrElIn iEl, iArr[]
+ArrElIn2   : iRes ArrElIn2 iEl, iArr[]
 ArrPermRnd : iOutArr[] ArrPermRnd iInArr[] [, iN]
 ArrPermRnd2: iOutArr[] ArrPermRnd2 iInArr[] [, iStart [, iEnd]]
 ArrPermRndIndx: iOutArr[] ArrPermRndIndx iInArr[] [, iN]
@@ -77,6 +78,17 @@ written by joachim heintz
 i(k)El - element to test
 i(k)Arr[] - array in which to look for i(k)El
 i(k)Res - 1 for yes, 0 for no
+****************************************************************************/
+/****************************************************************************
+iRes ArrElIn2 iEl, iArr[]
+kRes ArrElIn2 kEl, kArr[]
+Looks whether i(k)El is in i(k)Arr or not. 
+Returns index of the element if found, otherwise -1.
+written by joachim heintz
+
+i(k)El - element to test
+i(k)Arr[] - array in which to look for i(k)El
+i(k)Res - first element index for yes, -1 for no
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrPermRnd iInArr[] [, iN]
@@ -477,6 +489,39 @@ opcode ArrElIn, k, kk[]
  while kndx < lenarray:k(kArr) do
   if kEl == kArr[kndx] then
    kRes = 1
+   kgoto end
+  endif
+  kndx += 1
+ od
+ end:
+ xout kRes
+
+endop
+
+opcode ArrElIn2, i, ii[]
+
+ iEl, iArr[] xin
+ iRes = -1
+ indx = 0
+ while indx < lenarray:i(iArr) do
+  if iEl == iArr[indx] then
+   iRes = indx
+   igoto end
+  endif
+  indx += 1
+ od
+ end:
+ xout iRes
+
+endop
+opcode ArrElIn2, k, kk[]
+
+ kEl, kArr[] xin
+ kRes = -1
+ kndx = 0
+ while kndx < lenarray:k(kArr) do
+  if kEl == kArr[kndx] then
+   kRes = kndx
    kgoto end
   endif
   kndx += 1

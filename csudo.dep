@@ -2,6 +2,7 @@
 # UDO: dependency [, dependency2 [, ...]]
 
 ArrRmDup: ArrElIn
+CsQtMbrowse2Array: StrMems
 EvtLvLp: StrSum,StrNumP,StrayElCnt,StrayLen,StrayGetNum,EvtPtrnz,EvtS2P
 EvtPtrnz: StrayGetNum,StrayLen
 ExtrOrc: StripL

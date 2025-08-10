@@ -30,9 +30,9 @@ if indx3 >= iftlen igoto end
 iStart     table      indx1, ift
 iDur       table      indx2, ift
 iTarget    table      indx3, ift
-           timout     0, iDur, do
+           timout     0, iDur, go
            reinit     segment
-do:
+go:
 kOut       linseg     iStart, iDur, iTarget
 indx1      =          indx1+2
 indx2      =          indx2+2
