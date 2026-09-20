@@ -75,6 +75,10 @@ i "Caution_LOUD" 13 1 -10
 </CsoundSynthesizer>
 
 
+
+
+
+
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
@@ -89,7 +93,7 @@ i "Caution_LOUD" 13 1 -10
   <g>255</g>
   <b>255</b>
  </bgcolor>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL</objectName>
   <x>53</x>
   <y>25</y>
@@ -118,7 +122,7 @@ i "Caution_LOUD" 13 1 -10
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -126,7 +130,7 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outL_clip</objectName>
   <x>302</x>
   <y>25</y>
@@ -155,7 +159,7 @@ i "Caution_LOUD" 13 1 -10
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -163,7 +167,7 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>28</x>
   <y>22</y>
@@ -194,7 +198,7 @@ i "Caution_LOUD" 13 1 -10
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR</objectName>
   <x>53</x>
   <y>48</y>
@@ -223,7 +227,7 @@ i "Caution_LOUD" 13 1 -10
    <g>234</g>
    <b>0</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -231,7 +235,7 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBController">
+ <bsbObject type="BSBController" version="2">
   <objectName>outR_clip</objectName>
   <x>302</x>
   <y>48</y>
@@ -260,7 +264,7 @@ i "Caution_LOUD" 13 1 -10
    <g>14</g>
    <b>12</b>
   </color>
-  <randomizable mode="both" group="0">false</randomizable>
+  <randomizable group="0" mode="both">false</randomizable>
   <bgcolor>
    <r>0</r>
    <g>0</g>
@@ -268,7 +272,7 @@ i "Caution_LOUD" 13 1 -10
   </bgcolor>
   <bgcolormode>true</bgcolormode>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>28</x>
   <y>45</y>
@@ -299,7 +303,7 @@ i "Caution_LOUD" 13 1 -10
   <borderradius>1</borderradius>
   <borderwidth>0</borderwidth>
  </bsbObject>
- <bsbObject version="2" type="BSBLabel">
+ <bsbObject type="BSBLabel" version="2">
   <objectName/>
   <x>8</x>
   <y>70</y>

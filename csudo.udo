@@ -20,7 +20,9 @@ ArrRmIndx  : iOutArr[] ArrRmIndx iInArr[], iIndx
 ArrRndEl   : iEl ArrRndEl iInArr[] [, iStart [, iEnd]]
 ArrRtt     : iOutArr[] ArrRtt iInArr[] [,iRot]
 ArrRvrs    : iOutArr[] ArrRvrs iInArr[]
+ArrShft    : iOutArr[] ArrShft iInArr[] [,iNumShft]
 ArrSrt     : iOutArr[] ArrSrt iInArr[] [,iOutN [,iOutType ,[iStart [,iEnd [,iHop]]]]]
+ArrStr2Num : iArr[], iLen ArrStr2Num S_in, S_sep
 ArrSwpPos  : iOutArr[] ArrRtt iInArr[], iSwapPos[]
 BufCt1     : ift BufCt1 ilen [, inum]
 BufCt2     : iftL, iftR BufCt2 ilen [, inumL [, inumR]]
@@ -56,6 +58,7 @@ Linek      : kval, kfin Linek kthis, knext, ktim, ktrig
 NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
 NmFrcLen   : iFracs NmFrcLen iNum
 NmRndInt   : iRnd NmRndInt iMin, iMax
+NmRndWlk   : iRnd NmRndInt iMin, iMax, iMaxStep, iStart
 NmScl      : iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 NmStpInc   : iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
 OnDtct     : kOnset, kDb OnDtct aIn [,kDbDiff [,kMinTim [,kMinDb [,iRmsFreq [,iDelComp]]]]]
@@ -323,6 +326,15 @@ i(k)InArr[] - input array
 i(k)OutArr[] - output array
 ****************************************************************************/
 /****************************************************************************
+iOutArr[] ArrShft iInArr[] [,iNumShft]
+Shift the values of an array by iNumShft positions.
+written by joachim heintz
+
+iInArr[] - input array
+iNumShft - defaults to 1 = shift one position to the right side
+iOutArry[] - output array
+****************************************************************************/
+/****************************************************************************
 iOutArr[] ArrSrt iInArr[] [,iOutN [,iOutType ,[iStart [,iEnd [,iHop]]]]]
 kOutArr[] ArrSrt kInArr[] [,iOutN [,kOutType ,[kStart [,kEnd [,kHop]]]]]
 
@@ -344,6 +356,16 @@ i|kStart - start from this element (inclusive) (default = 0)
 i|kEnd - end at this element (exclusive) (default = 0 means length of array)
 i|kHop - distance from element to element you are regarding (default = 1)
 i|kOutArr[] - sorted array (containing either values or indices)
+****************************************************************************/
+/****************************************************************************
+iArr[], iLen ArrStr2Num S_in, S_sep
+Transforms the numbers of the input string S_in to a numerical array. The sections in S_in are seperated by the seperator S_in. 
+written by joachim heintz
+
+S_in - Input string.
+S_sep - Seperator string.
+iArr - Output array.
+iLen - Its length.
 ****************************************************************************/
 /****************************************************************************
 iOutArr[] ArrRtt iInArr[], iSwapPos[]
@@ -893,6 +915,21 @@ Returns a random integer number bewteen Min and Max (included).
 
 Returns a random integer number bewteen Min and Max (included).
 As the random opcode is used, make sure to set 'seed 0'.
+written by joachim heintz
+
+i(k)Min - minimum possible number
+i(k)Max - maximum possible number
+i(k)Rnd - result
+****************************************************************************/
+/****************************************************************************
+iRnd NmRndInt iMin, iMax, iMaxStep, iStart
+kRnd NmRndInt kMin, kMax
+Returns a random integer number bewteen Min and Max (included).
+
+Random walk in the Min/Max boundaries, with Start as initial position, and
+MaxStep as maximum possible step (to positive or negative side). 
+If the step hits one boundary, it is "pushed back", e.g. 
+0 and 10 as boundaries. position is 0.5, step is -0.8 => result is 0.3,
 written by joachim heintz
 
 i(k)Min - minimum possible number
@@ -1955,6 +1992,20 @@ opcode ArrElIn, k, kk[]
 
 endop
 
+opcode ArrElIn2, i, SS[]
+ SEl, SArr[] xin
+ iRes = -1
+ indx = 0
+ while indx < lenarray:i(SArr) do
+  if strcmp(SEl,SArr[indx]) == 0 then
+   iRes = indx
+   igoto end
+  endif
+  indx += 1
+ od
+ end:
+ xout iRes
+endop
 opcode ArrElIn2, i, ii[]
 
  iEl, iArr[] xin
@@ -2432,6 +2483,17 @@ opcode ArrRvrs, k[], k[]
  xout kOutArr
 endop
 
+opcode ArrShft,i[],i[]p
+  inarr[],numshft:i xin
+  l:i = lenarray(inarr)
+  outarr:i[] init l
+  numshft = (numshft < 0) ? l+numshft : numshft
+  for el,i in inarr do
+    outarr[(i+numshft)%l] = el
+  od
+  xout outarr
+endop
+
 opcode ArrSrt, k[], k[]jOOOP
  kArr[], iOutN, kOutType, kStart, kEnd, kHop xin
  ;calculate some common values 
@@ -2544,6 +2606,46 @@ opcode ArrSrt, i[], i[]jooop
  iOut[] = iIndices
  endif
  xout iOut
+endop
+
+opcode ArrStr2Num, i[]i, SS
+
+ S_in, S_sep xin 
+
+ ;count the number of substrings
+ iLenSep strlen S_sep
+ iPos = 0
+ iPosShift = 0
+ iCnt = 0
+
+ while iPos != -1 do
+ 
+  iCnt += 1
+  S_sub strsub S_in, iPosShift
+  iPos strindex S_sub, S_sep
+  iPosShift += iPos+iLenSep
+  
+ od
+ 
+ ;create a string array and put the substrings in it
+ iArr[] init iCnt
+ iPos = 0
+ iPosShift = 0
+ iArrIndx = -1
+ while iPos != -1 do
+ 
+  iArrIndx += 1
+  S_sub strsub S_in, iPosShift
+  iPos strindex S_sub, S_sep
+  iEnd = (iPos == -1 ? -1 : iPosShift+iPos)
+  S_ToArr strsub S_in, iPosShift, iEnd
+  iPosShift += iPos+iLenSep
+  iArr[iArrIndx] = strtod(S_ToArr)  
+ 
+ od
+ 
+ xout iArr, iCnt
+
 endop
 
 opcode ArrSwpPos, i[], i[]i[]
@@ -3692,6 +3794,17 @@ opcode NmRndInt, k, kk
   kMin, kMax xin
   kRnd random kMin, kMax+.999999
   xout int(kRnd)
+endop
+
+opcode NmRndWlk, i, iiii
+  iMin, iMax, iMaxStep, iStart xin
+  iStep = random(-iMaxStep,iMaxStep)
+  xout mirror:i(iStart+iStep,iMin,iMax)
+endop
+opcode NmRndWlk, k, kkkk
+  kMin, kMax, kMaxStep, kStart xin
+  kStep = random(-kMaxStep,kMaxStep)
+  xout mirror:k(kStart+kStep,kMin,kMax)
 endop
 
   opcode NmScl, i, iiiii

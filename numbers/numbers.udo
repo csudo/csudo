@@ -5,6 +5,7 @@ UDO DEFINITIONS IN numbers:
 NmCntr     : kcount NmCntr kup, kdown [, kstep [, istart]]
 NmFrcLen   : iFracs NmFrcLen iNum
 NmRndInt   : iRnd NmRndInt iMin, iMax
+NmRndWlk   : iRnd NmRndInt iMin, iMax, iMaxStep, iStart
 NmScl      : iValOut NmScl iVal, iInMin, iInMax, iOutMin, iOutMax
 NmStpInc   : iOut NmStpInc iValStart, iValEnd, iNumSteps, iThisStep
 *****************************************************************************
@@ -40,6 +41,21 @@ Returns a random integer number bewteen Min and Max (included).
 
 Returns a random integer number bewteen Min and Max (included).
 As the random opcode is used, make sure to set 'seed 0'.
+written by joachim heintz
+
+i(k)Min - minimum possible number
+i(k)Max - maximum possible number
+i(k)Rnd - result
+****************************************************************************/
+/****************************************************************************
+iRnd NmRndInt iMin, iMax, iMaxStep, iStart
+kRnd NmRndInt kMin, kMax
+Returns a random integer number bewteen Min and Max (included).
+
+Random walk in the Min/Max boundaries, with Start as initial position, and
+MaxStep as maximum possible step (to positive or negative side). 
+If the step hits one boundary, it is "pushed back", e.g. 
+0 and 10 as boundaries. position is 0.5, step is -0.8 => result is 0.3,
 written by joachim heintz
 
 i(k)Min - minimum possible number
@@ -111,6 +127,17 @@ opcode NmRndInt, k, kk
   kMin, kMax xin
   kRnd random kMin, kMax+.999999
   xout int(kRnd)
+endop
+
+opcode NmRndWlk, i, iiii
+  iMin, iMax, iMaxStep, iStart xin
+  iStep = random(-iMaxStep,iMaxStep)
+  xout mirror:i(iStart+iStep,iMin,iMax)
+endop
+opcode NmRndWlk, k, kkkk
+  kMin, kMax, kMaxStep, kStart xin
+  kStep = random(-kMaxStep,kMaxStep)
+  xout mirror:k(kStart+kStep,kMin,kMax)
 endop
 
   opcode NmScl, i, iiiii

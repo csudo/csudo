@@ -19,6 +19,26 @@ i(k)Res - first element index for yes, -1 for no
 <CsInstruments>
 ksmps = 32
 
+klaenge@global:S[] = ["metro.wav","nachrichten.wav","passage.wav","verkehr.wav","wasser.wav",
+                      "animateur-1.wav","animateur-2.wav","animateur-3.wav","animateur-alle.wav"]
+
+
+opcode ArrElIn2, i, SS[]
+ SEl, SArr[] xin
+ iRes = -1
+ indx = 0
+ while indx < lenarray:i(SArr) do
+  if strcmp(SEl,SArr[indx]) == 0 then
+   iRes = indx
+   igoto end
+  endif
+  indx += 1
+ od
+ end:
+ xout iRes
+endop
+
+
 opcode ArrElIn2, i, ii[]
 
  iEl, iArr[] xin
@@ -81,6 +101,12 @@ instr Test
  
 endin
 
+instr Hello
+  indx = ArrElIn2("animateur-2.wav",klaenge)
+  print(indx)
+endin
+
+
 </CsInstruments>
 <CsScore>
 i "Test" 0 1
@@ -109,6 +135,8 @@ El = 0.0000, Res = 1
 El = 0.1000, Res = 1
 El = -0.1230, Res = 1
 El = -0.1234, Res = 0
+
+
 
 
 <bsbPanel>
